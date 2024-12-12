@@ -35,7 +35,7 @@ function generateCalendar(year) {
                     const dayCell = document.createElement('span');
                     dayCell.className = 'day-cell';
                     dayCell.textContent = dayNumber;
-                    dayCell.dataset.date = `${year}-${month}-${dayNumber}`;
+                    dayCell.dataset.date = `${year}-${String(index + 1).padStart(2, '0')}-${String(dayNumber).padStart(2, '0')}`;
                     weekRow.appendChild(dayCell);
                 });
 
@@ -47,19 +47,4 @@ function generateCalendar(year) {
         monthContainer.appendChild(daysContainer);
         calendarContainer.appendChild(monthContainer);
     });
-
-    highlightVacationDays(year);
-}
-
-function highlightVacationDays(year) {
-    const vacationData = JSON.parse(localStorage.getItem('vacationData')) || {};
-
-    for (const [employee, dates] of Object.entries(vacationData)) {
-        dates.forEach((date) => {
-            const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
-            if (dayCell) {
-                dayCell.style.backgroundColor = 'orange';
-            }
-        });
-    }
 }
