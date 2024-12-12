@@ -3,13 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Page</title>
+    <title>Admin Dashboard</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="login-container">
-        <h1>Hello Admin</h1>
-        <p>Welcome to the admin dashboard.</p>
+        <h1>Admin Dashboard</h1>
+        <div id="controls">
+            <label for="employee-select">Select Employee:</label>
+            <select id="employee-select">
+                <option value="john">John Doe</option>
+                <option value="jane">Jane Smith</option>
+                <option value="mike">Mike Brown</option>
+            </select>
+            <button id="add-vacation-btn">Add Vacation</button>
+        </div>
+        <div id="calendar"></div>
     </div>
+    <script src="calendar.js"></script>
+    <script src="admin.js"></script>
+    <script>
+        generateCalendar(2025);
+    </script>
 </body>
 </html>
