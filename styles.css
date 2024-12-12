@@ -7,7 +7,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    flex-direction: column; /* Align content vertically */
+    flex-direction: column;
 }
 
 /* Main Container Styles */
@@ -17,8 +17,8 @@ body {
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
     text-align: center;
-    width: 95%; /* Allow width to adapt */
-    max-width: 1200px; /* Fit the calendar better */
+    width: 95%;
+    max-width: 900px; /* Adjusted for better spacing */
     margin: auto;
     box-sizing: border-box;
 }
@@ -60,11 +60,11 @@ button:hover {
 /* Calendar Styles */
 #calendar {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Auto-adjust columns */
-    gap: 20px; /* Space between months */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+    gap: 20px;
     margin-top: 25px;
     padding: 15px;
-    width: 100%; /* Ensure calendar fits container */
+    width: 100%;
     box-sizing: border-box;
 }
 
@@ -101,6 +101,7 @@ button:hover {
     margin: 0 auto;
     color: #ffffff;
     font-size: 0.85rem;
+    transition: background-color 0.3s ease; /* Smooth color transition */
 }
 
 .day-cell:hover {
@@ -109,14 +110,35 @@ button:hover {
     cursor: pointer;
 }
 
+/* Department-Based Colors */
+.day-cell[data-department="technical"] {
+    background: blue;
+    color: white;
+}
+
+.day-cell[data-department="analytics"] {
+    background: green;
+    color: white;
+}
+
+.day-cell[data-department="vip"] {
+    background: orange;
+    color: black;
+}
+
+.day-cell[data-department="other"] {
+    background: purple;
+    color: white;
+}
+
 /* Media Query for Smaller Screens */
 @media (max-width: 768px) {
     #calendar {
-        grid-template-columns: repeat(2, 1fr); /* Reduce columns to fit smaller screens */
+        grid-template-columns: repeat(2, 1fr); /* Reduce columns for smaller screens */
     }
 
     .day-cell {
-        width: 30px; /* Adjust size for smaller screens */
+        width: 30px; /* Smaller size for small screens */
         height: 30px;
         line-height: 30px;
     }
