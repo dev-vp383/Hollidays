@@ -1,6 +1,7 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+    background-color: #121212; /* Dark background */
+    color: #ffffff; /* White text */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,30 +10,38 @@ body {
 }
 
 .login-container {
-    background: #fff;
+    background: #1e1e1e; /* Slightly lighter dark color */
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Darker shadow for depth */
     text-align: center;
     width: 300px;
 }
 
 h1 {
-    color: #333;
+    color: #ffffff; /* White for headings */
     margin-bottom: 20px;
 }
 
 input {
-    width: 100%; /* Ensure inputs are full-width */
-    padding: 10px; /* Add padding inside the input fields */
-    margin: 10px 0; /* Add spacing between input fields */
-    border: 1px solid #ccc;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #444444; /* Border matching dark theme */
+    background-color: #2a2a2a; /* Input background */
+    color: #ffffff; /* White input text */
     border-radius: 4px;
+    outline: none; /* Remove default outline */
+}
+
+input:focus {
+    border-color: #007BFF; /* Blue border on focus */
+    box-shadow: 0 0 5px #007BFF; /* Subtle blue glow */
 }
 
 button {
-    background-color: #007BFF;
-    color: white;
+    background-color: #007BFF; /* Blue button */
+    color: #ffffff;
     border: none;
     padding: 10px 15px;
     border-radius: 4px;
@@ -41,15 +50,15 @@ button {
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #0056b3; /* Darker blue on hover */
 }
 
 .error {
-    color: red;
+    color: #ff4d4f; /* Red error message */
     margin-top: 10px;
 }
 
 .welcome {
     margin-top: 20px;
-    color: green;
+    color: #00c851; /* Green welcome message */
 }
