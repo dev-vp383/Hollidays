@@ -10,8 +10,8 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const database = firebase.database(app);
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
 
 // Array to track selected dates
 let selectedDates = [];
