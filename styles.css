@@ -14,81 +14,72 @@ body {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Darker shadow for depth */
-    text-align: center;
-    width: 50%; /* Make it responsive */
-    max-width: 300px; /* Limit the max width */
-}
-
-h1 {
-    color: #ffffff; /* White for headings */
-    margin-bottom: 20px;
-    font-size: 1.8em;
-}
-
-input {
-    width: calc(100% - 22px); /* Adjust width to fit perfectly inside the container */
-    padding: 10px; /* Add padding inside the input fields */
-    margin: 10px 0; /* Add spacing between input fields */
-    border: 1px solid #444444; /* Border matching dark theme */
-    background-color: #2a2a2a; /* Input background */
-    color: #ffffff; /* White input text */
-    border-radius: 4px;
-    outline: none; /* Remove default outline */
-}
-
-input:focus {
-    border-color: #007BFF; /* Blue border on focus */
-    box-shadow: 0 0 5px #007BFF; /* Subtle blue glow */
-}
-
-button {
-    background-color: #007BFF; /* Blue button */
     color: #ffffff;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    width: 100%; /* Make button fill the container width */
-    margin-top: 15px; /* Add spacing above the button */
+    text-align: center;
+    width: 90%; /* Make it responsive */
+    max-width: 1200px; /* Limit the max width */
 }
 
-button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-}
-
-.error {
-    color: #ff4d4f; /* Red error message */
-    margin-top: 10px;
-}
-
-.welcome {
-    margin-top: 20px;
-    color: #00c851; /* Green welcome message */
-}
-/* Calendar Styling */
+/* Calendar Container */
 #calendar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 months per row */
+    gap: 20px; /* Space between months */
     margin-top: 20px;
+    padding: 20px;
 }
 
+/* Each Month */
 .month-container {
-    margin-bottom: 20px;
+    background: #1e1e1e; /* Slightly lighter dark color */
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: #ffffff;
+    text-align: center;
 }
 
 .month-container h2 {
+    margin: 10px 0;
+    font-size: 1.4em;
     color: #007BFF;
-    font-size: 1.5em;
-    margin-bottom: 10px;
+    text-transform: uppercase;
+    border-bottom: 1px solid #444;
+    padding-bottom: 5px;
 }
 
+/* Days Container */
 .days-container {
-    padding: 10px;
-    background: #1e1e1e;
-    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .week-row {
-    margin-bottom: 5px;
-    color: #ffffff;
     font-family: monospace;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 2px;
 }
 
+.week-row span {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    background: #2a2a2a;
+    border-radius: 4px;
+    margin: 1px;
+    color: #ffffff;
+}
+
+.week-row span:hover {
+    background: #007BFF;
+    color: white;
+    cursor: pointer;
+}
