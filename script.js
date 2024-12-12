@@ -1,11 +1,11 @@
 // Predefined users
 const users = {
     admin: {
-        password: 'admin', // Admin password
+        password: 'admin',
         role: 'Admin'
     },
     user: {
-        password: 'user', // User password
+        password: 'user',
         role: 'User'
     }
 };
@@ -15,12 +15,9 @@ function login() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     const errorMessage = document.getElementById('error-message');
-    const welcomeMessage = document.getElementById('welcome-message');
 
     errorMessage.textContent = '';
-    welcomeMessage.textContent = '';
 
-    // Validate username and password
     if (!users[username]) {
         errorMessage.textContent = 'Invalid username or password.';
         return;
@@ -28,10 +25,8 @@ function login() {
 
     if (password === users[username].password) {
         if (users[username].role === 'Admin') {
-            // Redirect admin to the admin page
             window.location.href = 'admin.html';
         } else {
-            // Redirect user to the user page
             window.location.href = 'user.html';
         }
     } else {
@@ -39,11 +34,11 @@ function login() {
     }
 }
 
-// Add event listener for the button click
+// Add event listener for login button
 document.getElementById('login-btn').addEventListener('click', login);
 
-// Add event listener for the Enter key
-document.addEventListener('keydown', function (event) {
+// Allow Enter key to trigger login
+document.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
         login();
     }
