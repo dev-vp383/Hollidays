@@ -1,4 +1,3 @@
-// Function to generate a custom calendar
 function generateCalendar(year) {
     const months = [
         'January', 'February', 'March', 'April', 'May', 'June',
@@ -31,14 +30,15 @@ function generateCalendar(year) {
         for (let day = 1; day <= daysInMonth[index]; day++) {
             week.push(day);
 
-            // Add week rows or last remaining days
             if (week.length === 7 || day === daysInMonth[index]) {
                 const weekRow = document.createElement('div');
                 weekRow.className = 'week-row';
 
                 week.forEach((dayNumber) => {
                     const dayCell = document.createElement('span');
+                    dayCell.className = 'day-cell';
                     dayCell.textContent = dayNumber;
+                    dayCell.dataset.date = `${year}-${month}-${dayNumber}`; // Unique identifier
                     weekRow.appendChild(dayCell);
                 });
 
@@ -50,4 +50,18 @@ function generateCalendar(year) {
         monthContainer.appendChild(daysContainer);
         calendarContainer.appendChild(monthContainer);
     });
+
+    // Highlight vacation days
+    highlightVacationDays(year);
+}
+
+function highlightVacationDays(year) {
+    for (const [employee, dates] of Object.entries(vacationData)) {
+        dates.forEach((date) => {
+            const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
+            if (dayCell) {
+                dayCell.style.backgroundColor = 'orange'; // Taken date color
+            }
+        });
+    }
 }
