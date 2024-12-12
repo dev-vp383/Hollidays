@@ -23,9 +23,9 @@ h1 {
 }
 
 input {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
+    width: 100%; /* Ensure inputs are full-width */
+    padding: 10px; /* Add padding inside the input fields */
+    margin: 10px 0; /* Add spacing between input fields */
     border: 1px solid #ccc;
     border-radius: 4px;
 }
