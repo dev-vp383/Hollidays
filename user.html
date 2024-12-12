@@ -12,42 +12,53 @@
         <div id="calendar"></div>
     </div>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js"></script>
+    <!-- Firebase SDK UMD Versions -->
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
 
     <!-- Project Scripts -->
     <script src="calendar.js"></script>
 
     <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD0Biwjk-PfEGAsm_FUwavuo_6-FpfQw8I",
+            authDomain: "vacation-calendar-ad463.firebaseapp.com",
+            databaseURL: "https://vacation-calendar-ad463-default-rtdb.firebaseio.com",
+            projectId: "vacation-calendar-ad463",
+            storageBucket: "vacation-calendar-ad463.firebasestorage.app",
+            messagingSenderId: "318751055172",
+            appId: "1:318751055172:web:b511b2a74e7b804f56cb11"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Generate Calendar
         generateCalendar(2025);
 
+        // Highlight Taken Dates
         async function highlightTakenDates() {
-            const firebaseConfig = {
-                apiKey: "AIzaSyD0Biwjk-PfEGAsm_FUwavuo_6-FpfQw8I",
-                authDomain: "vacation-calendar-ad463.firebaseapp.com",
-                databaseURL: "https://vacation-calendar-ad463-default-rtdb.firebaseio.com",
-                projectId: "vacation-calendar-ad463",
-                storageBucket: "vacation-calendar-ad463.firebasestorage.app",
-                messagingSenderId: "318751055172",
-                appId: "1:318751055172:web:b511b2a74e7b804f56cb11"
-            };
+            try {
+                const ref = database.ref('vacations');
+                const snapshot = await ref.get();
+                const vacationData = snapshot.val() || {};
 
-            const app = firebase.initializeApp(firebaseConfig);
-            const database = firebase.database(app);
-
-            const ref = database.ref('vacations');
-            const snapshot = await ref.get();
-            const vacationData = snapshot.val() || {};
-
-            Object.values(vacationData).flat().forEach((date) => {
-                const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
-                if (dayCell) {
-                    dayCell.style.backgroundColor = 'orange';
-                }
-            });
+                // Loop through vacation data and highlight dates
+                Object.values(vacationData).flat().forEach((date) => {
+                    const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
+                    if (dayCell) {
+                        dayCell.style.backgroundColor = 'orange'; // Highlight taken dates
+                    }
+                });
+                console.log('Vacation dates highlighted successfully.');
+            } catch (error) {
+                console.error('Error fetching vacation data:', error);
+            }
         }
 
+        // Call the function to highlight vacation dates
         highlightTakenDates();
     </script>
 </body>
