@@ -1,26 +1,71 @@
+/* Global Styles */
 body {
     font-family: Arial, sans-serif;
     background-color: #121212; /* Dark background */
     color: #ffffff; /* White text */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     margin: 0;
 }
 
+/* Login Page Styles */
 .login-container {
     background: #1e1e1e; /* Slightly lighter dark color */
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Darker shadow for depth */
-    color: #ffffff;
     text-align: center;
     width: 90%; /* Make it responsive */
-    max-width: 1200px; /* Limit the max width */
+    max-width: 400px; /* Limit the max width */
+    margin: auto;
+    margin-top: 10%;
 }
 
-/* Calendar Container */
+.login-container h1 {
+    margin-bottom: 20px;
+    font-size: 1.8em;
+}
+
+input {
+    width: calc(100% - 22px); /* Adjust width to fit perfectly inside the container */
+    padding: 10px; /* Add padding inside the input fields */
+    margin: 10px 0; /* Add spacing between input fields */
+    border: 1px solid #444444; /* Border matching dark theme */
+    background-color: #2a2a2a; /* Input background */
+    color: #ffffff; /* White input text */
+    border-radius: 4px;
+    outline: none; /* Remove default outline */
+}
+
+input:focus {
+    border-color: #007BFF; /* Blue border on focus */
+    box-shadow: 0 0 5px #007BFF; /* Subtle blue glow */
+}
+
+button {
+    background-color: #007BFF; /* Blue button */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 15px;
+}
+
+button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+.error {
+    color: #ff4d4f; /* Red error message */
+    margin-top: 10px;
+}
+
+.welcome {
+    margin-top: 20px;
+    color: #00c851; /* Green welcome message */
+}
+
+/* Calendar Page Styles */
 #calendar {
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* 4 months per row */
@@ -29,7 +74,6 @@ body {
     padding: 20px;
 }
 
-/* Each Month */
 .month-container {
     background: #1e1e1e; /* Slightly lighter dark color */
     border-radius: 8px;
@@ -48,7 +92,6 @@ body {
     padding-bottom: 5px;
 }
 
-/* Days Container */
 .days-container {
     display: flex;
     flex-direction: column;
