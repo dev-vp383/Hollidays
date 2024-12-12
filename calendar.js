@@ -7,7 +7,7 @@ function generateCalendar(year) {
     const calendarContainer = document.getElementById('calendar');
 
     if ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0) {
-        daysInMonth[1] = 29;
+        daysInMonth[1] = 29; // Leap year adjustment
     }
 
     calendarContainer.innerHTML = '';
