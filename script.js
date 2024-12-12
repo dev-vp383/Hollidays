@@ -1,11 +1,11 @@
-// Predefined users with hashed passwords
+// Predefined users with plaintext passwords
 const users = {
     admin: {
-        password: 'admin', // Plaintext password for simplicity
+        password: 'admin', // Admin password
         role: 'Admin'
     },
     user: {
-        password: 'user', // Plaintext password for simplicity
+        password: 'user', // User password
         role: 'User'
     }
 };
@@ -39,3 +39,6 @@ function login() {
         errorMessage.textContent = 'Invalid username or password.';
     }
 }
+
+// Add event listener for the button
+document.getElementById('login-btn').addEventListener('click', login);
