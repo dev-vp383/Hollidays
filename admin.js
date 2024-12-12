@@ -35,21 +35,26 @@ document.getElementById('add-vacation-btn').addEventListener('click', async () =
         return;
     }
 
-    const ref = database.ref(`vacations/${employee}`);
-    const snapshot = await ref.get();
+    try {
+        const ref = database.ref(`vacations/${employee}`);
+        const snapshot = await ref.get();
 
-    let existingDates = snapshot.val() || [];
-    existingDates = [...new Set([...existingDates, ...selectedDates])];
+        let existingDates = snapshot.val() || [];
+        existingDates = [...new Set([...existingDates, ...selectedDates])];
 
-    await ref.set(existingDates);
+        await ref.set(existingDates);
 
-    selectedDates.forEach((date) => {
-        const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
-        if (dayCell) {
-            dayCell.style.backgroundColor = 'orange';
-        }
-    });
+        selectedDates.forEach((date) => {
+            const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
+            if (dayCell) {
+                dayCell.style.backgroundColor = 'orange';
+            }
+        });
 
-    selectedDates = [];
-    alert(`Vacation added for ${employee}!`);
+        selectedDates = [];
+        alert(`Vacation added for ${employee}!`);
+    } catch (error) {
+        console.error('Error saving vacation data:', error);
+        alert('Failed to add vacation. Please try again.');
+    }
 });
