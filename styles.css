@@ -12,13 +12,15 @@ body {
 /* Main Container Styles */
 .login-container {
     background: #1e1e1e;
-    padding: 40px; /* Increased padding */
+    padding: 40px; /* Increased padding for spacing */
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
     text-align: center;
-    width: 90%; /* Slightly larger container */
-    max-width: 700px; /* Reduced max width */
+    width: 90%; /* Full width with limits */
+    max-width: 700px; /* Maximum width */
+    overflow: hidden; /* Prevent content overflow */
     margin: auto;
+    box-sizing: border-box; /* Include padding in size calculations */
 }
 
 .login-container h1 {
@@ -58,38 +60,40 @@ button:hover {
 /* Calendar Styles */
 #calendar {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Reduced to 3 columns */
-    gap: 20px; /* Reduced spacing between months */
+    grid-template-columns: repeat(3, 1fr); /* 3 columns for better spacing */
+    gap: 20px; /* Add spacing between months */
     margin-top: 25px;
-    padding: 15px; /* Smaller padding */
+    padding: 15px;
+    overflow-x: auto; /* Enable horizontal scrolling if needed */
+    box-sizing: border-box; /* Include padding in size calculations */
 }
 
 .month-container {
     background: #2a2a2a;
     border-radius: 8px;
-    padding: 10px; /* Reduced padding */
+    padding: 10px; /* Adjusted padding */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     color: #ffffff;
     text-align: center;
 }
 
 .month-container h2 {
-    margin-bottom: 10px; /* Reduced margin */
-    font-size: 1.4rem; /* Reduced font size */
+    margin-bottom: 10px;
+    font-size: 1.4rem; /* Slightly reduced font size */
     color: #007BFF;
     text-transform: uppercase;
 }
 
 .days-container {
     display: grid;
-    grid-template-columns: repeat(7, 1fr); /* 7 days per week */
-    gap: 8px; /* Reduced spacing between days */
+    grid-template-columns: repeat(7, 1fr); /* 7 days in a week */
+    gap: 8px; /* Adjust spacing between days */
 }
 
 .day-cell {
     display: inline-block;
-    width: 35px; /* Reduced size */
-    height: 35px; /* Reduced size */
+    width: 35px; /* Adjust size */
+    height: 35px;
     line-height: 35px;
     text-align: center;
     background: #3a3a3a;
@@ -108,7 +112,7 @@ button:hover {
 /* Media Query for Smaller Screens */
 @media (max-width: 768px) {
     #calendar {
-        grid-template-columns: repeat(2, 1fr); /* 2 columns for small screens */
+        grid-template-columns: repeat(2, 1fr); /* Adjust to 2 columns for smaller screens */
     }
 
     .day-cell {
@@ -118,6 +122,6 @@ button:hover {
     }
 
     .month-container h2 {
-        font-size: 1.2rem; /* Reduced font size */
+        font-size: 1.2rem;
     }
 }
