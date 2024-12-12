@@ -1,4 +1,3 @@
-/* Global Styles */
 body {
     font-family: Arial, sans-serif;
     background-color: #121212; /* Dark background */
@@ -8,13 +7,13 @@ body {
 
 /* Login Page Styles */
 .login-container {
-    background: #1e1e1e; /* Slightly lighter dark color */
+    background: #1e1e1e;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Darker shadow for depth */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     text-align: center;
-    width: 90%; /* Make it responsive */
-    max-width: 400px; /* Limit the max width */
+    width: 90%;
+    max-width: 400px;
     margin: auto;
     margin-top: 10%;
 }
@@ -25,23 +24,18 @@ body {
 }
 
 input {
-    width: calc(100% - 22px); /* Adjust width to fit perfectly inside the container */
-    padding: 10px; /* Add padding inside the input fields */
-    margin: 10px 0; /* Add spacing between input fields */
-    border: 1px solid #444444; /* Border matching dark theme */
-    background-color: #2a2a2a; /* Input background */
-    color: #ffffff; /* White input text */
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #444444;
+    background-color: #2a2a2a;
+    color: #ffffff;
     border-radius: 4px;
-    outline: none; /* Remove default outline */
-}
-
-input:focus {
-    border-color: #007BFF; /* Blue border on focus */
-    box-shadow: 0 0 5px #007BFF; /* Subtle blue glow */
+    outline: none;
 }
 
 button {
-    background-color: #007BFF; /* Blue button */
+    background-color: #007BFF;
     color: white;
     border: none;
     padding: 10px 15px;
@@ -52,30 +46,20 @@ button {
 }
 
 button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
+    background-color: #0056b3;
 }
 
-.error {
-    color: #ff4d4f; /* Red error message */
-    margin-top: 10px;
-}
-
-.welcome {
-    margin-top: 20px;
-    color: #00c851; /* Green welcome message */
-}
-
-/* Calendar Page Styles */
+/* Calendar Styles */
 #calendar {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 months per row */
-    gap: 20px; /* Space between months */
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
     margin-top: 20px;
     padding: 20px;
 }
 
 .month-container {
-    background: #1e1e1e; /* Slightly lighter dark color */
+    background: #1e1e1e;
     border-radius: 8px;
     padding: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -86,7 +70,7 @@ button:hover {
 .month-container h2 {
     margin: 10px 0;
     font-size: 1.4em;
-    color: #FFFFFF;
+    color: #007BFF;
     text-transform: uppercase;
     border-bottom: 1px solid #444;
     padding-bottom: 5px;
@@ -109,7 +93,7 @@ button:hover {
     gap: 2px;
 }
 
-.week-row span {
+.day-cell {
     display: inline-block;
     width: 25px;
     height: 25px;
@@ -121,14 +105,8 @@ button:hover {
     color: #ffffff;
 }
 
-.week-row span:hover {
+.day-cell:hover {
     background: #007BFF;
     color: white;
     cursor: pointer;
 }
-
-button:focus {
-    outline: 2px solid #007BFF; /* Blue focus outline */
-    box-shadow: 0 0 5px #007BFF; /* Subtle glow */
-}
-
