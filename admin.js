@@ -1,12 +1,12 @@
 // Firebase configuration (replace with your Firebase credentials)
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyD0Biwjk-PfEGAsm_FUwavuo_6-FpfQw8I",
+  authDomain: "vacation-calendar-ad463.firebaseapp.com",
+  databaseURL: "https://vacation-calendar-ad463-default-rtdb.firebaseio.com",
+  projectId: "vacation-calendar-ad463",
+  storageBucket: "vacation-calendar-ad463.firebasestorage.app",
+  messagingSenderId: "318751055172",
+  appId: "1:318751055172:web:b511b2a74e7b804f56cb11"
 };
 
 // Initialize Firebase
