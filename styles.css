@@ -15,8 +15,8 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Darker shadow for depth */
     text-align: center;
-    width: 90%; /* Make it responsive */
-    max-width: 400px; /* Limit the max width */
+    width: 50%; /* Make it responsive */
+    max-width: 300px; /* Limit the max width */
 }
 
 h1 {
