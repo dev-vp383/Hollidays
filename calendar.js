@@ -6,15 +6,12 @@ function generateCalendar(year) {
     const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     const calendarContainer = document.getElementById('calendar');
 
-    // Adjust for leap year
     if ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0) {
         daysInMonth[1] = 29;
     }
 
-    // Clear the container
     calendarContainer.innerHTML = '';
 
-    // Generate calendar for each month
     months.forEach((month, index) => {
         const monthContainer = document.createElement('div');
         monthContainer.className = 'month-container';
@@ -38,7 +35,7 @@ function generateCalendar(year) {
                     const dayCell = document.createElement('span');
                     dayCell.className = 'day-cell';
                     dayCell.textContent = dayNumber;
-                    dayCell.dataset.date = `${year}-${month}-${dayNumber}`; // Unique identifier
+                    dayCell.dataset.date = `${year}-${month}-${dayNumber}`;
                     weekRow.appendChild(dayCell);
                 });
 
@@ -51,16 +48,17 @@ function generateCalendar(year) {
         calendarContainer.appendChild(monthContainer);
     });
 
-    // Highlight vacation days
     highlightVacationDays(year);
 }
 
 function highlightVacationDays(year) {
+    const vacationData = JSON.parse(localStorage.getItem('vacationData')) || {};
+
     for (const [employee, dates] of Object.entries(vacationData)) {
         dates.forEach((date) => {
             const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
             if (dayCell) {
-                dayCell.style.backgroundColor = 'orange'; // Taken date color
+                dayCell.style.backgroundColor = 'orange';
             }
         });
     }
