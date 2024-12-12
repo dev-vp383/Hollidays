@@ -15,18 +15,20 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Darker shadow for depth */
     text-align: center;
-    width: 300px;
+    width: 90%; /* Make it responsive */
+    max-width: 400px; /* Limit the max width */
 }
 
 h1 {
     color: #ffffff; /* White for headings */
     margin-bottom: 20px;
+    font-size: 1.8em;
 }
 
 input {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
+    width: calc(100% - 22px); /* Adjust width to fit perfectly inside the container */
+    padding: 10px; /* Add padding inside the input fields */
+    margin: 10px 0; /* Add spacing between input fields */
     border: 1px solid #444444; /* Border matching dark theme */
     background-color: #2a2a2a; /* Input background */
     color: #ffffff; /* White input text */
@@ -46,7 +48,8 @@ button {
     padding: 10px 15px;
     border-radius: 4px;
     cursor: pointer;
-    width: 100%;
+    width: 100%; /* Make button fill the container width */
+    margin-top: 15px; /* Add spacing above the button */
 }
 
 button:hover {
