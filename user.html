@@ -13,7 +13,23 @@
     </div>
     <script src="calendar.js"></script>
     <script>
+        // Generate the calendar for 2025 and fetch vacation data
         generateCalendar(2025);
+
+        // Fetch and highlight taken dates
+        async function highlightTakenDates() {
+            const response = await fetch('vacationData.json');
+            const vacationData = await response.json();
+
+            Object.values(vacationData).flat().forEach((date) => {
+                const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
+                if (dayCell) {
+                    dayCell.style.backgroundColor = 'orange'; // Highlight taken dates
+                }
+            });
+        }
+
+        highlightTakenDates();
     </script>
 </body>
 </html>
