@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js"></script>
 </head>
 <body>
     <div class="login-container">
@@ -14,14 +12,32 @@
         <div id="calendar"></div>
     </div>
     <script src="calendar.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js"></script>
     <script>
-        // Generate the calendar for 2025 and fetch vacation data
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database(app);
+
+        // Generate calendar
         generateCalendar(2025);
 
-        // Fetch and highlight taken dates
+        // Fetch and highlight vacations
         async function highlightTakenDates() {
-            const response = await fetch('vacationData.json');
-            const vacationData = await response.json();
+            const ref = firebase.database().ref('vacations');
+            const snapshot = await ref.get();
+            const vacationData = snapshot.val() || {};
 
             Object.values(vacationData).flat().forEach((date) => {
                 const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
