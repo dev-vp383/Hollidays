@@ -32,8 +32,7 @@ function login() {
             window.location.href = 'admin.html';
         } else {
             // Show welcome message for user
-            welcomeMessage.textContent = `Welcome, ${users[username].role}!`;
-            alert('User access granted. You can view the system.');
+            window.location.href = 'user.html';
         }
     } else {
         errorMessage.textContent = 'Invalid username or password.';
