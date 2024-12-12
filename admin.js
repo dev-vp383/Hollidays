@@ -1,5 +1,5 @@
 // Global vacation data
-const vacationData = {};
+let vacationData = JSON.parse(localStorage.getItem('vacationData')) || {};
 
 // Track selected dates
 let selectedDates = [];
@@ -32,6 +32,12 @@ document.getElementById('add-vacation-btn').addEventListener('click', () => {
     // Add selected dates to the employee's vacation list
     vacationData[employee].push(...selectedDates);
 
+    // Remove duplicates
+    vacationData[employee] = [...new Set(vacationData[employee])];
+
+    // Store the updated data in LocalStorage
+    localStorage.setItem('vacationData', JSON.stringify(vacationData));
+
     // Clear selection
     selectedDates.forEach((date) => {
         const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
@@ -43,6 +49,3 @@ document.getElementById('add-vacation-btn').addEventListener('click', () => {
     selectedDates = [];
     alert(`Vacation added for ${employee}!`);
 });
-
-// Expose vacation data for the user page
-window.vacationData = vacationData;
