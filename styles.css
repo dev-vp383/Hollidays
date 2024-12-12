@@ -7,20 +7,20 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    flex-direction: column; /* Align content vertically */
 }
 
 /* Main Container Styles */
 .login-container {
     background: #1e1e1e;
-    padding: 40px; /* Increased padding for spacing */
+    padding: 30px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
     text-align: center;
-    width: 90%; /* Full width with limits */
-    max-width: 700px; /* Maximum width */
-    overflow: hidden; /* Prevent content overflow */
+    width: 95%; /* Allow width to adapt */
+    max-width: 1200px; /* Fit the calendar better */
     margin: auto;
-    box-sizing: border-box; /* Include padding in size calculations */
+    box-sizing: border-box;
 }
 
 .login-container h1 {
@@ -60,18 +60,18 @@ button:hover {
 /* Calendar Styles */
 #calendar {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 columns for better spacing */
-    gap: 20px; /* Add spacing between months */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Auto-adjust columns */
+    gap: 20px; /* Space between months */
     margin-top: 25px;
     padding: 15px;
-    overflow-x: auto; /* Enable horizontal scrolling if needed */
-    box-sizing: border-box; /* Include padding in size calculations */
+    width: 100%; /* Ensure calendar fits container */
+    box-sizing: border-box;
 }
 
 .month-container {
     background: #2a2a2a;
     border-radius: 8px;
-    padding: 10px; /* Adjusted padding */
+    padding: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     color: #ffffff;
     text-align: center;
@@ -79,7 +79,7 @@ button:hover {
 
 .month-container h2 {
     margin-bottom: 10px;
-    font-size: 1.4rem; /* Slightly reduced font size */
+    font-size: 1.4rem;
     color: #007BFF;
     text-transform: uppercase;
 }
@@ -87,12 +87,12 @@ button:hover {
 .days-container {
     display: grid;
     grid-template-columns: repeat(7, 1fr); /* 7 days in a week */
-    gap: 8px; /* Adjust spacing between days */
+    gap: 8px;
 }
 
 .day-cell {
     display: inline-block;
-    width: 35px; /* Adjust size */
+    width: 35px;
     height: 35px;
     line-height: 35px;
     text-align: center;
@@ -100,7 +100,7 @@ button:hover {
     border-radius: 6px;
     margin: 0 auto;
     color: #ffffff;
-    font-size: 0.85rem; /* Slightly smaller font size */
+    font-size: 0.85rem;
 }
 
 .day-cell:hover {
@@ -112,11 +112,11 @@ button:hover {
 /* Media Query for Smaller Screens */
 @media (max-width: 768px) {
     #calendar {
-        grid-template-columns: repeat(2, 1fr); /* Adjust to 2 columns for smaller screens */
+        grid-template-columns: repeat(2, 1fr); /* Reduce columns to fit smaller screens */
     }
 
     .day-cell {
-        width: 30px; /* Further reduced size */
+        width: 30px; /* Adjust size for smaller screens */
         height: 30px;
         line-height: 30px;
     }
