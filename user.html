@@ -46,24 +46,25 @@
 
         // Highlight Taken Dates
         async function highlightTakenDates() {
-            try {
-                const ref = database.ref('vacations');
-                const snapshot = await ref.get();
-                const vacationData = snapshot.val() || {};
+    try {
+        const snapshot = await database.ref('vacations').get();
+        const vacationData = snapshot.val() || {};
 
-                Object.values(vacationData).flat().forEach((date) => {
-                    const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
-                    if (dayCell) {
-                        dayCell.style.backgroundColor = 'orange'; // Highlight taken dates
-                    }
-                });
+        Object.entries(vacationData).forEach(([employee, dates]) => {
+            const department = employee.split('|')[1]; // Extract department
+            const color = departmentColors[department] || 'gray'; // Default to gray if unknown
 
-                console.log("Vacation dates highlighted successfully.");
-            } catch (error) {
-                console.error("Error fetching vacation data:", error);
-            }
-        }
-
+            dates.forEach((date) => {
+                const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
+                if (dayCell) {
+                    dayCell.style.backgroundColor = color;
+                }
+            });
+        });
+    } catch (error) {
+        console.error('Error fetching vacation data:', error);
+    }
+}
         highlightTakenDates();
     </script>
 </body>
