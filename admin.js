@@ -10,8 +10,16 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+try {
+    firebase.initializeApp(firebaseConfig);
+    console.log("Firebase initialized successfully.");
+} catch (error) {
+    console.error("Error initializing Firebase:", error);
+}
+
+// Get the Realtime Database instance
 const database = firebase.database();
+
 
 // Array to track selected dates
 let selectedDates = [];
