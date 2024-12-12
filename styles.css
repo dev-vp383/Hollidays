@@ -14,7 +14,7 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Darker shadow for depth */
     text-align: center;
     width: 90%; /* Make it responsive */
-    max-width: 1000px; /* Limit the max width */
+    max-width: 400px; /* Limit the max width */
     margin: auto;
     margin-top: 10%;
 }
