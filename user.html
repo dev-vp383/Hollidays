@@ -60,13 +60,14 @@
                     console.log("Vacation data fetched:", vacationData);
 
                     Object.entries(vacationData).forEach(([employee, dates]) => {
-                        const department = employee.split('|')[1]; // Extract department
+                        const [employeeName, department] = employee.split('|'); // Extract employee and department
                         const color = departmentColors[department] || 'gray'; // Default to gray if unknown
 
                         dates.forEach((date) => {
                             const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
                             if (dayCell) {
                                 dayCell.style.backgroundColor = color;
+                                dayCell.setAttribute('data-department', department); // Add department as attribute
                             }
                         });
                     });
