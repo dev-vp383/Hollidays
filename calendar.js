@@ -23,25 +23,12 @@ function generateCalendar(year) {
         const daysContainer = document.createElement('div');
         daysContainer.className = 'days-container';
 
-        let week = [];
         for (let day = 1; day <= daysInMonth[index]; day++) {
-            week.push(day);
-
-            if (week.length === 7 || day === daysInMonth[index]) {
-                const weekRow = document.createElement('div');
-                weekRow.className = 'week-row';
-
-                week.forEach((dayNumber) => {
-                    const dayCell = document.createElement('span');
-                    dayCell.className = 'day-cell';
-                    dayCell.textContent = dayNumber;
-                    dayCell.dataset.date = `${year}-${String(index + 1).padStart(2, '0')}-${String(dayNumber).padStart(2, '0')}`;
-                    weekRow.appendChild(dayCell);
-                });
-
-                daysContainer.appendChild(weekRow);
-                week = [];
-            }
+            const dayCell = document.createElement('span');
+            dayCell.className = 'day-cell';
+            dayCell.textContent = day;
+            dayCell.dataset.date = `${year}-${String(index + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            daysContainer.appendChild(dayCell);
         }
 
         monthContainer.appendChild(daysContainer);
