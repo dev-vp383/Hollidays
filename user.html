@@ -1,71 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="login-container">
-        <h1>User Dashboard</h1>
-        <div id="calendar"></div>
-    </div>
+<script>
+    // Firebase Configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyD0Biwjk-PfEGAsm_FUwavuo_6-FpfQw8I",
+        authDomain: "vacation-calendar-ad463.firebaseapp.com",
+        databaseURL: "https://vacation-calendar-ad463-default-rtdb.firebaseio.com",
+        projectId: "vacation-calendar-ad463",
+        storageBucket: "vacation-calendar-ad463.firebasestorage.app",
+        messagingSenderId: "318751055172",
+        appId: "1:318751055172:web:b511b2a74e7b804f56cb11"
+    };
 
-    <!-- Firebase SDK UMD Versions -->
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
 
-    <!-- Project Scripts -->
-    <script src="calendar.js"></script>
+    // Department Colors
+    const departmentColors = {
+        technical: 'blue',
+        analytics: 'green',
+        vip: 'orange',
+        other: 'purple'
+    };
 
-    <script>
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyD0Biwjk-PfEGAsm_FUwavuo_6-FpfQw8I",
-            authDomain: "vacation-calendar-ad463.firebaseapp.com",
-            databaseURL: "https://vacation-calendar-ad463-default-rtdb.firebaseio.com",
-            projectId: "vacation-calendar-ad463",
-            storageBucket: "vacation-calendar-ad463.firebasestorage.app",
-            messagingSenderId: "318751055172",
-            appId: "1:318751055172:web:b511b2a74e7b804f56cb11"
-        };
+    // Generate Calendar
+    generateCalendar(2025);
 
-        // Initialize Firebase
+    // Highlight Taken Dates
+    async function highlightTakenDates() {
         try {
-            firebase.initializeApp(firebaseConfig);
-            console.log("Firebase initialized successfully.");
-        } catch (error) {
-            console.error("Error initializing Firebase:", error);
-        }
+            const ref = database.ref('vacations');
+            const snapshot = await ref.get();
+            const vacationData = snapshot.val() || {};
 
-        const database = firebase.database();
+            Object.entries(vacationData).forEach(([employee, dates]) => {
+                const department = employee.split('|')[1]; // Extract department
+                const color = departmentColors[department] || 'gray'; // Default to gray if unknown
 
-        // Generate Calendar
-        generateCalendar(2025);
-
-        // Highlight Taken Dates
-        async function highlightTakenDates() {
-    try {
-        const snapshot = await database.ref('vacations').get();
-        const vacationData = snapshot.val() || {};
-
-        Object.entries(vacationData).forEach(([employee, dates]) => {
-            const department = employee.split('|')[1]; // Extract department
-            const color = departmentColors[department] || 'gray'; // Default to gray if unknown
-
-            dates.forEach((date) => {
-                const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
-                if (dayCell) {
-                    dayCell.style.backgroundColor = color;
-                }
+                dates.forEach((date) => {
+                    const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
+                    if (dayCell) {
+                        dayCell.style.backgroundColor = color;
+                    }
+                });
             });
-        });
-    } catch (error) {
-        console.error('Error fetching vacation data:', error);
+
+            console.log('Vacation dates highlighted successfully.');
+        } catch (error) {
+            console.error('Error fetching vacation data:', error);
+        }
     }
-}
-        highlightTakenDates();
-    </script>
-</body>
-</html>
+
+    // Call the function to highlight vacation dates
+    highlightTakenDates();
+</script>
