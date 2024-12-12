@@ -32,7 +32,13 @@
         };
 
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
+        try {
+            firebase.initializeApp(firebaseConfig);
+            console.log("Firebase initialized successfully.");
+        } catch (error) {
+            console.error("Error initializing Firebase:", error);
+        }
+
         const database = firebase.database();
 
         // Generate Calendar
@@ -45,20 +51,19 @@
                 const snapshot = await ref.get();
                 const vacationData = snapshot.val() || {};
 
-                // Loop through vacation data and highlight dates
                 Object.values(vacationData).flat().forEach((date) => {
                     const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
                     if (dayCell) {
                         dayCell.style.backgroundColor = 'orange'; // Highlight taken dates
                     }
                 });
-                console.log('Vacation dates highlighted successfully.');
+
+                console.log("Vacation dates highlighted successfully.");
             } catch (error) {
-                console.error('Error fetching vacation data:', error);
+                console.error("Error fetching vacation data:", error);
             }
         }
 
-        // Call the function to highlight vacation dates
         highlightTakenDates();
     </script>
 </body>
