@@ -128,6 +128,37 @@ button:hover {
 }
 
 
+/* Style for red days */
+.day-cell.red-day {
+    background: red;
+    color: white;
+    font-weight: bold;
+}
+
+/* Div for holiday descriptions */
+.holiday-list {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.holiday-list h2 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.holiday-list ul {
+    padding-left: 20px;
+}
+
+.holiday-list ul li {
+    margin-bottom: 5px;
+}
+
+
+
 /* Media Query for Smaller Screens */
 @media (max-width: 768px) {
     #calendar {
