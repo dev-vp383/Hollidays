@@ -6,27 +6,26 @@ body {
     color: #eaeaea; /* Light gray text */
 }
 
-/* Centered Login Container */
-.login-container {
+/* User Container with Flexbox Layout */
+.user-container,
+.admin-container {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start; /* Align content to the left */
-    margin: 20px;
+    flex-direction: row; /* Side-by-side layout */
+    align-items: flex-start; /* Align sections to the top */
+    gap: 20px; /* Space between sections */
+    padding: 20px;
 }
 
-/* Dashboard Content - Flexbox Layout */
-.dashboard-content {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    gap: 20px;
-}
-
-/* Calendar Section (Admin/Shared) */
+/* Calendar Section */
 #calendar {
+    flex: 2; /* Take up more space compared to the holiday list */
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Two months per row */
+    grid-template-columns: repeat(3, 1fr); /* Three months per row */
     gap: 20px; /* Space between months */
+}
+
+.spacer {
+    flex: 1; /* Flexible space to push the holidays section */
 }
 
 /* Month Container Styling */
@@ -68,7 +67,6 @@ body {
     transition: all 0.3s ease;
 }
 
-/* Hover Effect on Day Cells */
 .day-cell:hover {
     background: #333; /* Dark hover effect */
     transform: scale(1.1);
@@ -83,13 +81,14 @@ body {
 
 /* Holiday List Section */
 .holiday-list {
-    flex: 1;
+    flex: 1; /* Take less space compared to the calendar */
     max-width: 300px;
     background: #2c2c2c; /* Dark gray background */
     padding: 10px;
     border: 1px solid #444; /* Darker border */
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    margin-top: 0; /* Align with the calendar top */
 }
 
 /* Holiday List Header */
@@ -123,6 +122,30 @@ body {
     z-index: 10;
 }
 
+/* Controls Section */
+#controls {
+    display: flex;
+    flex-direction: column; /* Stack label, select, and button */
+    align-items: flex-start; /* Prevent stretching of select dropdown */
+    gap: 10px; /* Add spacing between label, dropdown, and button */
+    margin-bottom: 20px; /* Space between controls and calendar */
+}
+
+#controls label {
+    font-size: 1rem;
+    color: #eaeaea;
+    margin-bottom: 5px;
+}
+
+#employee-select {
+    width: auto; /* Prevent dropdown from stretching unnecessarily */
+    padding: 5px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background: #2c2c2c;
+    color: #eaeaea;
+}
+
 /* Button Styling */
 button {
     padding: 10px 20px;
@@ -133,6 +156,8 @@ button {
     cursor: pointer;
     font-size: 1rem;
     transition: background 0.3s ease;
+    margin-top: 10px; /* Add space above the button */
+    margin-bottom: 20px; /* Add space below the button */
 }
 
 button:hover {
