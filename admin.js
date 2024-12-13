@@ -72,6 +72,7 @@ document.addEventListener('click', (event) => {
 });
 
 // Add Vacation Button Logic
+// Add Vacation Button Logic
 document.getElementById('add-vacation-btn').addEventListener('click', async () => {
     const employeeValue = document.getElementById('employee-select').value;
     const [employee, department] = employeeValue.split('|'); // Extract employee and department
@@ -85,11 +86,16 @@ document.getElementById('add-vacation-btn').addEventListener('click', async () =
         const ref = database.ref(`vacations/${employee}`);
         const snapshot = await ref.get();
 
-        let existingDates = snapshot.val() || [];
-        existingDates = [...new Set([...existingDates, ...selectedDates])];
+        // Retrieve existing data or initialize with default structure
+        let existingData = snapshot.val() || { dates: [], department };
 
-        await ref.set(existingDates);
+        // Combine existing and new dates
+        existingData.dates = [...new Set([...existingData.dates, ...selectedDates])];
 
+        // Save updated data with department
+        await ref.set(existingData);
+
+        // Apply department color to selected dates
         selectedDates.forEach((date) => {
             const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
             if (dayCell) {
@@ -97,7 +103,7 @@ document.getElementById('add-vacation-btn').addEventListener('click', async () =
             }
         });
 
-        selectedDates = [];
+        selectedDates = []; // Clear the selected dates array
         alert(`Vacation added for ${employee}!`);
     } catch (error) {
         console.error('Error saving vacation:', error);
