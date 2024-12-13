@@ -15,8 +15,8 @@ const database = firebase.database();
 
 // Department Colors
 const departmentColors = {
-    technical: '#FCC737',
-    analytics: '#FCC737',
+    technical: '#03346E',
+    analytics: '#03346E',
     vip: '#FCC737',
     other: '#7E1891'
 };
