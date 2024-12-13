@@ -5,55 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Flexbox for Main Dashboard Layout */
-        .dashboard-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 20px;
-        }
-
-        /* Calendar Container */
-        #calendar {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); /* Two months per row */
-            gap: 20px;
-            flex: 2;
-        }
-
-        /* Each Month Container */
-        .month-container {
-            border: 1px solid #ccc;
-            padding: 10px;
-            background: #f9f9f9;
-            border-radius: 8px;
-        }
-
-        /* Holiday List */
-        .holiday-list {
-            flex: 1;
-            max-width: 300px;
-        }
-
-        /* Tooltip Styles */
-        .tooltip {
-            position: absolute;
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.9rem;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.2s;
-            z-index: 10;
-        }
-    </style>
 </head>
 <body>
     <div class="login-container">
-        <h1>Days Off</h1>
+        <h1>Days Off 2025</h1>
         <div class="dashboard-content">
             <!-- Calendar Section -->
             <div id="calendar"></div>
@@ -88,9 +43,9 @@
     <!-- Firebase SDK UMD Versions -->
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
-
     <!-- Calendar Script -->
     <script src="calendar.js"></script>
+
     <script>
         // Firebase Configuration
         const firebaseConfig = {
