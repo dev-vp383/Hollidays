@@ -16,13 +16,43 @@ const database = firebase.database();
 // Department Colors
 const departmentColors = {
     technical: 'blue',
-    analytics: 'green',
-    vip: 'orange',
-    other: 'purple'
+    analytics: 'blue',
+    vip: 'red',
+    other: 'orange'
 };
 
 // Track selected dates
 let selectedDates = [];
+
+// Generate Calendar
+generateCalendar(2025);
+
+// Load Existing Vacations on Page Load
+async function loadExistingVacations() {
+    try {
+        const ref = database.ref('vacations');
+        const snapshot = await ref.get();
+        const vacationData = snapshot.val() || {};
+        console.log('Loaded vacation data:', vacationData);
+
+        Object.entries(vacationData).forEach(([employee, dates]) => {
+            const department = employee.split('|')[1]; // Extract department
+            const color = departmentColors[department] || 'gray'; // Default to gray
+
+            dates.forEach((date) => {
+                const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
+                if (dayCell) {
+                    dayCell.style.backgroundColor = color; // Apply department color
+                }
+            });
+        });
+    } catch (error) {
+        console.error('Error loading vacations:', error);
+    }
+}
+
+// Call function to load vacations
+loadExistingVacations();
 
 // Handle date selection
 document.addEventListener('click', (event) => {
@@ -41,7 +71,7 @@ document.addEventListener('click', (event) => {
     }
 });
 
-// Add vacation and apply department color
+// Add Vacation Button Logic
 document.getElementById('add-vacation-btn').addEventListener('click', async () => {
     const employeeValue = document.getElementById('employee-select').value;
     const [employee, department] = employeeValue.split('|'); // Extract employee and department
@@ -52,18 +82,14 @@ document.getElementById('add-vacation-btn').addEventListener('click', async () =
     }
 
     try {
-        // Get reference to Firebase
         const ref = database.ref(`vacations/${employee}`);
         const snapshot = await ref.get();
 
-        // Combine existing and new dates
         let existingDates = snapshot.val() || [];
         existingDates = [...new Set([...existingDates, ...selectedDates])];
 
-        // Save updated data
         await ref.set(existingDates);
 
-        // Apply department color
         selectedDates.forEach((date) => {
             const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
             if (dayCell) {
