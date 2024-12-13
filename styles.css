@@ -111,25 +111,22 @@ button:hover {
 }
 
 /* Department-Based Colors */
-.day-cell[data-department="technical"] {
+.day-cell[data-department="technical"],
+.day-cell[data-department="analytics"] {
     background: blue;
     color: white;
 }
 
-.day-cell[data-department="analytics"] {
-    background: green;
-    color: white;
-}
-
 .day-cell[data-department="vip"] {
-    background: orange;
+    background: red;
     color: black;
 }
 
 .day-cell[data-department="other"] {
-    background: purple;
-    color: white;
+    background: orange;
+    color: black;
 }
+
 
 /* Media Query for Smaller Screens */
 @media (max-width: 768px) {
