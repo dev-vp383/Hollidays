@@ -32,6 +32,8 @@
                 <li><strong>31.12.2025:</strong> Vecgada diena</li>
             </ul>
         </div>
+        <!-- Tooltip for Vacation Details -->
+        <div id="tooltip" class="tooltip"></div>
     </div>
 
     <!-- Firebase SDK UMD Versions -->
@@ -124,10 +126,14 @@
                     dates.forEach((date) => {
                         const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
                         if (dayCell) {
-                            console.log(`Coloring date: ${date} with color: ${color}`);
-                            dayCell.style.backgroundColor = color;
-                            dayCell.setAttribute('data-department', department); // Add department attribute
-                            dayCell.setAttribute('data-employee', employee); // Add employee name attribute
+                            // Add employee to the list of employees for the date
+                            const existingEmployees = dayCell.getAttribute('data-employees') || '';
+                            const updatedEmployees = existingEmployees
+                                ? `${existingEmployees}, ${employee}`
+                                : employee;
+                            dayCell.setAttribute('data-employees', updatedEmployees);
+
+                            dayCell.style.backgroundColor = color; // Apply department color
                         }
                     });
                 });
@@ -137,6 +143,31 @@
                 console.error("Error fetching vacation data:", error);
             }
         }
+
+        // Tooltip Logic
+        const tooltip = document.getElementById('tooltip');
+        document.addEventListener('mouseover', (event) => {
+            if (event.target.classList.contains('day-cell') && event.target.hasAttribute('data-employees')) {
+                const employees = event.target.getAttribute('data-employees');
+                tooltip.textContent = `Vacation by: ${employees}`;
+                tooltip.style.left = `${event.pageX + 10}px`;
+                tooltip.style.top = `${event.pageY + 10}px`;
+                tooltip.style.opacity = 1; // Show tooltip
+            }
+        });
+
+        document.addEventListener('mousemove', (event) => {
+            if (tooltip.style.opacity === '1') {
+                tooltip.style.left = `${event.pageX + 10}px`;
+                tooltip.style.top = `${event.pageY + 10}px`;
+            }
+        });
+
+        document.addEventListener('mouseout', (event) => {
+            if (event.target.classList.contains('day-cell') && event.target.hasAttribute('data-employees')) {
+                tooltip.style.opacity = 0; // Hide tooltip
+            }
+        });
 
         // Initialize functions
         highlightRedDays();
