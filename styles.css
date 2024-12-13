@@ -25,7 +25,7 @@ body {
 }
 
 .spacer {
-    flex: 1; /* Flexible space to push the holidays section */
+    flex: 0.1; /* Flexible space to push the holidays section */
 }
 
 /* Month Container Styling */
@@ -42,7 +42,7 @@ body {
 .month-container h2 {
     text-align: center;
     margin: 0 0 10px;
-    color: #ff8c00; /* Orange header text */
+    color: #E8BCB9; /* Orange header text */
 }
 
 /* Calendar Days Grid */
@@ -163,3 +163,26 @@ button {
 button:hover {
     background: #555; /* Slightly lighter hover effect */
 }
+
+/* Information Box Section */
+/* Information Box Section */
+/* Information Box Section */
+.info-box {
+    flex: 1; /* Similar to holiday list */
+    max-width: 300px;
+    background: #2c2c2c; /* Dark gray background */
+    padding: 10px;
+    border: 1px solid #444; /* Darker border */
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    margin-top: 0; /* Align with the calendar top */
+    font-size: 0.85rem; /* Slightly smaller font size */
+    line-height: 1.4; /* Adjust line height for better readability */
+}
+
+./* Highlight "VACATION NOT ALLOWED" */
+.vacation-not-allowed {
+    color: red; /* Red text */
+    font-weight: bold; /* Bold text */
+}
+
