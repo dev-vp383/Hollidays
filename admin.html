@@ -7,56 +7,83 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="login-container">
-        <h1>Admin Dashboard</h1>
-        <div id="controls">
-            <label for="employee-select">Select Employee:</label>
-            <select id="employee-select">
-    <!-- Technical Department -->
-    <option value="aleksandrs_potreba|technical">Aleksandrs Potreba</option>
-    <option value="julija_baluta|technical">Jūlija Baluta</option>
-    <option value="anastasija_vinogradova|technical">Anastasija Vinogradova</option>
-
-    <!-- Analytics Team -->
-    <option value="ruslans_pirimovs|analytics">Ruslans Pirimovs</option>
-    <option value="jelizaveta_migunova|analytics">Jelizaveta Migunova</option>
-    <option value="daniels_puskis|analytics">Daniels Pušķis</option>
-
-    <!-- VIP Department -->
-    <option value="anastasija_kirkica|vip">Anastasija Kirkiča</option>
-    <option value="ivo_jegorovs|vip">Ivo Jegorovs</option>
-    <option value="julija_jurcenko|vip">Jūlija Jurčenko</option>
-    <option value="jurijs_kulikovs|vip">Jurijs Kuļikovs</option>
-    <option value="krystsina_liber|vip">Krystsina Liber</option>
-    <option value="kyada_hirenkumar_himmatbhai|vip">Kyada Hirenkumar Himmatbhai</option>
-    <option value="laura_pavulane|vip">Laura Pāvulāne</option>
-    <option value="mari_otagiri|vip">Mari Otagiri</option>
-    <option value="monyque_alves_vieira|vip">Monyque Alves Vieira</option>
-    <option value="nadezhda_berneva|vip">Nadezhda Berneva</option>
-    <option value="natalja_triputina|vip">Nataļja Triputina</option>
-    <option value="nikolajs_pavickis|vip">Nikolajs Pavickis</option>
-    <option value="olga_dudareva|vip">Olga Dudareva</option>
-    <option value="olga_violeta_sherstnova|vip">Olga Violeta Šerstņova</option>
-    <option value="tatjana_tukuma|vip">Tatjana Tukuma</option>
-    <option value="thaisa_xavier|vip">Thaisa Xavier</option>
-    <option value="achraf_tobal_nafae|vip">Achraf Tobal Nafae</option>
-    <option value="edgars_seleznevs|vip">Edgars Seleznevs</option>
-    <option value="aleksandrs_sokolovs|vip">Aleksandrs Sokolovs</option>
-    <option value="devids_balodis|vip">Dēvids Balodis</option>
-    <option value="laura_santana_saenz|vip">Laura Santana Saenz</option>
-    <option value="aleksandrs_tkacenko|vip">Aleksandrs Tkačenko</option>
-    <option value="vjaceslavs_volodins|vip">Vjaceslavs Volodins</option>
-
-    <!-- Other -->
-    <option value="aliaksandryna_ivanova|other">Aliaksandryna Ivanova</option>
-    <option value="vladislavs|other">Vladislavs</option>
-    <option value="aliaksandr_liber|other">Aliaksandr Liber</option>
-    <option value="eduards_popovskis|other">Eduards Popovskis</option>
-</select>
-
-            <button id="add-vacation-btn">Add Vacation</button>
+    <div class="admin-container">
+        <!-- Left Section: Controls and Calendar -->
+        <div id="calendar-section">
+            <h1>Admin Dashboard</h1>
+            <div id="controls">
+                <label for="employee-select">Select Employee:</label>
+                <select id="employee-select">
+                    <!-- Technical Department -->
+                    <option value="aleksandrs_potreba|technical">Aleksandrs Potreba</option>
+                    <option value="julija_baluta|technical">Jūlija Baluta</option>
+                    <option value="anastasija_vinogradova|technical">Anastasija Vinogradova</option>
+                    <!-- Analytics Team -->
+                    <option value="ruslans_pirimovs|analytics">Ruslans Pirimovs</option>
+                    <option value="jelizaveta_migunova|analytics">Jelizaveta Migunova</option>
+                    <option value="daniels_puskis|analytics">Daniels Pušķis</option>
+                    <!-- VIP Department -->
+                    <option value="anastasija_kirkica|vip">Anastasija Kirkiča</option>
+                    <option value="ivo_jegorovs|vip">Ivo Jegorovs</option>
+                    <option value="julija_jurcenko|vip">Jūlija Jurčenko</option>
+                    <option value="jurijs_kulikovs|vip">Jurijs Kuļikovs</option>
+                    <option value="krystsina_liber|vip">Krystsina Liber</option>
+                    <option value="kyada_hirenkumar_himmatbhai|vip">Kyada Hirenkumar Himmatbhai</option>
+                    <option value="laura_pavulane|vip">Laura Pāvulāne</option>
+                    <option value="mari_otagiri|vip">Mari Otagiri</option>
+                    <option value="monyque_alves_vieira|vip">Monyque Alves Vieira</option>
+                    <option value="nadezhda_berneva|vip">Nadezhda Berneva</option>
+                    <option value="natalja_triputina|vip">Nataļja Triputina</option>
+                    <option value="nikolajs_pavickis|vip">Nikolajs Pavickis</option>
+                    <option value="olga_dudareva|vip">Olga Dudareva</option>
+                    <option value="olga_violeta_sherstnova|vip">Olga Violeta Šerstņova</option>
+                    <option value="tatjana_tukuma|vip">Tatjana Tukuma</option>
+                    <option value="thaisa_xavier|vip">Thaisa Xavier</option>
+                    <option value="achraf_tobal_nafae|vip">Achraf Tobal Nafae</option>
+                    <option value="edgars_seleznevs|vip">Edgars Seleznevs</option>
+                    <option value="aleksandrs_sokolovs|vip">Aleksandrs Sokolovs</option>
+                    <option value="devids_balodis|vip">Dēvids Balodis</option>
+                    <option value="laura_santana_saenz|vip">Laura Santana Saenz</option>
+                    <option value="aleksandrs_tkacenko|vip">Aleksandrs Tkačenko</option>
+                    <option value="vjaceslavs_volodins|vip">Vjaceslavs Volodins</option>
+                    <!-- Other -->
+                    <option value="aliaksandryna_ivanova|other">Aliaksandryna Ivanova</option>
+                    <option value="vladislavs|other">Vladislavs</option>
+                    <option value="aliaksandr_liber|other">Aliaksandr Liber</option>
+                    <option value="eduards_popovskis|other">Eduards Popovskis</option>
+                </select>
+            </div>
+            <button id="add-vacation">Add Vacation</button>
+            <div id="calendar">
+                <!-- Calendar months will be dynamically added here -->
+            </div>
         </div>
-        <div id="calendar"></div>
+
+        <!-- Spacer Div -->
+        <div class="spacer"></div>
+
+        <!-- Right Section: Latvia Holidays -->
+        <div class="holiday-list">
+            <h2>Latvia Holidays 2025</h2>
+            <ul>
+                <li><strong>01.01.2025:</strong> Jaungada diena</li>
+                <li><strong>18.04.2025:</strong> Lielā piektdiena</li>
+                <li><strong>20.04.2025:</strong> Pirmās Lieldienas</li>
+                <li><strong>21.04.2025:</strong> Otrās Lieldienas</li>
+                <li><strong>01.05.2025:</strong> Darba svētki</li>
+                <li><strong>04.05.2025:</strong> Neatkarības deklarācijas pasludināšanas diena</li>
+                <li><strong>05.05.2025:</strong> Pārceltā brīvdiena</li>
+                <li><strong>11.05.2025:</strong> Mātes diena</li>
+                <li><strong>08.06.2025:</strong> Vasarsvētki</li>
+                <li><strong>23.06.2025:</strong> Līgo diena</li>
+                <li><strong>24.06.2025:</strong> Jāņu diena</li>
+                <li><strong>18.11.2025:</strong> Latvijas Republikas proklamēšanas diena</li>
+                <li><strong>24.12.2025:</strong> Ziemassvētku vakars</li>
+                <li><strong>25.12.2025:</strong> Pirmie Ziemassvētki</li>
+                <li><strong>26.12.2025:</strong> Otrie Ziemassvētki</li>
+                <li><strong>31.12.2025:</strong> Vecgada diena</li>
+            </ul>
+        </div>
     </div>
 
     <!-- Firebase SDK UMD Versions -->
