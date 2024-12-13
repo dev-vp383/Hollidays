@@ -48,41 +48,42 @@
 
         // Highlight Taken Dates
         async function highlightTakenDates() {
-    try {
-        console.log("Fetching vacation data...");
-        const ref = database.ref('vacations');
-        const snapshot = await ref.get();
-        const vacationData = snapshot.val() || {};
-        console.log("Vacation data fetched:", vacationData);
+            try {
+                console.log("Fetching vacation data...");
+                const ref = database.ref('vacations');
+                const snapshot = await ref.get();
+                const vacationData = snapshot.val() || {};
+                console.log("Vacation data fetched:", vacationData);
 
-        Object.entries(vacationData).forEach(([employee, dates]) => {
-            // Ensure the employee string contains a department
-            if (!employee.includes('|')) {
-                console.warn(`Invalid employee format: ${employee}`);
-                return;
+                // Process each employee's vacation data
+                Object.entries(vacationData).forEach(([employee, info]) => {
+                    if (!info.dates || !info.department) {
+                        console.warn(`Skipping invalid entry for employee: ${employee}`);
+                        return;
+                    }
+
+                    const dates = info.dates;
+                    const department = info.department;
+                    const color = departmentColors[department] || 'gray'; // Default to gray if department unknown
+
+                    console.log(`Employee: ${employee}, Department: ${department}, Dates: ${dates}`);
+
+                    // Apply colors to calendar dates
+                    dates.forEach((date) => {
+                        const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
+                        if (dayCell) {
+                            console.log(`Coloring date: ${date} with color: ${color}`);
+                            dayCell.style.backgroundColor = color;
+                            dayCell.setAttribute('data-department', department); // Add department attribute
+                        }
+                    });
+                });
+
+                console.log("Vacation dates highlighted successfully.");
+            } catch (error) {
+                console.error("Error fetching vacation data:", error);
             }
-
-            const [employeeName, department] = employee.split('|'); // Extract employee and department
-            const color = departmentColors[department] || 'gray'; // Default to gray if unknown
-
-            console.log(`Employee: ${employeeName}, Department: ${department}, Color: ${color}`);
-
-            dates.forEach((date) => {
-                const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
-                if (dayCell) {
-                    console.log(`Coloring date: ${date} with color: ${color}`);
-                    dayCell.style.backgroundColor = color;
-                    dayCell.setAttribute('data-department', department); // Add department attribute
-                }
-            });
-        });
-
-        console.log("Vacation dates highlighted successfully.");
-    } catch (error) {
-        console.error("Error fetching vacation data:", error);
-    }
-}
-
+        }
 
         // Call the function to highlight vacation dates
         highlightTakenDates();
