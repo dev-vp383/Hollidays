@@ -15,10 +15,10 @@ const database = firebase.database();
 
 // Department Colors
 const departmentColors = {
-    technical: 'blue',
-    analytics: 'blue',
-    vip: 'red',
-    other: 'orange'
+    technical: '#FCC737',
+    analytics: '#FCC737',
+    vip: '#FCC737',
+    other: '#7E1891'
 };
 
 // Track selected dates
