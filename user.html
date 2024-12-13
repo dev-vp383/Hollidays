@@ -78,27 +78,36 @@
 
         <!-- Right Section: Latvia Holidays -->
         <div class="holiday-list">
-            <h2>Latvia Holidays 2025</h2>
-            <ul>
-                <li><strong>01.01.2025:</strong> Jaungada diena</li>
-                <li><strong>18.04.2025:</strong> Lielā piektdiena</li>
-                <li><strong>20.04.2025:</strong> Pirmās Lieldienas</li>
-                <li><strong>21.04.2025:</strong> Otrās Lieldienas</li>
-                <li><strong>01.05.2025:</strong> Darba svētki</li>
-                <li><strong>04.05.2025:</strong> Neatkarības deklarācijas pasludināšanas diena</li>
-                <li><strong>05.05.2025:</strong> Pārceltā brīvdiena</li>
-                <li><strong>11.05.2025:</strong> Mātes diena</li>
-                <li><strong>08.06.2025:</strong> Vasarsvētki</li>
-                <li><strong>23.06.2025:</strong> Līgo diena</li>
-                <li><strong>24.06.2025:</strong> Jāņu diena</li>
-                <li><strong>18.11.2025:</strong> Latvijas Republikas proklamēšanas diena</li>
-                <li><strong>24.12.2025:</strong> Ziemassvētku vakars</li>
-                <li><strong>25.12.2025:</strong> Pirmie Ziemassvētki</li>
-                <li><strong>26.12.2025:</strong> Otrie Ziemassvētki</li>
-                <li><strong>31.12.2025:</strong> Vecgada diena</li>
-            </ul>
-        </div>
+    <h2>Latvia Holidays 2025</h2>
+    <ul>
+        <li><strong>01.01.2025:</strong> Jaungada diena</li>
+        <li><strong>18.04.2025:</strong> Lielā piektdiena</li>
+        <li><strong>20.04.2025:</strong> Pirmās Lieldienas</li>
+        <li><strong>21.04.2025:</strong> Otrās Lieldienas</li>
+        <li><strong>01.05.2025:</strong> Darba svētki</li>
+        <li><strong>04.05.2025:</strong> Neatkarības deklarācijas pasludināšanas diena</li>
+        <li><strong>05.05.2025:</strong> Pārceltā brīvdiena</li>
+        <li><strong>11.05.2025:</strong> Mātes diena</li>
+        <li><strong>08.06.2025:</strong> Vasarsvētki</li>
+        <li><strong>23.06.2025:</strong> Līgo diena</li>
+        <li><strong>24.06.2025:</strong> Jāņu diena</li>
+        <li><strong>18.11.2025:</strong> Latvijas Republikas proklamēšanas diena</li>
+        <li><strong>24.12.2025:</strong> Ziemassvētku vakars</li>
+        <li><strong>25.12.2025:</strong> Pirmie Ziemassvētki</li>
+        <li><strong>26.12.2025:</strong> Otrie Ziemassvētki</li>
+        <li><strong>31.12.2025:</strong> Vecgada diena</li>
+    </ul>
+
+    <!-- Color Legend -->
+    <div class="color-legend">
+        <h3>Department Colors</h3>
+        <ul>
+            <li><span class="color-box" style="background-color: #F78E69;"></span> Analytics & Tech. dep.</li>
+            <li><span class="color-box" style="background-color: #368F8B;"></span> VIP dep.</li>
+            <li><span class="color-box" style="background-color: #CB04A5;"></span> Other</li>
+        </ul>
     </div>
+</div>
         <!-- Tooltip for Vacation Details -->
         <div id="tooltip" class="tooltip"></div>
     </div>
@@ -127,10 +136,10 @@
 
         // Department Colors
         const departmentColors = {
-        technical: '#03346E',
-        analytics: '#03346E',
-        vip: '#86D293',
-        other: '#47663B'
+        technical: '#F78E69',
+        analytics: '#F78E69',
+        vip: '#368F8B',
+        other: '#CB04A5'
     };
 
         // Tooltip Element
