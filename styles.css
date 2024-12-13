@@ -2,8 +2,8 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    color: #333;
+    background-color: #1e1e1e; /* Black background */
+    color: #eaeaea; /* Light gray text */
 }
 
 /* Centered Login Container */
@@ -31,17 +31,17 @@ body {
 .holiday-list {
     flex: 1;
     max-width: 300px;
-    background: #ffffff;
+    background: #2c2c2c; /* Dark gray background */
     padding: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid #444; /* Darker border */
     border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 /* Holiday List Header */
 .holiday-list h2 {
     margin-top: 0;
-    color: #ff4500;
+    color: #ff8c00; /* Orange header text */
 }
 
 /* Holiday List Items */
@@ -52,21 +52,23 @@ body {
 
 .holiday-list ul li {
     margin-bottom: 5px;
+    color: #dcdcdc; /* Light gray text for list items */
 }
 
 /* Calendar Month Styling */
 .month-container {
-    border: 1px solid #ccc;
+    border: 1px solid #444; /* Darker border */
     padding: 10px;
-    background: #f9f9f9;
+    background: #2c2c2c; /* Dark gray background */
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 /* Calendar Header */
 .month-container h2 {
     text-align: center;
     margin: 0 0 10px;
+    color: #ff8c00; /* Orange header text */
 }
 
 /* Calendar Days Grid */
@@ -82,31 +84,32 @@ body {
     justify-content: center;
     align-items: center;
     padding: 10px;
-    background: #ffffff;
-    border: 1px solid #ddd;
+    background: #1e1e1e; /* Black background */
+    border: 1px solid #444; /* Darker border */
     border-radius: 4px;
     font-size: 0.9rem;
+    color: #eaeaea; /* Light text */
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 /* Hover Effect on Day Cells */
 .day-cell:hover {
-    background: #e0e0e0;
+    background: #333; /* Dark hover effect */
     transform: scale(1.1);
 }
 
 /* Highlight for Red Days */
 .red-day {
-    background: #ffcccc !important;
-    color: #b30000;
+    background: #ff3333 !important; /* Bright red background */
+    color: #fff !important; /* White text */
     font-weight: bold;
 }
 
 /* Tooltip */
 .tooltip {
     position: absolute;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.8); /* Black tooltip */
     color: white;
     padding: 5px 10px;
     border-radius: 5px;
@@ -120,8 +123,8 @@ body {
 /* Button Styling (If Needed) */
 button {
     padding: 10px 20px;
-    background: #007bff;
-    color: #ffffff;
+    background: #444; /* Dark button */
+    color: #ffffff; /* White text */
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -130,5 +133,5 @@ button {
 }
 
 button:hover {
-    background: #0056b3;
+    background: #555; /* Slightly lighter hover effect */
 }
