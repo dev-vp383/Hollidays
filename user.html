@@ -6,21 +6,31 @@
     <title>User Dashboard</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Flexbox container for calendar and holidays */
+        /* Flexbox for Main Dashboard Layout */
         .dashboard-content {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-top: 20px;
             gap: 20px;
         }
 
-        /* Calendar section */
+        /* Calendar Container */
         #calendar {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Two months per row */
+            gap: 20px;
             flex: 2;
         }
 
-        /* Holiday list section */
+        /* Each Month Container */
+        .month-container {
+            border: 1px solid #ccc;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        /* Holiday List */
         .holiday-list {
             flex: 1;
             max-width: 300px;
@@ -43,7 +53,7 @@
 </head>
 <body>
     <div class="login-container">
-        <h1>Days off</h1>
+        <h1>Days Off</h1>
         <div class="dashboard-content">
             <!-- Calendar Section -->
             <div id="calendar"></div>
