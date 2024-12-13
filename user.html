@@ -3,30 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Days off 2025</title>
+    <title>User Dashboard</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Tooltip Styles */
-        .tooltip {
-            position: absolute;
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.9rem;
-            pointer-events: none; /* Prevents blocking hover events */
-            opacity: 0; /* Initially hidden */
-            transition: opacity 0.2s;
-            z-index: 10;
-        }
-    </style>
 </head>
 <body>
     <div class="login-container">
         <h1>User Dashboard</h1>
         <div id="calendar"></div>
-        <!-- Tooltip -->
-        <div id="tooltip" class="tooltip"></div>
+        <!-- Holiday Description -->
+        <div class="holiday-list">
+            <h2>Latvia Holidays 2025</h2>
+            <ul>
+                <li><strong>01.01.2025:</strong> Jaungada diena</li>
+                <li><strong>18.04.2025:</strong> Lielā piektdiena</li>
+                <li><strong>20.04.2025:</strong> Pirmās Lieldienas</li>
+                <li><strong>21.04.2025:</strong> Otrās Lieldienas</li>
+                <li><strong>01.05.2025:</strong> Darba svētki, Satversmes sapulces diena</li>
+                <li><strong>04.05.2025:</strong> Neatkarības deklarācijas pasludināšanas diena</li>
+                <li><strong>05.05.2025:</strong> Pārceltā brīvdiena</li>
+                <li><strong>11.05.2025:</strong> Mātes diena</li>
+                <li><strong>08.06.2025:</strong> Vasarsvētki</li>
+                <li><strong>23.06.2025:</strong> Līgo diena</li>
+                <li><strong>24.06.2025:</strong> Jāņu diena</li>
+                <li><strong>18.11.2025:</strong> Latvijas Republikas proklamēšanas diena</li>
+                <li><strong>24.12.2025:</strong> Ziemassvētku vakars</li>
+                <li><strong>25.12.2025:</strong> Pirmie Ziemassvētki</li>
+                <li><strong>26.12.2025:</strong> Otrie Ziemassvētki</li>
+                <li><strong>31.12.2025:</strong> Vecgada diena</li>
+            </ul>
+        </div>
     </div>
 
     <!-- Firebase SDK UMD Versions -->
@@ -60,8 +65,38 @@
             other: 'orange'
         };
 
+        // Red Days
+        const redDays = [
+            "2025-01-01",
+            "2025-04-18",
+            "2025-04-20",
+            "2025-04-21",
+            "2025-05-01",
+            "2025-05-04",
+            "2025-05-05",
+            "2025-05-11",
+            "2025-06-08",
+            "2025-06-23",
+            "2025-06-24",
+            "2025-11-18",
+            "2025-12-24",
+            "2025-12-25",
+            "2025-12-26",
+            "2025-12-31"
+        ];
+
         // Generate Calendar
         generateCalendar(2025);
+
+        // Highlight Red Days
+        function highlightRedDays() {
+            redDays.forEach((date) => {
+                const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
+                if (dayCell) {
+                    dayCell.classList.add("red-day");
+                }
+            });
+        }
 
         // Highlight Taken Dates
         async function highlightTakenDates() {
@@ -89,14 +124,10 @@
                     dates.forEach((date) => {
                         const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
                         if (dayCell) {
-                            // Add employee to the list of employees for the date
-                            const existingEmployees = dayCell.getAttribute('data-employees') || '';
-                            const updatedEmployees = existingEmployees
-                                ? `${existingEmployees}, ${employee}`
-                                : employee;
-                            dayCell.setAttribute('data-employees', updatedEmployees);
-
-                            dayCell.style.backgroundColor = color; // Apply department color
+                            console.log(`Coloring date: ${date} with color: ${color}`);
+                            dayCell.style.backgroundColor = color;
+                            dayCell.setAttribute('data-department', department); // Add department attribute
+                            dayCell.setAttribute('data-employee', employee); // Add employee name attribute
                         }
                     });
                 });
@@ -107,32 +138,8 @@
             }
         }
 
-        // Tooltip Logic
-        const tooltip = document.getElementById('tooltip');
-        document.addEventListener('mouseover', (event) => {
-            if (event.target.classList.contains('day-cell') && event.target.hasAttribute('data-employees')) {
-                const employees = event.target.getAttribute('data-employees');
-                tooltip.textContent = `Vacation by: ${employees}`;
-                tooltip.style.left = `${event.pageX + 10}px`;
-                tooltip.style.top = `${event.pageY + 10}px`;
-                tooltip.style.opacity = 1; // Show tooltip
-            }
-        });
-
-        document.addEventListener('mousemove', (event) => {
-            if (tooltip.style.opacity === '1') {
-                tooltip.style.left = `${event.pageX + 10}px`;
-                tooltip.style.top = `${event.pageY + 10}px`;
-            }
-        });
-
-        document.addEventListener('mouseout', (event) => {
-            if (event.target.classList.contains('day-cell') && event.target.hasAttribute('data-employees')) {
-                tooltip.style.opacity = 0; // Hide tooltip
-            }
-        });
-
-        // Call the function to highlight vacation dates
+        // Initialize functions
+        highlightRedDays();
         highlightTakenDates();
     </script>
 </body>
