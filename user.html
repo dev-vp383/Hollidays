@@ -5,11 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Tooltip Styles */
+        .tooltip {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            pointer-events: none; /* Prevents blocking hover events */
+            opacity: 0; /* Initially hidden */
+            transition: opacity 0.2s;
+        }
+    </style>
 </head>
 <body>
     <div class="login-container">
         <h1>User Dashboard</h1>
         <div id="calendar"></div>
+        <!-- Tooltip -->
+        <div id="tooltip" class="tooltip"></div>
     </div>
 
     <!-- Firebase SDK UMD Versions -->
@@ -75,6 +91,7 @@
                             console.log(`Coloring date: ${date} with color: ${color}`);
                             dayCell.style.backgroundColor = color;
                             dayCell.setAttribute('data-department', department); // Add department attribute
+                            dayCell.setAttribute('data-employee', employee); // Add employee name attribute
                         }
                     });
                 });
@@ -84,6 +101,31 @@
                 console.error("Error fetching vacation data:", error);
             }
         }
+
+        // Tooltip Logic
+        const tooltip = document.getElementById('tooltip');
+        document.addEventListener('mouseover', (event) => {
+            if (event.target.classList.contains('day-cell') && event.target.hasAttribute('data-employee')) {
+                const employeeName = event.target.getAttribute('data-employee');
+                tooltip.textContent = `Vacation by: ${employeeName}`;
+                tooltip.style.left = `${event.pageX + 10}px`;
+                tooltip.style.top = `${event.pageY + 10}px`;
+                tooltip.style.opacity = 1; // Show tooltip
+            }
+        });
+
+        document.addEventListener('mousemove', (event) => {
+            if (tooltip.style.opacity === '1') {
+                tooltip.style.left = `${event.pageX + 10}px`;
+                tooltip.style.top = `${event.pageY + 10}px`;
+            }
+        });
+
+        document.addEventListener('mouseout', (event) => {
+            if (event.target.classList.contains('day-cell') && event.target.hasAttribute('data-employee')) {
+                tooltip.style.opacity = 0; // Hide tooltip
+            }
+        });
 
         // Call the function to highlight vacation dates
         highlightTakenDates();
