@@ -6,6 +6,26 @@
     <title>User Dashboard</title>
     <link rel="stylesheet" href="styles.css">
     <style>
+        /* Flexbox container for calendar and holidays */
+        .dashboard-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-top: 20px;
+            gap: 20px;
+        }
+
+        /* Calendar section */
+        #calendar {
+            flex: 2;
+        }
+
+        /* Holiday list section */
+        .holiday-list {
+            flex: 1;
+            max-width: 300px;
+        }
+
         /* Tooltip Styles */
         .tooltip {
             position: absolute;
@@ -23,29 +43,33 @@
 </head>
 <body>
     <div class="login-container">
-        <h1>Days off 2025</h1>
-        <div id="calendar"></div>
-        <!-- Holiday Description -->
-        <div class="holiday-list">
-            <h2>Latvia Holidays 2025</h2>
-            <ul>
-                <li><strong>01.01.2025:</strong> Jaungada diena</li>
-                <li><strong>18.04.2025:</strong> Lielā piektdiena</li>
-                <li><strong>20.04.2025:</strong> Pirmās Lieldienas</li>
-                <li><strong>21.04.2025:</strong> Otrās Lieldienas</li>
-                <li><strong>01.05.2025:</strong> Darba svētki</li>
-                <li><strong>04.05.2025:</strong> Neatkarības deklarācijas pasludināšanas diena</li>
-                <li><strong>05.05.2025:</strong> Pārceltā brīvdiena</li>
-                <li><strong>11.05.2025:</strong> Mātes diena</li>
-                <li><strong>08.06.2025:</strong> Vasarsvētki</li>
-                <li><strong>23.06.2025:</strong> Līgo diena</li>
-                <li><strong>24.06.2025:</strong> Jāņu diena</li>
-                <li><strong>18.11.2025:</strong> Latvijas Republikas proklamēšanas diena</li>
-                <li><strong>24.12.2025:</strong> Ziemassvētku vakars</li>
-                <li><strong>25.12.2025:</strong> Pirmie Ziemassvētki</li>
-                <li><strong>26.12.2025:</strong> Otrie Ziemassvētki</li>
-                <li><strong>31.12.2025:</strong> Vecgada diena</li>
-            </ul>
+        <h1>Days off</h1>
+        <div class="dashboard-content">
+            <!-- Calendar Section -->
+            <div id="calendar"></div>
+
+            <!-- Latvia Holidays Section -->
+            <div class="holiday-list">
+                <h2>Latvia Holidays 2025</h2>
+                <ul>
+                    <li><strong>01.01.2025:</strong> Jaungada diena</li>
+                    <li><strong>18.04.2025:</strong> Lielā piektdiena</li>
+                    <li><strong>20.04.2025:</strong> Pirmās Lieldienas</li>
+                    <li><strong>21.04.2025:</strong> Otrās Lieldienas</li>
+                    <li><strong>01.05.2025:</strong> Darba svētki</li>
+                    <li><strong>04.05.2025:</strong> Neatkarības deklarācijas pasludināšanas diena</li>
+                    <li><strong>05.05.2025:</strong> Pārceltā brīvdiena</li>
+                    <li><strong>11.05.2025:</strong> Mātes diena</li>
+                    <li><strong>08.06.2025:</strong> Vasarsvētki</li>
+                    <li><strong>23.06.2025:</strong> Līgo diena</li>
+                    <li><strong>24.06.2025:</strong> Jāņu diena</li>
+                    <li><strong>18.11.2025:</strong> Latvijas Republikas proklamēšanas diena</li>
+                    <li><strong>24.12.2025:</strong> Ziemassvētku vakars</li>
+                    <li><strong>25.12.2025:</strong> Pirmie Ziemassvētki</li>
+                    <li><strong>26.12.2025:</strong> Otrie Ziemassvētki</li>
+                    <li><strong>31.12.2025:</strong> Vecgada diena</li>
+                </ul>
+            </div>
         </div>
         <!-- Tooltip for Vacation Details -->
         <div id="tooltip" class="tooltip"></div>
@@ -57,7 +81,6 @@
 
     <!-- Calendar Script -->
     <script src="calendar.js"></script>
-
     <script>
         // Firebase Configuration
         const firebaseConfig = {
@@ -78,7 +101,7 @@
         const departmentColors = {
             technical: 'blue',
             analytics: 'blue',
-            vip: 'green',
+            vip: 'red',
             other: 'orange'
         };
 
