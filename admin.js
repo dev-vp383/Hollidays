@@ -18,7 +18,7 @@ const departmentColors = {
     technical: 'blue',
     analytics: 'blue',
     vip: 'red',
-    other: #FCC737
+    other: '#FCC737'
 };
 
 // Track selected dates
