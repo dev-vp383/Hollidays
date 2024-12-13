@@ -24,8 +24,70 @@ const departmentColors = {
 // Track selected dates
 let selectedDates = [];
 
-// Generate Calendar
-generateCalendar(2025);
+// Ensure DOM is fully loaded before executing
+document.addEventListener("DOMContentLoaded", () => {
+    // Generate Calendar
+    generateCalendar(2025);
+
+    // Load Existing Vacations
+    loadExistingVacations();
+
+    // Add Vacation Button Logic
+    document.getElementById('add-vacation').addEventListener('click', async () => {
+        const employeeValue = document.getElementById('employee-select').value;
+        const [employee, department] = employeeValue.split('|'); // Extract employee and department
+
+        if (!selectedDates.length) {
+            alert('Please select at least one date.');
+            return;
+        }
+
+        try {
+            const ref = database.ref(`vacations/${employee}`);
+            const snapshot = await ref.get();
+
+            // Retrieve existing data or initialize with default structure
+            let existingData = snapshot.val() || { dates: [], department };
+
+            // Combine existing and new dates
+            existingData.dates = [...new Set([...existingData.dates, ...selectedDates])];
+
+            // Save updated data with department
+            await ref.set(existingData);
+
+            // Apply department color to selected dates
+            selectedDates.forEach((date) => {
+                const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
+                if (dayCell) {
+                    dayCell.style.backgroundColor = departmentColors[department]; // Apply department color
+                }
+            });
+
+            selectedDates = []; // Clear the selected dates array
+            alert(`Vacation added for ${employee}!`);
+        } catch (error) {
+            console.error('Error saving vacation:', error);
+            alert('Failed to save vacation.');
+        }
+    });
+
+    // Handle date selection
+    document.addEventListener('click', (event) => {
+        if (event.target.classList.contains('day-cell')) {
+            const date = event.target.dataset.date;
+
+            if (selectedDates.includes(date)) {
+                selectedDates = selectedDates.filter((d) => d !== date);
+                event.target.style.backgroundColor = ''; // Reset to default color
+            } else {
+                selectedDates.push(date);
+                event.target.style.backgroundColor = 'yellow'; // Temporary highlight
+            }
+
+            console.log('Selected Dates:', selectedDates);
+        }
+    });
+});
 
 // Load Existing Vacations on Page Load
 async function loadExistingVacations() {
@@ -35,78 +97,19 @@ async function loadExistingVacations() {
         const vacationData = snapshot.val() || {};
         console.log('Loaded vacation data:', vacationData);
 
-        Object.entries(vacationData).forEach(([employee, dates]) => {
-            const department = employee.split('|')[1]; // Extract department
-            const color = departmentColors[department] || 'gray'; // Default to gray
+        Object.entries(vacationData).forEach(([employee, data]) => {
+            const { dates, department } = data;
 
-            dates.forEach((date) => {
-                const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
-                if (dayCell) {
-                    dayCell.style.backgroundColor = color; // Apply department color
-                }
-            });
+            if (Array.isArray(dates)) {
+                dates.forEach((date) => {
+                    const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
+                    if (dayCell) {
+                        dayCell.style.backgroundColor = departmentColors[department] || 'gray'; // Apply department color
+                    }
+                });
+            }
         });
     } catch (error) {
         console.error('Error loading vacations:', error);
     }
 }
-
-// Call function to load vacations
-loadExistingVacations();
-
-// Handle date selection
-document.addEventListener('click', (event) => {
-    if (event.target.classList.contains('day-cell')) {
-        const date = event.target.dataset.date;
-
-        if (selectedDates.includes(date)) {
-            selectedDates = selectedDates.filter((d) => d !== date);
-            event.target.style.backgroundColor = '#3a3a3a'; // Reset color
-        } else {
-            selectedDates.push(date);
-            event.target.style.backgroundColor = 'yellow'; // Temporary highlight
-        }
-
-        console.log('Selected Dates:', selectedDates);
-    }
-});
-
-// Add Vacation Button Logic
-// Add Vacation Button Logic
-document.getElementById('add-vacation-btn').addEventListener('click', async () => {
-    const employeeValue = document.getElementById('employee-select').value;
-    const [employee, department] = employeeValue.split('|'); // Extract employee and department
-
-    if (!selectedDates.length) {
-        alert('Please select at least one date.');
-        return;
-    }
-
-    try {
-        const ref = database.ref(`vacations/${employee}`);
-        const snapshot = await ref.get();
-
-        // Retrieve existing data or initialize with default structure
-        let existingData = snapshot.val() || { dates: [], department };
-
-        // Combine existing and new dates
-        existingData.dates = [...new Set([...existingData.dates, ...selectedDates])];
-
-        // Save updated data with department
-        await ref.set(existingData);
-
-        // Apply department color to selected dates
-        selectedDates.forEach((date) => {
-            const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
-            if (dayCell) {
-                dayCell.style.backgroundColor = departmentColors[department]; // Apply department color
-            }
-        });
-
-        selectedDates = []; // Clear the selected dates array
-        alert(`Vacation added for ${employee}!`);
-    } catch (error) {
-        console.error('Error saving vacation:', error);
-        alert('Failed to save vacation.');
-    }
-});
