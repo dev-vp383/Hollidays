@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vacations Dates 2025</title>
+    <link rel="stylesheet" href="user.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
+</head>
+<body>
+    <div class="user-container">
+        <!-- Calendar Section -->
+        <div id="calendar-section">
+            <h1>Vacations Dates 2025</h1>
+            <div id="calendar">
+                <!-- Calendar months will be dynamically added here -->
+            </div>
+        </div>
+
+        <!-- Right Section: Descriptions and Notes -->
+        <<div id="notes-section">
+    <h2>Important Information</h2>
+<p>Please note: All vacation requests must be submitted at least <span class="bold-number">3</span> months in advance.</p>
+    <h3>Description:</h3>
+    <ul>
+    <li><span class="color-box latvian-holiday"></span> Latvian holidays (highest priority)</li>
+    <li><span class="color-box restricted-date"></span> Restricted dates (vacations not allowed)</li>
+    <li><span class="color-box special-date"></span> Special dates (company-specific events)</li>
+    <li><span class="color-box reserved-date"></span> Reserved vacation dates</li>
+    <li><span class="color-box approved-vip"></span> Approved vacation dates (VIP Department)</li>
+    <li><span class="color-box approved-tech-analytics"></span> Approved vacation dates (Technical or Analytics Department)</li>
+    <li><span class="dot-indicator2"></span> Fully booked (vacation not allowed)</li>
+</ul>
+</div>
+
+
+        <!-- Tooltip -->
+        <div id="tooltip" class="tooltip"></div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="calendar.js"></script>
+    <script src="special-dates.js"></script>
+    <script src="restricted-dates.js"></script>
+    <script src="latvian-holidays.js"></script>
+    <script src="vacation-status.js"></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Calendar Section -->
+        <div id="calendar-section">
+            <h1>Admin Dashboard</h1>
+            
+            <!-- Vacation Controls -->
+            <div id="controls">
+                <label for="employee-select">Select Employee:</label>
+                <select id="employee-select"></select>
+
+                <button id="add-vacation">Add Vacation</button>
+            </div>
+
+            <!-- Calendar -->
+            <div id="calendar">
+                <!-- Calendar months will be dynamically added here -->
+            </div>
+        </div>
+
+        <!-- Tooltip Element -->
+ 
+	<!-- Tooltip Elements -->
+<div id="tooltip" class="tooltip"></div>
+<div id="vacation-tooltip" class="tooltip"></div>
+<div id="special-dates-tooltip" class="tooltip"></div>
+
+
+        <!-- Right Section: Reserved and Approved Vacations -->
+        <div class="submitted-vacations">
+            <h2>Reserved Vacations</h2>
+            <ul id="reserved-vacations-list"></ul>
+
+            <div class="approval-controls">
+    <h2>Approve/Delete Vacation</h2>
+    <select id="approve-dropdown">
+        <option value="" disabled selected>Select a Reserved Vacation</option>
+    </select>
+    <button id="approve-button">Approve</button>
+    <button id="delete-button" style="margin-left: 10px; background-color: red; color: white;">Delete</button>
+    <select id="delete-approved-dropdown" style="margin-left: 10px;">
+        <option value="" disabled selected>Select an Approved Vacation</option>
+    </select>
+</div>
+
+
+
+            <h2>Approved Vacations</h2>
+            <ul id="approved-vacations-list"></ul>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
+
+    <!-- JavaScript Files -->
+ <script src="restricted-dates.js"></script>
+<script src="special-dates.js"></script>
+<script src="calendar.js"></script>
+<script src="latvian-holidays.js"></script>
+<script src="admin.js"></script>
+
+</html>
