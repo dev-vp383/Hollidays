@@ -21,30 +21,71 @@
 
         <!-- Right Section: Descriptions and Notes -->
         <<div id="notes-section">
-    <h2>Important Information</h2>
-<p>Please note: All vacation requests must be submitted at least <span class="bold-number">3</span> months in advance.</p>
-    <h3>Description:</h3>
-    <ul>
-    <li><span class="color-box latvian-holiday"></span> Latvian holidays (highest priority)</li>
-    <li><span class="color-box restricted-date"></span> Restricted dates (vacations not allowed)</li>
-    <li><span class="color-box special-date"></span> Special dates (company-specific events)</li>
-    <li><span class="color-box reserved-date"></span> Reserved vacation dates</li>
-    <li><span class="color-box approved-vip"></span> Approved vacation dates (VIP Department)</li>
-    <li><span class="color-box approved-tech-analytics"></span> Approved vacation dates (Technical or Analytics Department)</li>
-    <li><span class="dot-indicator2"></span> Fully booked (vacation not allowed)</li>
+ <h2>Important Information</h2>
+<p>
+    Please note: All vacation requests must be submitted at least 
+    <span class="bold-number">3</span> months in advance.
+</p>
+<h3>Vacation Rules:</h3>
+<ul>
+
+    <li>Vacation dates are fully booked in the following scenarios:</li>
+
+    <li>
+        <strong>2 VIP managers request the same week.</strong>
+    </li>
+    <li>
+        <ul>
+            <li><strong>One Analytical and one Technical team member request the same week.</strong></li>
+        </ul>
+    </li>
+    <li>
+        <strong>Vacations are not allowed</strong> &nbsp;during &nbsp;
+        <span style="text-decoration: underline;">restricted dates</span> &nbsp;marked on the calendar.
+    </li>
+    <li>
+        <strong>Vacations are not allowed: </strong> &nbsp;if &nbsp;
+        <span style="text-decoration: underline;">two or more</span> &nbsp;employees from the same department request the same dates.
+    </li>
 </ul>
+<h3>Description:</h3>
+<ul>
+
+    <li><span class="color-box restricted-date"></span> Restricted dates (<span style="color: red;">VACATION NOT ALLOWED </span>).</li>
+    <li><span class="color-box reserved-date"></span> Reserved vacation dates.</li>
+    <li><span class="color-box approved-vip"></span> Approved vacation dates (VIP Department).</li>
+    <li><span class="color-box approved-tech-analytics"></span> Approved vacation dates (Technical or Analytics Department).</li>
+    <li><span class="dot-indicator2"></span> Fully booked (<span style="color: red;">VACATION NOT ALLOWED</span>).</li>
+</ul>
+
+<h3>Dates when vacation is not allowed and Approved Vacations:</h3>
+<div class="fully-booked-container">
+    <!-- Left: Restricted Dates -->
+    <div id="restricted-dates">
+        <h4>Vacation not alllowed:</h4>
+        <ul id="restricted-dates-list">
+            <!-- Restricted dates will be dynamically loaded here -->
+        </ul>
+    </div>
+
+    <!-- Right: Approved Vacations -->
+    <div id="approved-vacations">
+        <h4>Approved Vacations:</h4>
+        <ul id="approved-vacations-list">
+            <!-- Approved vacations will be dynamically loaded here -->
+        </ul>
+    </div>
 </div>
-
-
+</div>
         <!-- Tooltip -->
         <div id="tooltip" class="tooltip"></div>
     </div>
 
     <!-- JavaScript Files -->
     <script src="calendar.js"></script>
-    <script src="special-dates.js"></script>
-    <script src="restricted-dates.js"></script>
-    <script src="latvian-holidays.js"></script>
+   <script src="dates-highlighting.js"></script>
+<script src="vacation-details.js"></script>
+
     <script src="vacation-status.js"></script>
 </body>
 </html>
