@@ -60,6 +60,10 @@ function generateCalendar(year) {
             dayCell.textContent = day;
             dayCell.dataset.date = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
             dayCell.classList.add("day-cell");
+
+            // Remove the diagonal background logic entirely
+            // If you had any conditions for applying diagonals, they are now removed.
+
             daysContainer.appendChild(dayCell);
         }
 
@@ -71,18 +75,4 @@ function generateCalendar(year) {
 // Initialize Calendar
 document.addEventListener("DOMContentLoaded", () => {
     generateCalendar(year);
-	highlightLatvianHolidays(); 
-
-    // Highlight restricted and special dates
-    if (typeof highlightVacationNotAllowed === "function") {
-        highlightVacationNotAllowed();
-    } else {
-        console.error("highlightVacationNotAllowed function is not defined. Ensure restricted-dates.js is loaded.");
-    }
-
-    if (typeof highlightSpecialDates === "function") {
-        highlightSpecialDates();
-    } else {
-        console.error("highlightSpecialDates function is not defined. Ensure special-dates.js is loaded.");
-    }
 });
