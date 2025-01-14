@@ -33,7 +33,6 @@ document.addEventListener("DOMContentLoaded", () => {
             { name: "Jevgenijs B.", value: "Jevgenijs_B|vip" },
             { name: "Jūlija J.", value: "Jūlija_J|vip" },
             { name: "Jurijs K.", value: "Jurijs_K|vip" },
-            { name: "Krystsina L.", value: "Krystsina_L|vip" },
             { name: "Kyada Hirenkumar H.", value: "Kyada_Hirenkumar_H|vip" },
             { name: "Laura P.", value: "Laura_P|vip" },
             { name: "Mari O.", value: "Mari_O|vip" },
