@@ -58,6 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
         other: [
             { name: "Aliaksandryna I.", value: "Aliaksandryna_I|other" },
             { name: "Vladislavs", value: "Vladislavs|other" },
+            { name: "Krystina L.", value: "Krystina L.|other" },
             { name: "Aliaksandr L.", value: "Aliaksandr_L|other" },
             { name: "Eduards P.", value: "Eduards_P|other" },
             { name: "Romans S.", value: "Romans_S|other" }
