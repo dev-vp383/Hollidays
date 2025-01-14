@@ -259,7 +259,7 @@ body {
 }
 
 .vacations-list {
-    font-size: 1rem; /* Smaller font size */
+    font-size: 0.85rem; /* Smaller font size */
     line-height: 1.4;   /* Adjusted line spacing for readability */
     margin: 10px 0;     /* Add spacing between elements */
 }
