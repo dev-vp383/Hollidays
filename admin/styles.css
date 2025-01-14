@@ -264,6 +264,22 @@ body {
     margin: 10px 0;     /* Add spacing between elements */
 }
 
+.month-wrapper {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #555; /* Darker border */
+    border-radius: 8px;
+    background-color: #2e2e2e; /* Slightly lighter background for the wrapper */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow for better separation */
+}
+
+.month-wrapper h3 {
+    margin: 0 0 10px; /* Add spacing below the header */
+    color: #ff8c00; /* Distinct color for the header text */
+    font-size: 1.2rem;
+    border-bottom: 2px solid #444; /* Underline to distinguish the header */
+    padding-bottom: 5px;
+}
 
 /* Dropdowns */
 #employee-select,
