@@ -11,8 +11,7 @@ body {
 
 .admin-container {
     display: flex;
-    flex-wrap: wrap; /* Allow wrapping on smaller screens */
-    gap: 10px; /* Space between sections */
+    gap: 10px; /* Space between calendar and submitted vacations */
     align-items: flex-start; /* Align both sections to the top */
 }
 
@@ -26,61 +25,19 @@ body {
     height: auto; /* Ensure it adjusts based on content */
 }
 
-.submitted-vacations, #notes-section, #color-key-section {
-    flex: 1 1 100%; /* Allow each section to take full width on smaller screens */
-    max-width: 400px;
-}
-
 /* Calendar Section */
 #calendar-section {
-    flex: 1 1 100%; /* Full width by default */
+    flex: 1; /* Calendar takes up 2/3 of the container */
     max-width: 1300px;
 }
 
 /* Calendar */
 #calendar {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid layout */
+    grid-template-columns: repeat(3, 1fr); /* 3 months per row */
     gap: 20px; /* Space between months */
-    margin-left: 10px; /* Add spacing for the calendar */
+    margin-left: 10px; /* Add spacing specifically for the calendar */
 }
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .admin-container {
-        flex-direction: column; /* Stack elements vertically on smaller screens */
-    }
-
-    .submitted-vacations, #notes-section, #color-key-section {
-        max-width: 100%;
-    }
-
-    #calendar {
-        grid-template-columns: repeat(2, 1fr); /* 2 columns for smaller screens */
-    }
-}
-
-@media (max-width: 480px) {
-    #calendar {
-        grid-template-columns: repeat(1, 1fr); /* 1 column for very small screens */
-    }
-}
-
-/* Adjustments for buttons and dropdowns */
-button, #employee-select, #approve-dropdown, #delete-approved-dropdown {
-    width: 100%; /* Full width on smaller screens */
-    max-width: 300px;
-}
-
-/* Ensure right section fits within smaller screens */
-.submitted-vacations {
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid #444;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-    overflow-x: auto; /* Allow scrolling if content overflows */
-}
-
 
 #notes-section {
     flex: 1; /* Notes section takes remaining space */
@@ -307,7 +264,6 @@ button, #employee-select, #approve-dropdown, #delete-approved-dropdown {
     margin: 10px 0;     /* Add spacing between elements */
 }
 
-
 .month-wrapper {
     padding: 15px;
     margin-bottom: 20px;
@@ -324,7 +280,6 @@ button, #employee-select, #approve-dropdown, #delete-approved-dropdown {
     border-bottom: 2px solid #444; /* Underline to distinguish the header */
     padding-bottom: 5px;
 }
-
 
 /* Dropdowns */
 #employee-select,
@@ -505,4 +460,96 @@ button:active {
     margin-bottom: 5px;
     color: #dcdcdc; /* Light gray text */
     font-size: 0.9rem;
+}
+
+
+/* Mobile Responsive Layout */
+@media screen and (max-width: 768px) {
+    /* Adjust layout for small screens */
+    .admin-container {
+        flex-direction: column; /* Stack sections vertically */
+        gap: 20px; /* Adjust spacing for better readability */
+        padding-left: 10px; /* Reduce padding */
+        padding-right: 10px;
+    }
+
+    #calendar-section,
+    .submitted-vacations,
+    #notes-section,
+    #color-key-section {
+        max-width: 100%; /* Make sections full-width */
+        width: 100%;
+    }
+
+    /* Calendar Grid */
+    #calendar {
+        grid-template-columns: repeat(1, 1fr); /* Show one month per row */
+        gap: 10px; /* Reduce gap for better spacing */
+        margin-left: 0; /* Remove extra left margin */
+    }
+
+    /* Month Container Adjustments */
+    .month-container {
+        max-width: 100%; /* Full width for better visibility */
+    }
+
+    /* Controls section improvements */
+    #employee-select,
+    #approve-dropdown,
+    #delete-approved-dropdown {
+        max-width: 100%;
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+
+    /* Adjust button styles for better touch usability */
+    button {
+        width: 100%; /* Full width for better accessibility */
+        font-size: 1rem;
+        padding: 12px;
+    }
+
+    /* Reduce tooltip max-width for small screens */
+    .tooltip {
+        max-width: 150px;
+        font-size: 0.75rem;
+    }
+
+    /* Weekdays and days grid adjustments */
+    .weekdays-container, .days-container {
+        gap: 3px;
+    }
+
+    .day-cell {
+        padding: 8px;
+        font-size: 0.8rem;
+    }
+
+    /* Adjust the spacing and layout for fully booked indicator */
+    .fully-booked-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #restricted-dates, #approved-vacations {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    /* Improve the text layout inside vacation lists */
+    .submitted-vacations ul {
+        font-size: 0.9rem;
+        padding-left: 5px;
+    }
+
+    /* Ensure proper readability of headings */
+    h1, h2, h3 {
+        font-size: 1.4rem;
+    }
+
+    /* Adjust spacing in color legend section */
+    .color-legend ul li {
+        font-size: 0.85rem;
+        margin-bottom: 8px;
+    }
 }
