@@ -11,7 +11,8 @@ body {
 
 .admin-container {
     display: flex;
-    gap: 10px; /* Space between calendar and submitted vacations */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    gap: 10px; /* Space between sections */
     align-items: flex-start; /* Align both sections to the top */
 }
 
@@ -25,19 +26,61 @@ body {
     height: auto; /* Ensure it adjusts based on content */
 }
 
+.submitted-vacations, #notes-section, #color-key-section {
+    flex: 1 1 100%; /* Allow each section to take full width on smaller screens */
+    max-width: 400px;
+}
+
 /* Calendar Section */
 #calendar-section {
-    flex: 1; /* Calendar takes up 2/3 of the container */
+    flex: 1 1 100%; /* Full width by default */
     max-width: 1300px;
 }
 
 /* Calendar */
 #calendar {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 months per row */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid layout */
     gap: 20px; /* Space between months */
-    margin-left: 10px; /* Add spacing specifically for the calendar */
+    margin-left: 10px; /* Add spacing for the calendar */
 }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .admin-container {
+        flex-direction: column; /* Stack elements vertically on smaller screens */
+    }
+
+    .submitted-vacations, #notes-section, #color-key-section {
+        max-width: 100%;
+    }
+
+    #calendar {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns for smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    #calendar {
+        grid-template-columns: repeat(1, 1fr); /* 1 column for very small screens */
+    }
+}
+
+/* Adjustments for buttons and dropdowns */
+button, #employee-select, #approve-dropdown, #delete-approved-dropdown {
+    width: 100%; /* Full width on smaller screens */
+    max-width: 300px;
+}
+
+/* Ensure right section fits within smaller screens */
+.submitted-vacations {
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    overflow-x: auto; /* Allow scrolling if content overflows */
+}
+
 
 #notes-section {
     flex: 1; /* Notes section takes remaining space */
@@ -264,6 +307,7 @@ body {
     margin: 10px 0;     /* Add spacing between elements */
 }
 
+
 .month-wrapper {
     padding: 15px;
     margin-bottom: 20px;
@@ -280,6 +324,7 @@ body {
     border-bottom: 2px solid #444; /* Underline to distinguish the header */
     padding-bottom: 5px;
 }
+
 
 /* Dropdowns */
 #employee-select,
