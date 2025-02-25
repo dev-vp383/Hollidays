@@ -45,55 +45,48 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Highlighting function
     function highlightDates() {
-        console.log("Highlighting dates...");
+    console.log("Highlighting dates...");
 
-        const latvianDates = latvianHolidayRanges.map(h => h.date);
-        const restrictedDates = vacationNotAllowedRanges.flatMap(range =>
-            generateDateRange(range.start, range.end)
-        );
+    const latvianDates = latvianHolidayRanges.map(h => h.date);
+    const restrictedDates = vacationNotAllowedRanges.flatMap(range =>
+        generateDateRange(range.start, range.end)
+    );
 
-        const allDates = new Set([...latvianDates, ...restrictedDates]);
+    const allDates = new Set([...latvianDates, ...restrictedDates]);
 
-        allDates.forEach(date => {
-            const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
-            if (dayCell) {
-                const isLatvianHoliday = latvianDates.includes(date);
-                const isRestrictedDate = restrictedDates.includes(date);
+    allDates.forEach(date => {
+        const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
+        if (dayCell) {
+            const isLatvianHoliday = latvianDates.includes(date);
+            const isRestrictedDate = restrictedDates.includes(date);
 
-                // Set border color priority
-                if (isLatvianHoliday && isRestrictedDate) {
-                    dayCell.style.borderLeft = "3px solid #4D0000"; // Latvian holiday
-                    dayCell.style.borderRight = "3px solid #4D0000"; // Restricted date
-                } else if (isLatvianHoliday) {
-                    dayCell.style.border = "2px solid #4D0000"; // Only Latvian holiday
-                } else if (isRestrictedDate) {
-                    dayCell.style.border = "2px solid #4D0000"; // Only restricted date
-                }
-
-                // Update tooltip
-                const existingTooltip = dayCell.getAttribute("data-tooltip") || "";
-                const newTooltip = [];
-                if (isLatvianHoliday) {
-                    const holiday = latvianHolidayRanges.find(h => h.date === date);
-                    if (holiday) newTooltip.push(holiday.description);
-                }
-                if (isRestrictedDate) {
-                    newTooltip.push("VACATION NOT ALLOWED");
-                }
-                const combinedTooltip = [existingTooltip, ...newTooltip].filter(Boolean).join("\n");
-                dayCell.setAttribute("data-tooltip", combinedTooltip);
-
-                // Set background color
-                if (isLatvianHoliday) {
-                    dayCell.style.backgroundColor = "#4D0000"; // Latvian holiday
-                } else if (isRestrictedDate) {
-                    dayCell.style.backgroundColor = "#4D0000"; // Restricted date
-                }
+            // Add a class to trigger CSS triangle
+            if (isLatvianHoliday && isRestrictedDate) {
+                dayCell.classList.add("highlighted-date", "both-highlighted");
+            } else if (isLatvianHoliday) {
+                dayCell.classList.add("highlighted-date", "holiday-highlighted");
+            } else if (isRestrictedDate) {
+                dayCell.classList.add("highlighted-date", "restricted-highlighted");
             }
-        });
 
-        console.log("Dates highlighted successfully.");
-    }
+            // Update tooltip
+            const existingTooltip = dayCell.getAttribute("data-tooltip") || "";
+            const newTooltip = [];
+            if (isLatvianHoliday) {
+                const holiday = latvianHolidayRanges.find(h => h.date === date);
+                if (holiday) newTooltip.push(holiday.description);
+            }
+            if (isRestrictedDate) {
+                newTooltip.push("VACATION NOT ALLOWED");
+            }
+            const combinedTooltip = [existingTooltip, ...newTooltip].filter(Boolean).join("\n");
+            dayCell.setAttribute("data-tooltip", combinedTooltip);
+        }
+    });
+
+    console.log("Dates highlighted successfully.");
+}
+
 
     // Call the highlighting function
     highlightDates();
