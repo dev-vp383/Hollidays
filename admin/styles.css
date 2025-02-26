@@ -553,3 +553,23 @@ button:active {
         margin-bottom: 8px;
     }
 }
+.day-cell.highlighted-date {
+    position: relative;
+    background-color: #4D0000; /* Single color for all marked dates */
+    color: white; /* Ensure text remains readable */
+}
+
+/* Triangle in the top-left corner */
+.day-cell.highlighted-date::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 25px 25px 0 0; /* Triangle size */
+    border-color: #4D0000 transparent transparent transparent; /* Slightly darker red */
+}
+
+
