@@ -17,8 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
         technical: [
             { name: "Aleksandrs P.", value: "Aleksandrs_P|technical" },
             { name: "Jūlija B.", value: "Jūlija_B|technical" },
-            { name: "Anastasija V.", value: "Anastasija_V|technical" },
-            { name: "Zdans I.", value: "Zdans_I|technical" }
+            { name: "Anastasija V.", value: "Anastasija_V|technical" }
         ],
         analytics: [
             { name: "Ruslans P.", value: "Ruslans_P|analytics" },
@@ -52,7 +51,9 @@ document.addEventListener("DOMContentLoaded", () => {
             { name: "Aleksandrs T.", value: "Aleksandrs_T|vip" },
             { name: "Vjaceslavs V.", value: "Vjaceslavs_V|vip" },
             { name: "Ilja N.", value: "Ilja_N|vip" },
-            { name: "Eduard E.", value: "Eduard_E|vip" }
+            { name: "Eduard E.", value: "Eduard_E|vip" },
+            { name: "Maksims R.", value: "Maksims_R|vip" },
+            { name: "Eriks K.", value: "Eriks_k|vip" },
         ],
         other: [
             { name: "Aliaksandryna I.", value: "Aliaksandryna_I|other" },
