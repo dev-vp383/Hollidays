@@ -70,7 +70,6 @@ const employees = {
         { name: "Thaisa Xavier", value: "Thaisa Xavier|vip" },
         { name: "Achraf Tobal Nafae", value: "Achraf Tobal Nafae|vip" },
         { name: "Edgars Seleznevs", value: "Edgars Seleznevs|vip" },
-        { name: "Aleksandrs Sokolovs", value: "Aleksandrs Sokolovs|vip" },
         { name: "Dēvids Balodis", value: "Dēvids Balodis|vip" },
         { name: "Laura Santana Saenz", value: "Laura Santana Saenz|vip" },
         { name: "Aleksandrs Tkačenko", value: "Aleksandrs Tkačenko|vip" },
