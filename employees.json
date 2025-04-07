@@ -2,12 +2,13 @@
     "technical": [
         { "name": "Aleksandrs Potreba", "value": "Aleksandrs Potreba|technical" },
         { "name": "Jūlija Baluta", "value": "Jūlija Baluta|technical" },
-        { "name": "Anastasija Vinogradova", "value": "Anastasija Vinogradova|technical" }
+        { "name": "Anastasija Vinogradova", "value": "Anastasija Vinogradova|technical" },
+	{ "name": "Daniels Pušķis", "value": "Daniels Pušķis|analytics" }
     ],
     "analytics": [
         { "name": "Ruslans Pirimovs", "value": "Ruslans Pirimovs|analytics" },
-        { "name": "Jelizaveta Migunova", "value": "Jelizaveta Migunova|analytics" },
-        { "name": "Daniels Pušķis", "value": "Daniels Pušķis|analytics" }
+        { "name": "Jelizaveta Migunova", "value": "Jelizaveta Migunova|analytics" }
+        
     ],
     "vip": [
         { "name": "Aleksandrs Potreba", "value": "Aleksandrs Potreba|vip" },
@@ -30,7 +31,6 @@
         { "name": "Thaisa Xavier", "value": "Thaisa Xavier|vip" },
         { "name": "Achraf Tobal Nafae", "value": "Achraf Tobal Nafae|vip" },
         { "name": "Edgars Seleznevs", "value": "Edgars Seleznevs|vip" },
-        { "name": "Aleksandrs Sokolovs", "value": "Aleksandrs Sokolovs|vip" },
         { "name": "Dēvids Balodis", "value": "Dēvids Balodis|vip" },
         { "name": "Laura Santana Saenz", "value": "Laura Santana Saenz|vip" },
         { "name": "Aleksandrs Tkačenko", "value": "Aleksandrs Tkačenko|vip" },
