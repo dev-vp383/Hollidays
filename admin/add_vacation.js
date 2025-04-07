@@ -17,12 +17,13 @@ document.addEventListener("DOMContentLoaded", () => {
         technical: [
             { name: "Aleksandrs P.", value: "Aleksandrs_P|technical" },
             { name: "Jūlija B.", value: "Jūlija_B|technical" },
-            { name: "Anastasija V.", value: "Anastasija_V|technical" }
+            { name: "Anastasija V.", value: "Anastasija_V|technical" },
+            { name: "Daniels P.", value: "Daniels_P|technical" }
         ],
         analytics: [
             { name: "Ruslans P.", value: "Ruslans_P|analytics" },
             { name: "Jelizaveta M.", value: "Jelizaveta_M|analytics" },
-            { name: "Daniels P.", value: "Daniels_P|analytics" }
+            
         ],
         vip: [
             { name: "Anastasija K.", value: "Anastasija_K|vip" },
@@ -43,7 +44,6 @@ document.addEventListener("DOMContentLoaded", () => {
             { name: "Tatjana T.", value: "Tatjana_T|vip" },
             { name: "Thaisa X.", value: "Thaisa_X|vip" },
             { name: "Achraf T. N.", value: "Achraf_T_N|vip" },
-            { name: "Edgars S.", value: "Edgars_S|vip" },
             { name: "Dēvids B.", value: "Dēvids_B|vip" },
             { name: "Laura S. S.", value: "Laura_S_S|vip" },
             { name: "Aleksandrs T.", value: "Aleksandrs_T|vip" },
