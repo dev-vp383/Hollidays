@@ -45,7 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
             { name: "Thaisa X.", value: "Thaisa_X|vip" },
             { name: "Achraf T. N.", value: "Achraf_T_N|vip" },
             { name: "Edgars S.", value: "Edgars_S|vip" },
-            { name: "Aleksandrs S.", value: "Aleksandrs_S|vip" },
             { name: "Dēvids B.", value: "Dēvids_B|vip" },
             { name: "Laura S. S.", value: "Laura_S_S|vip" },
             { name: "Aleksandrs T.", value: "Aleksandrs_T|vip" },
