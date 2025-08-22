@@ -142,8 +142,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     const tooltip = `${employee.split("_").join(" ")} - ${department} (Approved)`;
                     const existingTooltip = dayCell.getAttribute("data-tooltip") || "";
-                    const combinedTooltip = [existingTooltip, tooltip].filter(Boolean).join("\n");
-                    dayCell.setAttribute("data-tooltip", combinedTooltip);
+                    if (!existingTooltip.includes(tooltip)) {
+                        const combinedTooltip = [existingTooltip, tooltip].filter(Boolean).join("\n");
+                        dayCell.setAttribute("data-tooltip", combinedTooltip);
+                    }
 
                     if (!dateDetails[date]) dateDetails[date] = new Set();
                     dateDetails[date].add(departmentColors[department]?.approved || "#0000FF");
@@ -164,8 +166,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         const tooltip = `${employee.split("_").join(" ")} - ${department} (Reserved)`;
                         const existingTooltip = dayCell.getAttribute("data-tooltip") || "";
-                        const combinedTooltip = [existingTooltip, tooltip].filter(Boolean).join("\n");
-                        dayCell.setAttribute("data-tooltip", combinedTooltip);
+                        if (!existingTooltip.includes(tooltip)) {
+                            const combinedTooltip = [existingTooltip, tooltip].filter(Boolean).join("\n");
+                            dayCell.setAttribute("data-tooltip", combinedTooltip);
+                        }
 
                         if (!dateDetails[date]) dateDetails[date] = new Set();
                         dateDetails[date].add(departmentColors[department]?.reserved || "#7700ff");
@@ -180,43 +184,69 @@ document.addEventListener("DOMContentLoaded", () => {
         const dayCells = document.querySelectorAll(".day-cell");
         dayCells.forEach((dayCell) => {
     const date = dayCell.dataset.date;
-    if (!date || !dateDetails[date]) return;
+    if (!date) return;
 
-    const colors = Array.from(dateDetails[date]);
+    // Check if this date has vacation data
+    const hasVacationData = dateDetails[date];
+    const isRestrictedDate = window.restrictedDates && window.restrictedDates.includes(date);
 
-    // Apply the base color (first department)
-    dayCell.style.backgroundColor = colors[0];
+    if (!hasVacationData && !isRestrictedDate) return;
 
     // Remove any existing corner elements
     const existingCorners = dayCell.querySelectorAll(".corner-triangle");
     existingCorners.forEach((corner) => corner.remove());
 
-    // Add top-left and top-right triangles for additional departments
-    if (colors.length > 1) {
-        if (colors[1]) {
-            const topLeftTriangle = document.createElement("div");
-            topLeftTriangle.classList.add("corner-triangle");
-            topLeftTriangle.style.backgroundColor = colors[1];
-            topLeftTriangle.style.clipPath = "polygon(0 0, 100% 0, 0 100%)"; // Top-left triangle
-            topLeftTriangle.style.position = "absolute";
-            topLeftTriangle.style.top = "0";
-            topLeftTriangle.style.left = "0";
-            topLeftTriangle.style.width = "50%";
-            topLeftTriangle.style.height = "50%";
-            dayCell.appendChild(topLeftTriangle);
+    if (hasVacationData) {
+        // Handle vacation colors
+        const colors = Array.from(dateDetails[date]);
+        
+        // Apply the base color (first department)
+        dayCell.style.backgroundColor = colors[0];
+
+        // Add top-left and top-right triangles for additional departments
+        if (colors.length > 1) {
+            if (colors[1]) {
+                const topLeftTriangle = document.createElement("div");
+                topLeftTriangle.classList.add("corner-triangle");
+                topLeftTriangle.style.backgroundColor = colors[1];
+                topLeftTriangle.style.clipPath = "polygon(0 0, 100% 0, 0 100%)"; // Top-left triangle
+                topLeftTriangle.style.position = "absolute";
+                topLeftTriangle.style.top = "0";
+                topLeftTriangle.style.left = "0";
+                topLeftTriangle.style.width = "50%";
+                topLeftTriangle.style.height = "50%";
+                dayCell.appendChild(topLeftTriangle);
+            }
+            if (colors[2]) {
+                const topRightTriangle = document.createElement("div");
+                topRightTriangle.classList.add("corner-triangle");
+                topRightTriangle.style.backgroundColor = colors[2];
+                topRightTriangle.style.clipPath = "polygon(100% 0, 100% 100%, 0 0)"; // Top-right triangle
+                topRightTriangle.style.position = "absolute";
+                topRightTriangle.style.top = "0";
+                topRightTriangle.style.right = "0";
+                topRightTriangle.style.width = "50%";
+                topRightTriangle.style.height = "50%";
+                dayCell.appendChild(topRightTriangle);
+            }
         }
-        if (colors[2]) {
-            const topRightTriangle = document.createElement("div");
-            topRightTriangle.classList.add("corner-triangle");
-            topRightTriangle.style.backgroundColor = colors[2];
-            topRightTriangle.style.clipPath = "polygon(100% 0, 100% 100%, 0 0)"; // Top-right triangle
-            topRightTriangle.style.position = "absolute";
-            topRightTriangle.style.top = "0";
-            topRightTriangle.style.right = "0";
-            topRightTriangle.style.width = "50%";
-            topRightTriangle.style.height = "50%";
-            dayCell.appendChild(topRightTriangle);
+
+        // If this is also a restricted date, add restricted color as a corner triangle
+        if (isRestrictedDate) {
+            const restrictedTriangle = document.createElement("div");
+            restrictedTriangle.classList.add("corner-triangle");
+            restrictedTriangle.style.backgroundColor = "#e69500"; // Restricted date color
+            restrictedTriangle.style.clipPath = "polygon(100% 0, 100% 100%, 0 100%)"; // Bottom-right triangle
+            restrictedTriangle.style.position = "absolute";
+            restrictedTriangle.style.bottom = "0";
+            restrictedTriangle.style.right = "0";
+            restrictedTriangle.style.width = "50%";
+            restrictedTriangle.style.height = "50%";
+            dayCell.appendChild(restrictedTriangle);
         }
+    } else if (isRestrictedDate) {
+        // Only restricted date, no vacation - fill the whole cell
+        dayCell.style.backgroundColor = "#e69500";
     }
 
     // Red Dot Logic (unchanged)

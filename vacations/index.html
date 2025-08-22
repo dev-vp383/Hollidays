@@ -13,7 +13,14 @@
     <div class="user-container">
         <!-- Calendar Section -->
         <div id="calendar-section">
-            <h1>Vacations Dates 2025</h1>
+            <h1>Vacations Dates</h1>
+            
+            <!-- Year Selector Tabs -->
+            <div id="year-selector">
+                <button class="year-tab active" data-year="2025">2025</button>
+                <button class="year-tab" data-year="2026">2026</button>
+            </div>
+            
             <div id="calendar">
                 <!-- Calendar months will be dynamically added here -->
             </div>
@@ -62,7 +69,7 @@
 <div class="fully-booked-container">
     <!-- Left: Restricted Dates -->
     <div id="restricted-dates">
-        <h4>Vacation not allowed:</h4>
+        <h4>Vacation not alllowed:</h4>
         <ul id="restricted-dates-list">
             <!-- Restricted dates will be dynamically loaded here -->
         </ul>
@@ -76,14 +83,6 @@
         </ul>
     </div>
 </div>
-
-<!-- New Section: Promotion Dates -->
-<div id="promotion-dates">
-    <h4>Promotion Dates:</h4>
-    <ul id="promotion-dates-list">
-        <!-- Promotion dates will be dynamically loaded here -->
-    </ul>
-</div>
 </div>
         <!-- Tooltip -->
         <div id="tooltip" class="tooltip"></div>
@@ -91,9 +90,8 @@
 
     <!-- JavaScript Files -->
     <script src="calendar.js"></script>
-   <script src="dates-highlighting.js"></script>
-<script src="vacation-details.js"></script>
-<script src="promotion_dates.js"></script>
+    <script src="dates-highlighting.js"></script>
+    <script src="vacation-details.js"></script>
     <script src="vacation-status.js"></script>
 </body>
 </html>

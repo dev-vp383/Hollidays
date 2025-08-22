@@ -12,6 +12,12 @@
         <div id="calendar-section">
             <h1>Admin Dashboard</h1>
             
+            <!-- Year Selector Tabs -->
+            <div id="year-selector">
+                <button class="year-tab active" data-year="2025">2025</button>
+                <button class="year-tab" data-year="2026">2026</button>
+            </div>
+            
             <!-- Vacation Controls -->
             <div id="controls">
                 <label for="employee-select">Select Employee:</label>
@@ -68,11 +74,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
 
     <!-- JavaScript Files -->
-   <script src="calendar.js"></script>
-   <script src="dates-highlighting.js"></script>
-      <script src="add_vacation.js"></script>
-      <script src="reserved_vacations_handling.js"></script>
-      <script src="approved_vacations_handling.js"></script>
-	  <script src="load_data.js"></script>
-      <script src="admin.js"></script>
+    <script src="../admin.js"></script>
+    <script src="calendar.js"></script>
+    <script src="dates-highlighting.js"></script>
 </html>

@@ -1,5 +1,5 @@
 // Calendar Year
-const year = 2025;
+let currentYear = 2025;
 
 // Generate Calendar Dynamically
 function generateCalendar(year) {
@@ -61,8 +61,25 @@ function generateCalendar(year) {
             dayCell.dataset.date = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
             dayCell.classList.add("day-cell");
 
-            // Remove the diagonal background logic entirely
-            // If you had any conditions for applying diagonals, they are now removed.
+            // Add click event listener for date selection
+            dayCell.addEventListener("click", () => {
+                const date = dayCell.dataset.date;
+                if (selectedDates && selectedDates.includes(date)) {
+                    selectedDates = selectedDates.filter(d => d !== date);
+                    dayCell.style.backgroundColor = "";
+                } else {
+                    if (!selectedDates) selectedDates = [];
+                    selectedDates.push(date);
+                    dayCell.style.backgroundColor = "rgba(255, 204, 0, 0.5)";
+                }
+                console.log("Selected Dates:", selectedDates);
+            });
+
+            // Add dot indicator for overlaps
+            const dotIndicator = document.createElement("div");
+            dotIndicator.classList.add("dot-indicator");
+            dotIndicator.style.display = "none";
+            dayCell.appendChild(dotIndicator);
 
             daysContainer.appendChild(dayCell);
         }
@@ -72,7 +89,4 @@ function generateCalendar(year) {
     }
 }
 
-// Initialize Calendar
-document.addEventListener("DOMContentLoaded", () => {
-    generateCalendar(year);
-});
+// Calendar initialization is handled by admin.js

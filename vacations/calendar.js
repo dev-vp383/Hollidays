@@ -1,5 +1,5 @@
 // Calendar Year
-const year = 2025;
+let currentYear = 2025;
 
 // Generate Calendar Dynamically
 function generateCalendar(year) {
@@ -74,5 +74,74 @@ function generateCalendar(year) {
 
 // Initialize Calendar
 document.addEventListener("DOMContentLoaded", () => {
-    generateCalendar(year);
+    generateCalendar(currentYear);
+    setupYearSelector();
+    
+    // Apply highlighting after calendar is generated
+    setTimeout(() => {
+        if (typeof window.highlightVacationNotAllowed === 'function') {
+            window.highlightVacationNotAllowed();
+        }
+        if (typeof window.highlightLatvianHolidays === 'function') {
+            window.highlightLatvianHolidays();
+        }
+        if (typeof window.highlightSpecialDates === 'function') {
+            window.highlightSpecialDates();
+        }
+        
+        // Load vacation statuses
+        if (typeof window.applyVacationStatuses === 'function') {
+            window.applyVacationStatuses();
+        }
+        
+        // Load vacation details
+        if (typeof window.initializeVacationDetails === 'function') {
+            window.initializeVacationDetails();
+        }
+    }, 100);
 });
+
+// Setup Year Selector
+function setupYearSelector() {
+    const yearTabs = document.querySelectorAll('.year-tab');
+    
+    yearTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Remove active class from all tabs
+            yearTabs.forEach(t => t.classList.remove('active'));
+            
+            // Add active class to clicked tab
+            tab.classList.add('active');
+            
+            // Update current year
+            currentYear = parseInt(tab.dataset.year);
+            window.currentYear = currentYear; // Set global variable for highlighting functions
+            
+            // Regenerate calendar for new year
+            generateCalendar(currentYear);
+            
+            // Reapply highlighting for new year
+            setTimeout(() => {
+                if (typeof window.highlightVacationNotAllowed === 'function') {
+                    window.highlightVacationNotAllowed();
+                }
+                if (typeof window.highlightLatvianHolidays === 'function') {
+                    window.highlightLatvianHolidays();
+                }
+                if (typeof window.highlightSpecialDates === 'function') {
+                    window.highlightSpecialDates();
+                }
+                
+                // Reload vacation statuses for new year
+                if (typeof window.applyVacationStatuses === 'function') {
+                    window.applyVacationStatuses();
+                }
+                
+                // Refresh vacation details for new year
+                if (typeof window.initializeVacationDetails === 'function') {
+                    window.initializeVacationDetails();
+                }
+            }, 100);
+        });
+    });
+}

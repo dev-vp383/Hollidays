@@ -3,12 +3,11 @@
         { "name": "Aleksandrs Potreba", "value": "Aleksandrs Potreba|technical" },
         { "name": "Jūlija Baluta", "value": "Jūlija Baluta|technical" },
         { "name": "Anastasija Vinogradova", "value": "Anastasija Vinogradova|technical" },
-	{ "name": "Daniels Pušķis", "value": "Daniels Pušķis|analytics" }
+        { "name": "Daniels Pušķis", "value": "Daniels Pušķis|technical" }
     ],
     "analytics": [
         { "name": "Ruslans Pirimovs", "value": "Ruslans Pirimovs|analytics" },
         { "name": "Jelizaveta Migunova", "value": "Jelizaveta Migunova|analytics" }
-        
     ],
     "vip": [
         { "name": "Aleksandrs Potreba", "value": "Aleksandrs Potreba|vip" },
@@ -17,10 +16,8 @@
 		{ "name": "Jevgenijs Bondarenko", "value": "Jevgenijs Bondarenko|vip" },
         { "name": "Jūlija Jurčenko", "value": "Jūlija Jurčenko|vip" },
         { "name": "Jurijs Kuļikovs", "value": "Jurijs Kuļikovs|vip" },
-        { "name": "Krystsina Liber", "value": "Krystsina Liber|vip" },
         { "name": "Kyada Hirenkumar Himmatbhai", "value": "Kyada Hirenkumar Himmatbhai|vip" },
         { "name": "Laura Pāvulāne", "value": "Laura Pāvulāne|vip" },
-        { "name": "Mari Otagiri", "value": "Mari Otagiri|vip" },
         { "name": "Monyque Alves Vieira", "value": "Monyque Alves Vieira|vip" },
         { "name": "Nadezhda Berneva", "value": "Nadezhda Berneva|vip" },
         { "name": "Nataļja Triputina", "value": "Nataļja Triputina|vip" },
@@ -28,18 +25,24 @@
         { "name": "Olga Dudareva", "value": "Olga Dudareva|vip" },
         { "name": "Olga Violeta Šerstņova", "value": "Olga Violeta Šerstņova|vip" },
         { "name": "Tatjana Tukuma", "value": "Tatjana Tukuma|vip" },
-        { "name": "Thaisa Xavier", "value": "Thaisa Xavier|vip" },
         { "name": "Achraf Tobal Nafae", "value": "Achraf Tobal Nafae|vip" },
-        { "name": "Edgars Seleznevs", "value": "Edgars Seleznevs|vip" },
+
         { "name": "Dēvids Balodis", "value": "Dēvids Balodis|vip" },
         { "name": "Laura Santana Saenz", "value": "Laura Santana Saenz|vip" },
         { "name": "Aleksandrs Tkačenko", "value": "Aleksandrs Tkačenko|vip" },
-        { "name": "Vjaceslavs Volodins", "value": "Vjaceslavs Volodins|vip" }
+        { "name": "Vjaceslavs Volodins", "value": "Vjaceslavs Volodins|vip" },
+        { "name": "Jekaterina Chistakova", "value": "Jekaterina Chistakova|vip" },
+        { "name": "Elīna Tretjaka", "value": "Elīna Tretjaka|vip" },
+        { "name": "Andrejs Kots", "value": "Andrejs Kots|vip" },
+        { "name": "Kirills Kļesarevs", "value": "Kirills Kļesarevs|vip" },
+        { "name": "Sanita Bite", "value": "Sanita Bite|vip" },
+        { "name": "Vladislavs Rubcovs", "value": "Vladislavs Rubcovs|vip" },
+        { "name": "Aleksejs Bugrišovs", "value": "Aleksejs Bugrišovs|vip" },
+        { "name": "Kezia Raichel James", "value": "Kezia Raichel James|vip" }
     ],
     "other": [
         { "name": "Aliaksandryna Ivanova", "value": "Aliaksandryna Ivanova|other" },
         { "name": "Vladislavs", "value": "Vladislavs|other" },
-        { "name": "Aliaksandr Liber", "value": "Aliaksandr Liber|other" },
         { "name": "Eduards Popovskis", "value": "Eduards Popovskis|other" }
     ]
 }

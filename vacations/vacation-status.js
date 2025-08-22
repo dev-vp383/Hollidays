@@ -103,13 +103,75 @@ document.addEventListener("DOMContentLoaded", () => {
         return dates;
     }
 
+    // Helper: Merge consecutive date ranges
+    function mergeConsecutiveRanges(ranges) {
+        if (!ranges || ranges.length === 0) return [];
+        
+        // Convert ranges to date objects for easier comparison
+        const rangeObjects = ranges.map(range => {
+            const [start, end] = range.split(" to ");
+            return {
+                start: new Date(start),
+                end: new Date(end),
+                original: range
+            };
+        });
+        
+        // Sort by start date
+        rangeObjects.sort((a, b) => a.start - b.start);
+        
+        const merged = [];
+        let current = rangeObjects[0];
+        
+        for (let i = 1; i < rangeObjects.length; i++) {
+            const next = rangeObjects[i];
+            
+            // Check if current range ends the day before next range starts (consecutive)
+            const currentEndPlusOne = new Date(current.end);
+            currentEndPlusOne.setDate(currentEndPlusOne.getDate() + 1);
+            
+            if (currentEndPlusOne.getTime() === next.start.getTime()) {
+                // Merge the ranges
+                current.end = next.end;
+            } else {
+                // No consecutive, add current to merged and move to next
+                merged.push(current);
+                current = next;
+            }
+        }
+        
+        // Add the last range
+        merged.push(current);
+        
+            // Convert back to string format
+    return merged.map(range => {
+        const startStr = range.start.toISOString().split('T')[0];
+        const endStr = range.end.toISOString().split('T')[0];
+        return `${startStr} to ${endStr}`;
+    });
+    }
+
     // Fetch vacation data from Firebase
     async function fetchVacationData() {
         try {
             const snapshot = await database.ref("vacations").get();
             if (snapshot.exists()) {
-                console.log("Vacation data fetched successfully:", snapshot.val());
-                return snapshot.val();
+                const allVacationData = snapshot.val();
+                console.log("All vacation data fetched successfully:", allVacationData);
+                
+                // Filter by current year
+                const currentYear = window.currentYear || 2025;
+                const yearFilteredData = {};
+                
+                Object.entries(allVacationData).forEach(([employee, info]) => {
+                    // Only include vacations that have year field matching current year, or no year field (legacy 2025 data)
+                    if (!info.year || info.year === currentYear) {
+                        yearFilteredData[employee] = info;
+                    }
+                });
+                
+                console.log(`Filtered vacation data for year ${currentYear}:`, yearFilteredData);
+                return yearFilteredData;
             } else {
                 console.warn("No data found in 'vacations' node.");
                 return {};
@@ -132,7 +194,9 @@ document.addEventListener("DOMContentLoaded", () => {
         Object.entries(vacationData).forEach(([employee, details]) => {
             const { dates = [], approved = [], department } = details;
 
-            approved.forEach((range) => {
+            // Merge consecutive approved ranges
+            const mergedApprovedRanges = mergeConsecutiveRanges(approved);
+            mergedApprovedRanges.forEach((range) => {
                 const [start, end] = range.split(" to ");
                 const dateRange = generateDateRange(start, end);
 
@@ -154,7 +218,9 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             if (details.status === "reserved") {
-                dates.forEach((range) => {
+                // Merge consecutive reserved ranges
+                const mergedReservedRanges = mergeConsecutiveRanges(dates);
+                mergedReservedRanges.forEach((range) => {
                     const [start, end] = range.split(" to ");
                     const dateRange = generateDateRange(start, end);
 
@@ -180,43 +246,69 @@ document.addEventListener("DOMContentLoaded", () => {
         const dayCells = document.querySelectorAll(".day-cell");
         dayCells.forEach((dayCell) => {
     const date = dayCell.dataset.date;
-    if (!date || !dateDetails[date]) return;
+    if (!date) return;
 
-    const colors = Array.from(dateDetails[date]);
+    // Check if this date has vacation data
+    const hasVacationData = dateDetails[date];
+    const isRestrictedDate = window.restrictedDates && window.restrictedDates.includes(date);
 
-    // Apply the base color (first department)
-    dayCell.style.backgroundColor = colors[0];
+    if (!hasVacationData && !isRestrictedDate) return;
 
     // Remove any existing corner elements
     const existingCorners = dayCell.querySelectorAll(".corner-triangle");
     existingCorners.forEach((corner) => corner.remove());
 
-    // Add top-left and top-right triangles for additional departments
-    if (colors.length > 1) {
-        if (colors[1]) {
-            const topLeftTriangle = document.createElement("div");
-            topLeftTriangle.classList.add("corner-triangle");
-            topLeftTriangle.style.backgroundColor = colors[1];
-            topLeftTriangle.style.clipPath = "polygon(0 0, 100% 0, 0 100%)"; // Top-left triangle
-            topLeftTriangle.style.position = "absolute";
-            topLeftTriangle.style.top = "0";
-            topLeftTriangle.style.left = "0";
-            topLeftTriangle.style.width = "50%";
-            topLeftTriangle.style.height = "50%";
-            dayCell.appendChild(topLeftTriangle);
+    if (hasVacationData) {
+        // Handle vacation colors
+        const colors = Array.from(dateDetails[date]);
+        
+        // Apply the base color (first department)
+        dayCell.style.backgroundColor = colors[0];
+
+        // Add top-left and top-right triangles for additional departments
+        if (colors.length > 1) {
+            if (colors[1]) {
+                const topLeftTriangle = document.createElement("div");
+                topLeftTriangle.classList.add("corner-triangle");
+                topLeftTriangle.style.backgroundColor = colors[1];
+                topLeftTriangle.style.clipPath = "polygon(0 0, 100% 0, 0 100%)"; // Top-left triangle
+                topLeftTriangle.style.position = "absolute";
+                topLeftTriangle.style.top = "0";
+                topLeftTriangle.style.left = "0";
+                topLeftTriangle.style.width = "50%";
+                topLeftTriangle.style.height = "50%";
+                dayCell.appendChild(topLeftTriangle);
+            }
+            if (colors[2]) {
+                const topRightTriangle = document.createElement("div");
+                topRightTriangle.classList.add("corner-triangle");
+                topRightTriangle.style.backgroundColor = colors[2];
+                topRightTriangle.style.clipPath = "polygon(100% 0, 100% 100%, 0 0)"; // Top-right triangle
+                topRightTriangle.style.position = "absolute";
+                topRightTriangle.style.top = "0";
+                topRightTriangle.style.right = "0";
+                topRightTriangle.style.width = "50%";
+                topRightTriangle.style.height = "50%";
+                dayCell.appendChild(topRightTriangle);
+            }
         }
-        if (colors[2]) {
-            const topRightTriangle = document.createElement("div");
-            topRightTriangle.classList.add("corner-triangle");
-            topRightTriangle.style.backgroundColor = colors[2];
-            topRightTriangle.style.clipPath = "polygon(100% 0, 100% 100%, 0 0)"; // Top-right triangle
-            topRightTriangle.style.position = "absolute";
-            topRightTriangle.style.top = "0";
-            topRightTriangle.style.right = "0";
-            topRightTriangle.style.width = "50%";
-            topRightTriangle.style.height = "50%";
-            dayCell.appendChild(topRightTriangle);
+
+        // If this is also a restricted date, add restricted color as a corner triangle
+        if (isRestrictedDate) {
+            const restrictedTriangle = document.createElement("div");
+            restrictedTriangle.classList.add("corner-triangle");
+            restrictedTriangle.style.backgroundColor = "#e69500"; // Restricted date color
+            restrictedTriangle.style.clipPath = "polygon(100% 0, 100% 100%, 0 100%)"; // Bottom-right triangle
+            restrictedTriangle.style.position = "absolute";
+            restrictedTriangle.style.bottom = "0";
+            restrictedTriangle.style.right = "0";
+            restrictedTriangle.style.width = "50%";
+            restrictedTriangle.style.height = "50%";
+            dayCell.appendChild(restrictedTriangle);
         }
+    } else if (isRestrictedDate) {
+        // Only restricted date, no vacation - fill the whole cell
+        dayCell.style.backgroundColor = "#e69500";
     }
 
     // Red Dot Logic (unchanged)
@@ -248,5 +340,8 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Vacation statuses with diagonal division and red dot logic applied successfully.");
     }
 
+    // Make function globally available for year switching
+    window.applyVacationStatuses = applyVacationStatuses;
+    
     applyVacationStatuses();
 });

@@ -7,6 +7,42 @@ body {
     padding-left: 20px; /* Add padding to the left for global spacing */
 }
 
+/* Year Selector Styles */
+#year-selector {
+    display: flex;
+    gap: 10px;
+    margin: 30px 0 30px 0;
+    justify-content: center;
+    align-items: center;
+}
+
+.year-tab {
+    padding: 10px 20px !important;
+    border: 2px solid #444 !important;
+    background: #2c2c2c !important;
+    color: #eaeaea !important;
+    cursor: pointer !important;
+    border-radius: 5px !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    transition: all 0.3s ease !important;
+}
+
+.year-tab:hover {
+    background: #3c3c3c;
+    border-color: #666;
+}
+
+button.year-tab.active,
+.year-tab.active {
+    background: #dc2626 !important;
+    color: white !important;
+    border-color: #dc2626 !important;
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.8) !important;
+    font-weight: bold !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
 /* Admin Container Layout */
 
 .admin-container {
