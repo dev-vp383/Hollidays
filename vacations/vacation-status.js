@@ -206,8 +206,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     const tooltip = `${employee.split("_").join(" ")} - ${department} (Approved)`;
                     const existingTooltip = dayCell.getAttribute("data-tooltip") || "";
-                    const combinedTooltip = [existingTooltip, tooltip].filter(Boolean).join("\n");
-                    dayCell.setAttribute("data-tooltip", combinedTooltip);
+                    
+                    // Only add tooltip if it's not already there
+                    if (!existingTooltip.includes(tooltip)) {
+                        const combinedTooltip = [existingTooltip, tooltip].filter(Boolean).join("\n");
+                        dayCell.setAttribute("data-tooltip", combinedTooltip);
+                    }
 
                     if (!dateDetails[date]) dateDetails[date] = new Set();
                     dateDetails[date].add(departmentColors[department]?.approved || "#0000FF");
@@ -230,8 +234,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         const tooltip = `${employee.split("_").join(" ")} - ${department} (Reserved)`;
                         const existingTooltip = dayCell.getAttribute("data-tooltip") || "";
-                        const combinedTooltip = [existingTooltip, tooltip].filter(Boolean).join("\n");
-                        dayCell.setAttribute("data-tooltip", combinedTooltip);
+                        
+                        // Only add tooltip if it's not already there
+                        if (!existingTooltip.includes(tooltip)) {
+                            const combinedTooltip = [existingTooltip, tooltip].filter(Boolean).join("\n");
+                            dayCell.setAttribute("data-tooltip", combinedTooltip);
+                        }
 
                         if (!dateDetails[date]) dateDetails[date] = new Set();
                         dateDetails[date].add(departmentColors[department]?.reserved || "#7700ff");
