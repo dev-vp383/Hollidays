@@ -176,7 +176,13 @@ button.year-tab.active,
 }
 
 .color-box.restricted-date {
-    background-color: #e69500;
+    background-color: #8B0000; /* Dark red for restricted dates */
+}
+
+/* Dark red background for restricted date cells */
+.day-cell.restricted-date {
+    background-color: #8B0000 !important; /* Dark red for restricted dates */
+    color: white !important; /* White text for visibility */
 }
 
 .color-box.special-date {
@@ -423,9 +429,9 @@ button:active {
 
 /* Latvian Holiday Styling */
 .day-cell.latvian-holiday {
-    background-color: #4d0000 !important; /* Red for Latvian holidays */
-    color: white;
-    border: 1px solid #7a0000;
+    /* background-color: #4d0000 !important; */
+    /* color: white; */
+    /* border: 1px solid #7a0000; */
 }
 
 /* Ensure date numbers are visible on Latvian holidays */

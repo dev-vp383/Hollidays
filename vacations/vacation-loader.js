@@ -333,6 +333,17 @@ function setupMonthSelector() {
             
             // Reload data from Firebase for the new year
             loadApprovedVacations();
+            
+            // Reapply date highlighting after calendar is generated and data is loaded
+            if (window.highlightVacationNotAllowed) {
+                window.highlightVacationNotAllowed();
+            }
+            if (window.highlightLatvianHolidays) {
+                window.highlightLatvianHolidays();
+            }
+            if (window.highlightSpecialDates) {
+                window.highlightSpecialDates();
+            }
         });
     });
 }

@@ -18,17 +18,19 @@ if (typeof window.vacationNotAllowedRanges === "undefined") {
             { start: "2025-12-15", end: "2026-01-03" }
         ],
         2026: [
-            { start: "2026-02-09", end: "2026-02-16" },
-            { start: "2026-03-03", end: "2026-03-18" },
-            { start: "2026-04-15", end: "2026-04-23" },
-            { start: "2026-04-29", end: "2026-05-01" },
-            { start: "2026-06-09", end: "2026-06-18" },
-            { start: "2026-10-27", end: "2026-11-03" },
-            { start: "2026-11-25", end: "2026-12-01" },
-            { start: "2026-12-15", end: "2027-01-03" }
+            { start: "2026-01-01", end: "2026-01-01" },
+            { start: "2026-02-12", end: "2026-02-17" },
+            { start: "2026-03-05", end: "2026-03-06" },
+            { start: "2026-03-15", end: "2026-03-21" },
+            { start: "2026-04-01", end: "2026-04-07" },
+            { start: "2026-05-10", end: "2026-05-11" },
+            { start: "2026-10-26", end: "2026-10-31" },
+            { start: "2026-11-01", end: "2026-11-03" },
+            { start: "2026-12-13", end: "2026-12-31" }
         ]
     };
     window.vacationNotAllowedRanges = vacationNotAllowedRanges; // Attach to global scope
+}
 
 
 function highlightVacationNotAllowed() {
@@ -55,8 +57,10 @@ function highlightVacationNotAllowed() {
     restrictedDates.forEach(date => {
         const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
         if (dayCell) {
-            // Don't set background color here - let vacation-status.js handle it
-            // Just add the tooltip
+            // Add the restricted-date class for dark red background
+            dayCell.classList.add("restricted-date");
+            
+            // Add the tooltip
             const existingTooltip = dayCell.getAttribute("data-tooltip") || "";
             
             // Only add "VACATION NOT ALLOWED" if it's not already there
@@ -216,8 +220,7 @@ function highlightSpecialDates() {
             }
         }
     });
-
-   
+}
 
 // ============================================================================
 // GLOBAL FUNCTIONS - Attach to global scope

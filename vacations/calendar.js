@@ -88,6 +88,17 @@ function generateCalendar(year) {
         monthContainer.appendChild(daysContainer);
         calendarContainer.appendChild(monthContainer);
     }
+    
+    // After calendar is generated, apply date highlighting
+    if (window.highlightVacationNotAllowed) {
+        window.highlightVacationNotAllowed();
+    }
+    if (window.highlightLatvianHolidays) {
+        window.highlightLatvianHolidays();
+    }
+    if (window.highlightSpecialDates) {
+        window.highlightSpecialDates();
+    }
 }
 
 // Calendar initialization is handled by admin.js

@@ -809,6 +809,17 @@ function setupYearSelector() {
             
             // Reload vacations for new year
             await loadReservedVacations();
+            
+            // Reapply date highlighting after vacations are loaded
+            if (window.highlightVacationNotAllowed) {
+                window.highlightVacationNotAllowed();
+            }
+            if (window.highlightLatvianHolidays) {
+                window.highlightLatvianHolidays();
+            }
+            if (window.highlightSpecialDates) {
+                window.highlightSpecialDates();
+            }
         });
     });
 }
