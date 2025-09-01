@@ -204,7 +204,7 @@ function highlightSpecialDates() {
             const existingTooltip = dayCell.getAttribute("data-tooltip") || "";
             if (!existingTooltip.includes(description)) {
                 const combinedTooltip = [existingTooltip, description].filter(Boolean).join("\n");
-                dayCell.setAttribute("data-tooltip", combinedTooltip);
+            dayCell.setAttribute("data-tooltip", combinedTooltip);
             }
             
             // Ensure date number is preserved for special dates

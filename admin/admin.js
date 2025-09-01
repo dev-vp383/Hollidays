@@ -414,6 +414,8 @@ async function loadReservedVacations() {
         // Apply month filtering after data is loaded
         filterVacationsByMonth('reserved');
         filterVacationsByMonth('approved');
+        filterVacationsByMonth('approve');
+        filterVacationsByMonth('delete-approved');
         
         // Populate dropdowns with filtered data
         populateDropdowns();
@@ -847,12 +849,14 @@ function setupMonthSelectors() {
     
     if (approveMonthSelector) {
         approveMonthSelector.addEventListener('change', () => {
+            filterVacationsByMonth('approve');
             populateDropdowns(); // Update dropdowns when month changes
         });
     }
     
     if (deleteApprovedMonthSelector) {
         deleteApprovedMonthSelector.addEventListener('change', () => {
+            filterVacationsByMonth('delete-approved');
             populateDropdowns(); // Update dropdowns when month changes
         });
     }
@@ -860,8 +864,22 @@ function setupMonthSelectors() {
 
 // Filter vacations by month
 function filterVacationsByMonth(type) {
-    const monthSelector = document.getElementById(`${type}-month-selector`);
-    const vacationList = document.getElementById(`${type}-vacations-list`);
+    let monthSelector, vacationList;
+    
+    // Map type to the correct month selector and vacation list
+    if (type === 'reserved') {
+        monthSelector = document.getElementById('reserved-month-selector');
+        vacationList = document.getElementById('reserved-vacations-list');
+    } else if (type === 'approved') {
+        monthSelector = document.getElementById('approved-month-selector');
+        vacationList = document.getElementById('approved-vacations-list');
+    } else if (type === 'approve') {
+        monthSelector = document.getElementById('approve-month-selector');
+        vacationList = document.getElementById('reserved-vacations-list'); // Use reserved list for approve section
+    } else if (type === 'delete-approved') {
+        monthSelector = document.getElementById('delete-approved-month-selector');
+        vacationList = document.getElementById('approved-vacations-list'); // Use approved list for delete-approved section
+    }
     
     if (!monthSelector || !vacationList) return;
     

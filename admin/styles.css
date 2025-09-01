@@ -448,6 +448,23 @@ button.year-tab.active,
     display: none;
 }
 
+/* Tooltip Styling - exact same as user side */
+.day-cell[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.9); /* Black background */
+    color: white; /* White text */
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    white-space: pre; /* Preserve \n as new lines */
+    z-index: 999999999 !important; /* Always on top - higher than everything including date numbers */
+    top: -40px; /* Adjust position above the cell */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%);
+    pointer-events: none; /* Prevent tooltip from blocking interactions */
+}
+
 /* Special case: highlighted dates use ::after to avoid conflicts */
 .day-cell.highlighted-date[data-date-number]::after {
     display: block;
@@ -758,20 +775,72 @@ button:active {
     }
 
     /* Ensure proper readability of headings */
-    h1, h2, h3 {
-        font-size: 1.4rem;
-    }
-
-    /* Adjust spacing in color legend section */
-    .color-legend ul li {
-        font-size: 0.85rem;
-        margin-bottom: 8px;
-    }
+h1, h2, h3 {
+    font-size: 1.4rem;
 }
+
+/* Adjust spacing in color legend section */
+.color-legend ul li {
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+}
+}
+
 .day-cell.highlighted-date {
     position: relative;
     background-color: #4D0000; /* Single color for all marked dates */
     color: white; /* Ensure text remains readable */
+}
+
+/* Vacation Controls */
+#controls {
+    margin: 20px 0;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 20px;
+    background: #2c2c2c;
+    border-radius: 8px;
+    border: 1px solid #444;
+}
+
+#controls label {
+    font-weight: bold;
+    color: #eaeaea;
+    margin-right: 5px;
+}
+
+#controls select,
+#controls input[type="date"] {
+    padding: 8px 12px;
+    border: 1px solid #555;
+    border-radius: 4px;
+    background: #3c3c3c;
+    color: #eaeaea;
+    font-size: 14px;
+}
+
+#controls select:focus,
+#controls input[type="date"]:focus {
+    outline: none;
+    border-color: #ff8c00;
+    box-shadow: 0 0 5px rgba(255, 140, 0, 0.3);
+}
+
+#controls button {
+    padding: 10px 20px;
+    background: #ff8c00;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+#controls button:hover {
+    background: #e67e00;
 }
 
 
