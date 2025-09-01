@@ -10,8 +10,18 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
+let database;
+try {
+    firebase.initializeApp(firebaseConfig);
+    database = firebase.database();
+    console.log("Firebase initialized successfully");
+} catch (error) {
+    console.error("Firebase initialization failed:", error);
+    database = null;
+}
+
+// Make database available globally
+window.database = database;
 
 // Department Colors (matching vacations folder)
 const departmentColors = {
@@ -117,7 +127,7 @@ const employees = {
         { name: "Anastasija K", value: "Anastasija_K|vip" },
 		{ name: "Gatis J", value: "Gatis_J|vip" },
         { name: "Ivo J", value: "Ivo_J|vip" },
-		{ name: "Jevgenijs B", "value": "Jevgenijs_B|vip" },
+		{ name: "Jevgenijs B", value: "Jevgenijs_B|vip" },
         { name: "Jūlija J", value: "Jūlija_J|vip" },
         { name: "Jurijs K", value: "Jurijs_K|vip" },
         { name: "Kyada H", value: "Kyada_H|vip" },
@@ -144,8 +154,7 @@ const employees = {
     ],
     other: [
         { name: "Aliaksandryna I", value: "Aliaksandryna_I|other" },
-        { name: "Vladislavs", value: "Vladislavs|other" },
-
+        { name: "Vladislavs", value: "Vladislavs|other" }
     ],
     Design: [
         { name: "Romans S", value: "Romans_S|design" },
@@ -257,7 +266,7 @@ function generateCalendar(year) {
 // Load Vacations and Update UI
 async function loadReservedVacations() {
     try {
-        const ref = database.ref("vacations");
+        const ref = window.database.ref("vacations");
         const snapshot = await ref.get();
         const vacationData = snapshot.val() || {};
         
@@ -438,22 +447,35 @@ function updateCalendar(vacationMap) {
 
 // Initialize App
 async function initialize() {
-            generateCalendar(window.currentYear); // Generate calendar
+    console.log("Initializing admin app...");
+    generateCalendar(window.currentYear); // Generate calendar
     await loadReservedVacations(); // Load vacations from Firebase
     populateEmployeeDropdown();
     setupYearSelector();
     setupTooltips(); // Setup tooltip functionality
     setupEventListeners(); // Setup all event listeners
+    console.log("Admin app initialization complete!");
 }
 
 // Setup Event Listeners
 function setupEventListeners() {
-  
+    console.log("Setting up event listeners...");
     
-    // Check if buttons exist
-    const deleteApprovedButton = document.getElementById("delete-approved-button");
-    const forceReserveButton = document.getElementById("force-reserve-button");
-    const deleteApprovedDropdown = document.getElementById("delete-approved-dropdown");
+    // Check if buttons exist and log them
+    console.log("Found buttons:", {
+        approveButton: !!document.getElementById("approve-button"),
+        deleteButton: !!document.getElementById("delete-button"),
+        deleteApprovedButton: !!document.getElementById("delete-approved-button"),
+        forceReserveButton: !!document.getElementById("force-reserve-button"),
+        deleteApprovedDropdown: !!document.getElementById("delete-approved-dropdown")
+    });
+    
+    // Test if we can actually find the buttons by ID
+    console.log("Button elements found by ID:");
+    console.log("approve-button:", document.getElementById("approve-button"));
+    console.log("delete-button:", document.getElementById("delete-button"));
+    console.log("delete-approved-button:", document.getElementById("delete-approved-button"));
+    console.log("force-reserve-button:", document.getElementById("force-reserve-button"));
     
    
     // Add Vacation Button
@@ -477,7 +499,7 @@ function setupEventListeners() {
         const dateRange = startDate === endDate ? startDate : `${startDate} to ${endDate}`;
 
         try {
-            const ref = database.ref(`vacations/${employee}`);
+            const ref = window.database.ref(`vacations/${employee}`);
             const snapshot = await ref.get();
 
             let vacationData = snapshot.val() || { dates: [], approved: [], department, status: "reserved", year: window.currentYear };
@@ -503,38 +525,73 @@ function setupEventListeners() {
     });
 
     // Approve Vacation Button
-    document.getElementById("approve-button").addEventListener("click", async () => {
-        const selectedOption = document.getElementById("approve-dropdown").value;
-        if (!selectedOption) {
-            alert("Please select a vacation to approve.");
-            return;
-        }
-
-        const [employee, range] = selectedOption.split("|");
-
-        try {
-            const ref = database.ref(`vacations/${employee}`);
-            const snapshot = await ref.get();
-
-            if (snapshot.exists()) {
-                const vacationData = snapshot.val();
-                vacationData.dates = vacationData.dates.filter(d => d !== range);
-                if (!vacationData.approved) vacationData.approved = [];
-                vacationData.approved.push(range);
-                
-                // Preserve year field
-                if (!vacationData.year) vacationData.year = window.currentYear;
-
-                await ref.set(vacationData);
-                alert(`Vacation ${range} approved successfully!`);
-                await loadReservedVacations();
+    console.log("Adding click listener to approve button...");
+    const approveButton = document.getElementById("approve-button");
+    if (approveButton) {
+        approveButton.addEventListener("click", async () => {
+            console.log("Approve button clicked!");
+            
+            const selectedOption = document.getElementById("approve-dropdown").value;
+            console.log("Selected option:", selectedOption);
+            
+            if (!selectedOption) {
+                alert("Please select a vacation to approve.");
+                return;
             }
-        } catch (error) {
-            console.error("Error approving vacation:", error);
-        }
-    });
+
+            const [employee, range] = selectedOption.split("|");
+            // Convert employee name from "Aleksandrs P" to "Aleksandrs_P" for Firebase
+            const firebaseEmployee = employee.replace(/\s+/g, "_");
+            console.log("Employee (original):", employee, "Employee (Firebase):", firebaseEmployee, "Range:", range);
+            console.log("Database object:", window.database);
+
+            try {
+                console.log("Creating Firebase reference...");
+                const ref = window.database.ref(`vacations/${firebaseEmployee}`);
+                console.log("Firebase ref created:", ref);
+                
+                // First, let's see what's in the entire vacations node
+                console.log("Checking all vacations in database...");
+                const allVacationsRef = window.database.ref("vacations");
+                const allVacationsSnapshot = await allVacationsRef.get();
+                console.log("All vacations in database:", allVacationsSnapshot.val());
+                
+                console.log("Getting snapshot for specific employee...");
+                const snapshot = await ref.get();
+                console.log("Snapshot received:", snapshot);
+
+                if (snapshot.exists()) {
+                    console.log("Snapshot exists, processing...");
+                    const vacationData = snapshot.val();
+                    console.log("Vacation data:", vacationData);
+                    
+                    vacationData.dates = vacationData.dates.filter(d => d !== range);
+                    if (!vacationData.approved) vacationData.approved = [];
+                    vacationData.approved.push(range);
+                    
+                    // Preserve year field
+                    if (!vacationData.year) vacationData.year = window.currentYear;
+
+                    console.log("Updated vacation data:", vacationData);
+                    console.log("Setting data in Firebase...");
+                    
+                    await ref.set(vacationData);
+                    console.log("Data set successfully!");
+                    
+                    alert(`Vacation ${range} approved successfully!`);
+                    await loadReservedVacations();
+                } else {
+                    console.log("Snapshot does not exist");
+                }
+            } catch (error) {
+                console.error("Error approving vacation:", error);
+                alert(`Error: ${error.message}`);
+            }
+        });
+    }
 
     // Delete Vacation Button
+    console.log("Adding click listener to delete button...");
     document.getElementById("delete-button").addEventListener("click", async () => {
         const reservedOption = document.getElementById("approve-dropdown").value;
         const approvedOption = document.getElementById("delete-approved-dropdown").value;
@@ -548,9 +605,12 @@ function setupEventListeners() {
         }
 
         const [employee, range] = selectedOption.split("|");
+        // Convert employee name from "Aleksandrs P" to "Aleksandrs_P" for Firebase
+        const firebaseEmployee = employee.replace(/\s+/g, "_");
+        console.log("Delete Vacation - Employee (original):", employee, "Employee (Firebase):", firebaseEmployee, "Range:", range, "Type:", type);
 
         try {
-            const ref = database.ref(`vacations/${employee}`);
+            const ref = window.database.ref(`vacations/${firebaseEmployee}`);
             const snapshot = await ref.get();
 
             if (snapshot.exists()) {
@@ -574,6 +634,7 @@ function setupEventListeners() {
     });
 
     // Delete Approved Vacation Button
+    console.log("Adding click listener to delete approved button...");
     document.getElementById("delete-approved-button").addEventListener("click", async () => {
        
         const selectedOption = document.getElementById("delete-approved-dropdown").value;
@@ -584,10 +645,12 @@ function setupEventListeners() {
         }
 
         const [employee, range] = selectedOption.split("|");
-      
+        // Convert employee name from "Aleksandrs P" to "Aleksandrs_P" for Firebase
+        const firebaseEmployee = employee.replace(/\s+/g, "_");
+        console.log("Delete Approved - Employee (original):", employee, "Employee (Firebase):", firebaseEmployee, "Range:", range);
 
         try {
-            const ref = database.ref(`vacations/${employee}`);
+            const ref = window.database.ref(`vacations/${firebaseEmployee}`);
             const snapshot = await ref.get();
 
             if (snapshot.exists()) {
@@ -612,6 +675,7 @@ function setupEventListeners() {
     });
 
     // Force Reserve Button
+    console.log("Adding click listener to force reserve button...");
     document.getElementById("force-reserve-button").addEventListener("click", async () => {
        
         const selectedOption = document.getElementById("delete-approved-dropdown").value;
@@ -622,10 +686,12 @@ function setupEventListeners() {
         }
 
         const [employee, range] = selectedOption.split("|");
-       
+        // Convert employee name from "Aleksandrs P" to "Aleksandrs_P" for Firebase
+        const firebaseEmployee = employee.replace(/\s+/g, "_");
+        console.log("Force Reserve - Employee (original):", employee, "Employee (Firebase):", firebaseEmployee, "Range:", range);
 
         try {
-            const ref = database.ref(`vacations/${employee}`);
+            const ref = window.database.ref(`vacations/${firebaseEmployee}`);
             const snapshot = await ref.get();
 
             if (snapshot.exists()) {
@@ -1237,4 +1303,4 @@ function generateDateRange(range) {
     return dates;
 }
 
-initialize();
+// Don't auto-initialize - let the HTML file call initialize() when ready

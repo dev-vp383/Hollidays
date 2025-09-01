@@ -154,8 +154,14 @@
      <script src="dates-highlighting.js"></script>
      
      <script>
-         // Set current month as default for month selectors
-         document.addEventListener('DOMContentLoaded', function() {
+         // Initialize admin app and set month selectors
+         document.addEventListener('DOMContentLoaded', async function() {
+             console.log("DOM Content Loaded - starting admin initialization...");
+             
+             // Initialize the admin app first
+             await initialize();
+             
+             // Set current month as default for month selectors
              const currentMonth = new Date().getMonth() + 1; // getMonth() returns 0-11, so add 1
              
              // Set current month for reserved vacations selector
@@ -181,6 +187,8 @@
              if (deleteApprovedSelector) {
                  deleteApprovedSelector.value = currentMonth;
              }
+             
+             console.log("Admin initialization complete!");
          });
      </script>
  </html>
