@@ -1166,7 +1166,12 @@ function addTooltip(cell, vacations) {
     // Create tooltip content
     const tooltipContent = vacations.map(vacation => {
         const status = vacation.status === 'reserved' ? 'reserved' : 'approved';
-        return `${vacation.employee} (${vacation.department}) - ${status}`;
+        
+        // Hide "(other)" department and department labels for same department
+        const department = vacation.department === 'other' ? '' : vacation.department;
+        const departmentLabel = department ? ` (${department})` : '';
+        
+        return `${vacation.employee}${departmentLabel} - ${status}`;
     }).join('\n');
     
     tooltip.textContent = tooltipContent;

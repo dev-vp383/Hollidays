@@ -188,10 +188,14 @@ function displayApprovedVacations(vacations) {
     groupedVacations.forEach(vacation => {
         const li = document.createElement('li');
         
+        // Hide "(other)" department labels
+        const department = vacation.department === 'other' ? '' : vacation.department;
+        const departmentLabel = department ? ` (${department})` : '';
+        
         if (vacation.status === 'reserved') {
-            li.innerHTML = `<strong>${vacation.employee}</strong> (${vacation.department}): ${vacation.dateRange} <span style="color: red; font-weight: bold; font-size: 0.8em;">❌ NOT YET APPROVED</span>`;
+            li.innerHTML = `<strong>${vacation.employee}</strong>${departmentLabel}: ${vacation.dateRange} <span style="color: red; font-weight: bold; font-size: 0.8em;">❌ NOT YET APPROVED</span>`;
         } else {
-            li.innerHTML = `<strong>${vacation.employee}</strong> (${vacation.department}): ${vacation.dateRange} <span style="color: green; font-weight: bold; font-size: 0.8em;">✅ APPROVED</span>`;
+            li.innerHTML = `<strong>${vacation.employee}</strong>${departmentLabel}: ${vacation.dateRange} <span style="color: green; font-weight: bold; font-size: 0.8em;">✅ APPROVED</span>`;
         }
         
         // Add hover functionality to highlight calendar cells
@@ -632,7 +636,12 @@ function addTooltip(cell, vacations) {
     // Create tooltip content
     const tooltipContent = vacations.map(vacation => {
         const status = vacation.status === 'reserved' ? 'reserved' : 'approved';
-        return `${vacation.employee} (${vacation.department}) - ${status}`;
+        
+        // Hide "(other)" department and department labels for same department
+        const department = vacation.department === 'other' ? '' : vacation.department;
+        const departmentLabel = department ? ` (${department})` : '';
+        
+        return `${vacation.employee}${departmentLabel} - ${status}`;
     }).join('\n');
     
     tooltip.textContent = tooltipContent;

@@ -209,8 +209,7 @@ body {
 
 /* Vacations Container */
 .vacations-container {
-    max-height: 200px;
-    overflow-y: auto;
+    /* Remove fixed height and scroll - let container size dynamically */
     border: 1px solid #444;
     border-radius: 4px;
     background: #1e1e1e;
