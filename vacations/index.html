@@ -65,35 +65,42 @@
     <li><span class="dot-indicator2"></span> Fully booked (<span style="color: red;">VACATION NOT ALLOWED</span>).</li>
 </ul>
 
-<h3>Dates when vacation is not allowed and Approved Vacations:</h3>
-<div class="fully-booked-container">
-    <!-- Left: Restricted Dates -->
-    <div id="restricted-dates">
-        <h4>Vacation not alllowed:</h4>
-        <ul id="restricted-dates-list">
-            <!-- Restricted dates will be dynamically loaded here -->
-        </ul>
+<h3>Approved Vacations:</h3>
+<div id="approved-vacations">
+    <div class="month-selector-container">
+        <label for="month-selector">Select Month:</label>
+        <select id="month-selector">
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+        </select>
     </div>
-
-    <!-- Right: Approved Vacations -->
-    <div id="approved-vacations">
-        <h4>Approved Vacations:</h4>
-        <ul id="approved-vacations-list">
-            <!-- Approved vacations will be dynamically loaded here -->
-        </ul>
-    </div>
+    <ul id="approved-vacations-list">
+        <!-- Approved vacations will be dynamically loaded here -->
+    </ul>
 </div>
 </div>
-        <!-- Tooltip -->
-        <div id="tooltip" class="tooltip"></div>
+        <!-- Tooltip will be created dynamically by tooltip-manager.js -->
     </div>
 
     <!-- JavaScript Files -->
+    <script src="../date-highlighting.js"></script>
+    <script src="vacation-loader.js"></script>
     <script src="calendar.js"></script>
-    <script src="../restricted-dates.js"></script>
-    <script src="../latvian-holidays.js"></script>
-    <script src="../special-dates.js"></script>
-    <script src="vacation-details.js"></script>
-    <script src="vacation-status.js"></script>
+    <script>
+        // Initialize calendar when page loads
+        document.addEventListener("DOMContentLoaded", () => {
+            generateCalendar(currentYear);
+        });
+    </script>
 </body>
 </html>

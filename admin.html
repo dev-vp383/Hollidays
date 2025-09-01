@@ -37,24 +37,62 @@
         <!-- Right Section: Reserved and Approved Vacations -->
         <div class="submitted-vacations">
             <h2>Reserved Vacations</h2>
-            <ul id="reserved-vacations-list"></ul>
+            <div class="month-selector-container">
+                <label for="reserved-month-selector">Select Month:</label>
+                <select id="reserved-month-selector">
+                    <option value="0">Show All</option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+            <div class="vacations-container">
+                <ul id="reserved-vacations-list"></ul>
+            </div>
 
             <div class="approval-controls">
-    <h2>Approve/Delete Vacation</h2>
-    <select id="approve-dropdown">
-        <option value="" disabled selected>Select a Reserved Vacation</option>
-    </select>
-    <button id="approve-button">Approve</button>
-    <button id="delete-button" style="margin-left: 10px; background-color: red; color: white;">Delete</button>
-    <select id="delete-approved-dropdown" style="margin-left: 10px;">
-        <option value="" disabled selected>Select an Approved Vacation</option>
-    </select>
-</div>
-
-
+                <h2>Approve/Delete Vacation</h2>
+                <select id="approve-dropdown">
+                    <option value="" disabled selected>Select a Reserved Vacation</option>
+                </select>
+                <button id="approve-button">Approve</button>
+                <button id="delete-button" style="margin-left: 10px; background-color: red; color: white;">Delete</button>
+                <select id="delete-approved-dropdown" style="margin-left: 10px;">
+                    <option value="" disabled selected>Select an Approved Vacation</option>
+                </select>
+            </div>
 
             <h2>Approved Vacations</h2>
-            <ul id="approved-vacations-list"></ul>
+            <div class="month-selector-container">
+                <label for="approved-month-selector">Select Month:</label>
+                <select id="approved-month-selector">
+                    <option value="0">Show All</option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+            <div class="vacations-container">
+                <ul id="approved-vacations-list"></ul>
+            </div>
         </div>
     </div>
 

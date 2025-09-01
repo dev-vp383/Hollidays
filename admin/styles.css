@@ -61,6 +61,49 @@ button.year-tab.active,
     height: auto; /* Ensure it adjusts based on content */
 }
 
+/* Month Selector Container - Simple Styling */
+.month-selector-container {
+    margin-bottom: 20px;
+    background: #2c2c2c;
+    padding: 15px;
+    border: 1px solid #444;
+    border-radius: 5px;
+}
+
+.month-selector-container label {
+    display: block;
+    margin-bottom: 8px;
+    color: #eaeaea;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.month-selector-container select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background: #1e1e1e;
+    color: #eaeaea;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.month-selector-container select:hover {
+    border-color: #666;
+}
+
+.month-selector-container select:focus {
+    outline: none;
+    border-color: #ff8c00;
+}
+
+.month-selector-container select option {
+    background: #2c2c2c;
+    color: #eaeaea;
+    padding: 8px;
+}
+
 /* Calendar Section */
 #calendar-section {
     flex: 1; /* Calendar takes up 2/3 of the container */
@@ -246,8 +289,7 @@ button.year-tab.active,
 
 .day-cell {
     position: relative; /* Ensure proper positioning for tooltips */
-	    overflow: hidden; /* Hide overflow for pseudo-element */
-
+    overflow: visible; /* Allow ::before pseudo-elements to be visible */
 }
 
 
@@ -259,6 +301,150 @@ button.year-tab.active,
 .day-cell.approved {
     background-color: #0000ff; /* Approved: Blue */
     color: #ffffff; /* Ensure text is readable */
+}
+
+/* ============================================================================
+   CALENDAR DATE NUMBER VISIBILITY CSS (exact same as user side)
+   ============================================================================ */
+
+/* Ensure date numbers are always visible on top of colored backgrounds */
+.day-cell {
+    z-index: 2 !important;
+}
+
+.day-cell .cell-coloring-element {
+    z-index: 1 !important;
+}
+
+/* Add CSS rule to display date numbers when original text is hidden */
+.day-cell[data-date-number]::before {
+    content: attr(data-date-number);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100; /* Higher than dot indicator */
+    color: #ffffff !important;
+    font-weight: normal;
+    pointer-events: none;
+    /* Ensure positioning is not affected by other elements */
+    transform-origin: center center;
+    /* Force center positioning */
+    margin: 0;
+    padding: 0;
+    /* Ensure text is always centered regardless of other elements */
+    text-align: center;
+    line-height: 1;
+}
+
+/* Ensure the date number is visible even when cell has transparent text */
+.day-cell[data-date-number] {
+    position: relative;
+}
+
+/* Ensure date numbers are visible on reserved/approved dates */
+.day-cell.reserved[data-date-number]::before,
+.day-cell.approved[data-date-number]::before {
+    content: attr(data-date-number);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100; /* Higher than dot indicator */
+    color: #000000 !important;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+    pointer-events: none;
+}
+
+/* Ensure date numbers are visible on Latvian holidays */
+.day-cell.latvian-holiday[data-date-number]::before {
+    content: attr(data-date-number);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100; /* Higher than dot indicator */
+    color: #ffffff !important;
+    font-weight: normal;
+    pointer-events: none;
+}
+
+/* Ensure date numbers are visible on special dates */
+.day-cell.special-date[data-date-number]::before {
+    content: attr(data-date-number);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100; /* Higher than dot indicator */
+    color: #000000 !important;
+    font-weight: normal;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+    pointer-events: none;
+}
+
+/* Base style for highlighted dates */
+.day-cell.highlighted-date {
+    position: relative;
+    background-color: #4D0000; /* Single color for all marked dates */
+    color: white; /* Ensure text remains readable */
+}
+
+/* Ensure date numbers are visible on highlighted dates */
+.day-cell.highlighted-date[data-date-number]::after {
+    content: attr(data-date-number);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100; /* Higher than dot indicator */
+    color: #ffffff !important;
+    font-weight: normal;
+    pointer-events: none;
+}
+
+/* Additional styling for better date visibility */
+.day-cell[data-date-number]::before {
+    font-size: 0.9rem;
+    line-height: 1;
+}
+
+/* Enhanced styling for cells with multiple overlays */
+.day-cell .cell-coloring-element {
+    border-radius: 4px;
+    overflow: visible; /* Allow date numbers to be visible */
+}
+
+/* General rule: Ensure date numbers are always visible on all cells with data-date-number */
+.day-cell[data-date-number]::before {
+    content: attr(data-date-number);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100; /* Higher than dot indicator */
+    color: #ffffff !important;
+    font-weight: normal;
+    pointer-events: none;
+    font-size: 0.9rem;
+    line-height: 1;
+    text-shadow: none;
+}
+
+/* Show ::before for cells with multiple overlays */
+.day-cell.multiple-overlays[data-date-number]::before {
+    display: block;
+}
+
+/* Hide ::before for cells without multiple overlays */
+.day-cell:not(.multiple-overlays)[data-date-number]::before {
+    display: none;
+}
+
+/* Special case: highlighted dates use ::after to avoid conflicts */
+.day-cell.highlighted-date[data-date-number]::after {
+    display: block;
 }
 
 
@@ -451,18 +637,7 @@ button:active {
     color: red; /* Optional: Add a color to make it stand out */
 }
 
-/* Red Dot Indicator for Fully Booked */
-.dot-indicator {
-    width: 8px;
-    height: 8px;
-    background-color: red; /* Red for Fully Booked */
-    border-radius: 50%;
-    position: absolute;
-    bottom: 5px;
-    right: 5px;
-    pointer-events: none;
-    z-index: 2; /* Ensure the dot appears above other elements */
-}
+
 
 .fully-booked-container {
     display: flex;
@@ -595,17 +770,6 @@ button:active {
     color: white; /* Ensure text remains readable */
 }
 
-/* Triangle in the top-left corner */
-.day-cell.highlighted-date::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 25px 25px 0 0; /* Triangle size */
-    border-color: #4D0000 transparent transparent transparent; /* Slightly darker red */
-}
+
 
 

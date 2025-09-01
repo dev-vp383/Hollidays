@@ -59,6 +59,7 @@ function generateCalendar(year) {
             const dayCell = document.createElement("span");
             dayCell.textContent = day;
             dayCell.dataset.date = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+            dayCell.setAttribute('data-date-number', day); // Add this line to store the date number
             dayCell.classList.add("day-cell");
 
             // Add click event listener for date selection
@@ -75,11 +76,7 @@ function generateCalendar(year) {
                 console.log("Selected Dates:", selectedDates);
             });
 
-            // Add dot indicator for overlaps
-            const dotIndicator = document.createElement("div");
-            dotIndicator.classList.add("dot-indicator");
-            dotIndicator.style.display = "none";
-            dayCell.appendChild(dotIndicator);
+
 
             daysContainer.appendChild(dayCell);
         }

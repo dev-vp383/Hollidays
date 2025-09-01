@@ -105,6 +105,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 dayCell.classList.add("highlighted-date", "restricted-highlighted");
             }
 
+            // Ensure date number remains visible
+            const dateNumber = dayCell.dataset.dateNumber || dayCell.textContent.trim();
+            if (dateNumber) {
+                dayCell.setAttribute('data-date-number', dateNumber);
+            }
+
             // Update tooltip
             const existingTooltip = dayCell.getAttribute("data-tooltip") || "";
             const newTooltip = [];

@@ -59,10 +59,28 @@ function generateCalendar(year) {
             const dayCell = document.createElement("span");
             dayCell.textContent = day;
             dayCell.dataset.date = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+            dayCell.dataset.dateNumber = day;
             dayCell.classList.add("day-cell");
 
-            // Remove the diagonal background logic entirely
-            // If you had any conditions for applying diagonals, they are now removed.
+            // Add click event listener for date selection
+            dayCell.addEventListener("click", () => {
+                const date = dayCell.dataset.date;
+                if (selectedDates && selectedDates.includes(date)) {
+                    selectedDates = selectedDates.filter(d => d !== date);
+                    dayCell.style.backgroundColor = "";
+                } else {
+                    if (!selectedDates) selectedDates = [];
+                    selectedDates.push(date);
+                    dayCell.style.backgroundColor = "rgba(255, 204, 0, 0.5)";
+                }
+                console.log("Selected Dates:", selectedDates);
+            });
+
+            // Add dot indicator for overlaps
+            const dotIndicator = document.createElement("div");
+            dotIndicator.classList.add("dot-indicator");
+            dotIndicator.style.display = "none";
+            dayCell.appendChild(dotIndicator);
 
             daysContainer.appendChild(dayCell);
         }
@@ -72,76 +90,4 @@ function generateCalendar(year) {
     }
 }
 
-// Initialize Calendar
-document.addEventListener("DOMContentLoaded", () => {
-    generateCalendar(currentYear);
-    setupYearSelector();
-    
-    // Apply highlighting after calendar is generated
-    setTimeout(() => {
-        if (typeof window.highlightVacationNotAllowed === 'function') {
-            window.highlightVacationNotAllowed();
-        }
-        if (typeof window.highlightLatvianHolidays === 'function') {
-            window.highlightLatvianHolidays();
-        }
-        if (typeof window.highlightSpecialDates === 'function') {
-            window.highlightSpecialDates();
-        }
-        
-        // Load vacation statuses
-        if (typeof window.applyVacationStatuses === 'function') {
-            window.applyVacationStatuses();
-        }
-        
-        // Load vacation details
-        if (typeof window.initializeVacationDetails === 'function') {
-            window.initializeVacationDetails();
-        }
-    }, 100);
-});
-
-// Setup Year Selector
-function setupYearSelector() {
-    const yearTabs = document.querySelectorAll('.year-tab');
-    
-    yearTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            // Remove active class from all tabs
-            yearTabs.forEach(t => t.classList.remove('active'));
-            
-            // Add active class to clicked tab
-            tab.classList.add('active');
-            
-            // Update current year
-            currentYear = parseInt(tab.dataset.year);
-            window.currentYear = currentYear; // Set global variable for highlighting functions
-            
-            // Regenerate calendar for new year
-            generateCalendar(currentYear);
-            
-            // Reapply highlighting for new year
-            setTimeout(() => {
-                if (typeof window.highlightVacationNotAllowed === 'function') {
-                    window.highlightVacationNotAllowed();
-                }
-                if (typeof window.highlightLatvianHolidays === 'function') {
-                    window.highlightLatvianHolidays();
-                }
-                if (typeof window.highlightSpecialDates === 'function') {
-                    window.highlightSpecialDates();
-                }
-                
-                // Reload vacation statuses for new year
-                if (typeof window.applyVacationStatuses === 'function') {
-                    window.applyVacationStatuses();
-                }
-                
-                // Refresh vacation details for new year
-                if (typeof window.initializeVacationDetails === 'function') {
-                    window.initializeVacationDetails();
-                }
-            }, 100);
-        });
-    });
-}
+// Calendar initialization is handled by admin.js

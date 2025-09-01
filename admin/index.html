@@ -43,29 +43,104 @@
         <!-- Right Section: Reserved and Approved Vacations -->
         <div class="submitted-vacations">
             <h2>Reserved Vacations</h2>
-            <ul id="reserved-vacations-list"></ul>
+            <div class="month-selector-container">
+                <label for="reserved-month-selector">Select Month:</label>
+                <select id="reserved-month-selector">
+                    <option value="0">Show All</option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+            <div class="vacations-container">
+                <ul id="reserved-vacations-list"></ul>
+            </div>
 
             <div class="approval-controls">
-    <h2>Approve/Delete Vacation</h2>
-    <select id="approve-dropdown">
-        <option value="" disabled selected>Select a Reserved Vacation</option>
-    </select>
-    <button id="approve-button">Approve</button>
-    <button id="delete-button" style="margin-left: 10px; background-color: red; color: white;">Delete</button>
-</div>
+                <h2>Approve/Delete Vacation</h2>
+                <div class="month-selector-container">
+                    <label for="approve-month-selector">Select Month:</label>
+                    <select id="approve-month-selector">
+                        <option value="0">Show All</option>
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                </div>
+                <select id="approve-dropdown">
+                    <option value="" disabled selected>Select a Reserved Vacation</option>
+                </select>
+                <button id="approve-button">Approve</button>
+                <button id="delete-button" style="margin-left: 10px; background-color: red; color: white;">Delete</button>
+            </div>
 
 <div class="approval-controls">
     <h2>Delete Approved Vacation</h2>
+    <div class="month-selector-container">
+        <label for="delete-approved-month-selector">Select Month:</label>
+        <select id="delete-approved-month-selector">
+            <option value="0">Show All</option>
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+        </select>
+    </div>
     <select id="delete-approved-dropdown">
         <option value="" disabled selected>Select an Approved Vacation</option>
     </select>
     <button id="delete-approved-button" style="margin-left: 10px; background-color: red; color: white;">Delete</button>
-	    <button id="force-reserve-button" style="margin-left: 10px; background-color: orange; color: white;">Force reserve</button>
-
+    <button id="force-reserve-button" style="margin-left: 10px; background-color: orange; color: white;">Force reserve</button>
 </div>
 
             <h2>Approved Vacations</h2>
-            <ul id="approved-vacations-list"></ul>
+            <div class="month-selector-container">
+                <label for="approved-month-selector">Select Month:</label>
+                <select id="approved-month-selector">
+                    <option value="0">Show All</option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+            <div class="vacations-container">
+                <ul id="approved-vacations-list"></ul>
+            </div>
         </div>
     </div>
 
@@ -73,8 +148,39 @@
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
 
-    <!-- JavaScript Files -->
-    <script src="../admin.js"></script>
-    <script src="calendar.js"></script>
-    <script src="dates-highlighting.js"></script>
-</html>
+         <!-- JavaScript Files -->
+     <script src="../admin.js"></script>
+     <script src="calendar.js"></script>
+     <script src="dates-highlighting.js"></script>
+     
+     <script>
+         // Set current month as default for month selectors
+         document.addEventListener('DOMContentLoaded', function() {
+             const currentMonth = new Date().getMonth() + 1; // getMonth() returns 0-11, so add 1
+             
+             // Set current month for reserved vacations selector
+             const reservedSelector = document.getElementById('reserved-month-selector');
+             if (reservedSelector) {
+                 reservedSelector.value = currentMonth;
+             }
+             
+             // Set current month for approved vacations selector
+             const approvedSelector = document.getElementById('approved-month-selector');
+             if (approvedSelector) {
+                 approvedSelector.value = currentMonth;
+             }
+             
+             // Set current month for approve month selector
+             const approveSelector = document.getElementById('approve-month-selector');
+             if (approveSelector) {
+                 approveSelector.value = currentMonth;
+             }
+             
+             // Set current month for delete approved month selector
+             const deleteApprovedSelector = document.getElementById('delete-approved-month-selector');
+             if (deleteApprovedSelector) {
+                 deleteApprovedSelector.value = currentMonth;
+             }
+         });
+     </script>
+ </html>

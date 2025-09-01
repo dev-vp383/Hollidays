@@ -22,7 +22,8 @@ const departmentColors = {
 
 // Track Selected Dates
 let selectedDates = [];
-let currentYear = 2025;
+// Use window.currentYear to avoid conflicts with other files
+window.currentYear = window.currentYear || 2025;
 
 // Helper: Get Dates in a Range
 function getDatesInRange(startDate, endDate) {
@@ -44,12 +45,23 @@ function mergeConsecutiveRanges(ranges) {
     
     // Convert ranges to date objects for easier comparison
     const rangeObjects = ranges.map(range => {
-        const [start, end] = range.split(" to ");
-        return {
-            start: new Date(start),
-            end: new Date(end),
-            original: range
-        };
+        // Handle both single dates and date ranges
+        if (range.includes(" to ")) {
+            const [start, end] = range.split(" to ");
+            return {
+                start: new Date(start),
+                end: new Date(end),
+                original: range
+            };
+        } else {
+            // Single date - treat as start and end being the same
+            const date = new Date(range);
+            return {
+                start: date,
+                end: date,
+                original: range
+            };
+        }
     });
     
     // Sort by start date
@@ -82,57 +94,63 @@ function mergeConsecutiveRanges(ranges) {
     return merged.map(range => {
         const startStr = range.start.toISOString().split('T')[0];
         const endStr = range.end.toISOString().split('T')[0];
-        return `${startStr} to ${endStr}`;
+        // If start and end are the same, return just the date, otherwise return range
+        return startStr === endStr ? startStr : `${startStr} to ${endStr}`;
     });
 }
 
 const employees = {
     technical: [
-        { name: "Aleksandrs Potreba", value: "Aleksandrs Potreba|technical" },
-        { name: "Jūlija Baluta", value: "Jūlija Baluta|technical" },
-        { name: "Anastasija Vinogradova", value: "Anastasija Vinogradova|technical" },
-        { name: "Daniels Pušķis", value: "Daniels Pušķis|technical" }
+        { name: "Aleksandrs P", value: "Aleksandrs_P|technical" },
+        { name: "Jūlija B", value: "Jūlija_B|technical" },
+        { name: "Anastasija V", value: "Anastasija_V|technical" },
+        { name: "Daniels P", value: "Daniels_P|technical" },
+        {name: "Timurs C", value: "Timurs_C|technical" },
+        { name: "Elīna T", value: "Elīna_T|technical" },
     ],
-    analytics: [
-        { name: "Ruslans Pirimovs", value: "Ruslans Pirimovs|analytics" },
-        { name: "Jelizaveta Migunova", value: "Jelizaveta Migunova|analytics" }
+    KPI: [
+        { name: "Ruslans P", value: "Ruslans_P|analytics" },
+        { name: "Jelizaveta M", value: "Jelizaveta_M|analytics" }
     ],
     vip: [
-        { name: "Aleksandrs Potreba", value: "Aleksandrs Potreba|vip" },
-        { name: "Anastasija Kirkiča", value: "Anastasija Kirkiča|vip" },
-		{ name: "Gatis J.", value: "Gatis Janauskis|vip" },
-        { name: "Ivo Jegorovs", value: "Ivo Jegorovs|vip" },
-		{ "name": "Jevgenijs Bondarenko", "value": "Jevgenijs Bondarenko|vip" },
-        { name: "Jūlija Jurčenko", value: "Jūlija Jurčenko|vip" },
-        { name: "Jurijs Kuļikovs", value: "Jurijs Kuļikovs|vip" },
-        { name: "Kyada Hirenkumar Himmatbhai", value: "Kyada Hirenkumar Himmatbhai|vip" },
-        { name: "Laura Pāvulāne", value: "Laura Pāvulāne|vip" },
-        { name: "Monyque Alves Vieira", value: "Monyque Alves Vieira|vip" },
-        { name: "Nadezhda Berneva", value: "Nadezhda Berneva|vip" },
-        { name: "Nataļja Triputina", value: "Nataļja Triputina|vip" },
-        { name: "Nikolajs Pavickis", value: "Nikolajs Pavickis|vip" },
-        { name: "Olga Dudareva", value: "Olga Dudareva|vip" },
-        { name: "Olga Violeta Šerstņova", value: "Olga Violeta Šerstņova|vip" },
-        { name: "Tatjana Tukuma", value: "Tatjana Tukuma|vip" },
-        { name: "Achraf Tobal Nafae", value: "Achraf Tobal Nafae|vip" },
-
-        { name: "Dēvids Balodis", value: "Dēvids Balodis|vip" },
-        { name: "Laura Santana Saenz", value: "Laura Santana Saenz|vip" },
-        { name: "Aleksandrs Tkačenko", value: "Aleksandrs Tkačenko|vip" },
-        { name: "Vjaceslavs Volodins", value: "Vjaceslavs Volodins|vip" },
-        { name: "Jekaterina Chistakova", value: "Jekaterina Chistakova|vip" },
-        { name: "Elīna Tretjaka", value: "Elīna Tretjaka|vip" },
-        { name: "Andrejs Kots", value: "Andrejs Kots|vip" },
-        { name: "Kirills Kļesarevs", value: "Kirills Kļesarevs|vip" },
-        { name: "Sanita Bite", value: "Sanita Bite|vip" },
-        { name: "Vladislavs Rubcovs", value: "Vladislavs Rubcovs|vip" },
-        { name: "Aleksejs Bugrišovs", value: "Aleksejs Bugrišovs|vip" },
-        { name: "Kezia Raichel James", value: "Kezia Raichel James|vip" }
+        { name: "Aleksandrs P", value: "Aleksandrs_P|vip" },
+        { name: "Anastasija K", value: "Anastasija_K|vip" },
+		{ name: "Gatis J", value: "Gatis_J|vip" },
+        { name: "Ivo J", value: "Ivo_J|vip" },
+		{ name: "Jevgenijs B", "value": "Jevgenijs_B|vip" },
+        { name: "Jūlija J", value: "Jūlija_J|vip" },
+        { name: "Jurijs K", value: "Jurijs_K|vip" },
+        { name: "Kyada H", value: "Kyada_H|vip" },
+        { name: "Laura P", value: "Laura_P|vip" },
+        { name: "Monyque A V", value: "Monyque_A_V|vip" },
+        { name: "Nadezhda B", value: "Nadezhda_B|vip" },
+        { name: "Nataļja T", value: "Nataļja_T|vip" },
+        { name: "Nikolajs P", value: "Nikolajs_P|vip" },
+        { name: "Olga D", value: "Olga_D|vip" },
+        { name: "Olga V Š", value: "Olga_V_Š|vip" },
+        { name: "Tatjana T", value: "Tatjana_T|vip" },
+        { name: "Achraf T N", value: "Achraf_T_N|vip" },
+        { name: "Dēvids B", value: "Dēvids_B|vip" },
+        { name: "Laura S S", value: "Laura_S_S|vip" },
+        { name: "Aleksandrs T", value: "Aleksandrs_T|vip" },
+        { name: "Vjaceslavs V", value: "Vjaceslavs_V|vip" },
+        { name: "Jekaterina C", value: "Jekaterina_C|vip" },
+        { name: "Andrejs K", value: "Andrejs_K|vip" },
+        { name: "Kirills K", value: "Kirills_K|vip" },
+        { name: "Sanita B", value: "Sanita_B|vip" },
+        { name: "Vladislavs R", value: "Vladislavs_R|vip" },
+        { name: "Aleksejs B", value: "Aleksejs_B|vip" },
+        { name: "Kezia R J", value: "Kezia_R_J|vip" }
     ],
     other: [
-        { name: "Aliaksandryna Ivanova", value: "Aliaksandryna Ivanova|other" },
+        { name: "Aliaksandryna I", value: "Aliaksandryna_I|other" },
         { name: "Vladislavs", value: "Vladislavs|other" },
-        { name: "Eduards Popovskis", value: "Eduards Popovskis|other" }
+
+    ],
+    Design: [
+        { name: "Romans S", value: "Romans_S|design" },
+        { name: "Eduard E", value: "Eduard_E|design" },
+        { name: "Eduards P", value: "Eduards_P|design" },   
     ]
 };
 
@@ -206,7 +224,10 @@ function generateCalendar(year) {
             const dayCell = document.createElement("span");
             dayCell.textContent = day;
             dayCell.dataset.date = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+            dayCell.setAttribute('data-date-number', day);
             dayCell.classList.add("day-cell");
+            // Debug: Add a temporary visible text to verify the attribute is set
+            dayCell.setAttribute('title', `Date: ${day} (debug)`);
 
             dayCell.addEventListener("click", () => {
                 const date = dayCell.dataset.date;
@@ -217,7 +238,7 @@ function generateCalendar(year) {
                     selectedDates.push(date);
                     dayCell.style.backgroundColor = "rgba(255, 204, 0, 0.5)";
                 }
-                console.log("Selected Dates:", selectedDates);
+        
             });
 
             const dotIndicator = document.createElement("div");
@@ -230,7 +251,7 @@ function generateCalendar(year) {
         monthContainer.appendChild(daysContainer);
         calendarContainer.appendChild(monthContainer);
     }
-    console.log("Calendar generated successfully!");
+    
 }
 
 // Load Vacations and Update UI
@@ -240,14 +261,45 @@ async function loadReservedVacations() {
         const snapshot = await ref.get();
         const vacationData = snapshot.val() || {};
         
-        // Filter vacations by current year
+        // Filter vacations by date strings instead of year field
         const yearFilteredData = {};
+
+        
         Object.entries(vacationData).forEach(([employee, info]) => {
-            // Only include vacations that have year field matching current year, or no year field (legacy 2025 data)
-            if (!info.year || info.year === currentYear) {
-                yearFilteredData[employee] = info;
+
+            
+            // Create a filtered version of the employee data
+            const filteredInfo = { ...info };
+            let hasRelevantData = false;
+            
+            // Filter dates array (reserved)
+            if (info.dates && Array.isArray(info.dates)) {
+                filteredInfo.dates = info.dates.filter(dateRange => {
+                    const isRelevant = dateRange.startsWith(`${window.currentYear}-`);
+    
+                    return isRelevant;
+                });
+                if (filteredInfo.dates.length > 0) hasRelevantData = true;
+            }
+            
+            // Filter approved array
+            if (info.approved && Array.isArray(info.approved)) {
+                filteredInfo.approved = info.approved.filter(dateRange => {
+                    const isRelevant = dateRange.startsWith(`${window.currentYear}-`);
+    
+                    return isRelevant;
+                });
+                if (filteredInfo.approved.length > 0) hasRelevantData = true;
+            }
+            
+            // Only include employee if they have relevant data for the current year
+            if (hasRelevantData) {
+                yearFilteredData[employee] = filteredInfo;
+               
             }
         });
+        
+       
 
         const reservedList = document.getElementById("reserved-vacations-list");
         const approveDropdown = document.getElementById("approve-dropdown");
@@ -260,6 +312,10 @@ async function loadReservedVacations() {
         approvedList.innerHTML = "";
 
         const vacationMap = {};
+        
+        // Store all vacation data for filtering dropdowns
+        window.allReservedVacations = [];
+        window.allApprovedVacations = [];
 
         Object.entries(yearFilteredData).forEach(([employee, info]) => {
             const employeeName = employee.split("_").join(" ");
@@ -270,7 +326,15 @@ async function loadReservedVacations() {
                 const mergedReservedRanges = mergeConsecutiveRanges(info.dates);
                 
                 mergedReservedRanges.forEach(range => {
-                    const [startDate, endDate] = range.split(" to ") || [range, range];
+                    // Handle both single dates and date ranges
+                    let startDate, endDate;
+                    if (range.includes(" to ")) {
+                        [startDate, endDate] = range.split(" to ");
+                    } else {
+                        // Single date - use the same date for start and end
+                        startDate = range;
+                        endDate = range;
+                    }
                     const dates = getDatesInRange(startDate, endDate);
                     dates.forEach(date => {
                         if (!vacationMap[date]) vacationMap[date] = [];
@@ -281,10 +345,14 @@ async function loadReservedVacations() {
                     listItem.textContent = `${employeeName} - ${range}`;
                     reservedList.appendChild(listItem);
 
-                    const option = document.createElement("option");
-                    option.value = `${employee}|${range}`;
-                    option.textContent = `${employeeName} - ${range}`;
-                    approveDropdown.appendChild(option);
+                    // Store reserved vacation data
+                    window.allReservedVacations.push({
+                        employee: employeeName,
+                        range: range,
+                        startDate: startDate,
+                        endDate: endDate,
+                        department: department
+                    });
                 });
             }
 
@@ -293,10 +361,21 @@ async function loadReservedVacations() {
                 const mergedApprovedRanges = mergeConsecutiveRanges(info.approved);
                 
                 mergedApprovedRanges.forEach(range => {
-                    const [startDate, endDate] = range.split(" to ") || [range, range];
+                    // Handle both single dates and date ranges
+                    let startDate, endDate;
+                    if (range.includes(" to ")) {
+                        [startDate, endDate] = range.split(" to ");
+                    } else {
+                        // Single date - use the same date for start and end
+                        startDate = range;
+                        endDate = range;
+                    }
+                    
                     const dates = getDatesInRange(startDate, endDate);
                     dates.forEach(date => {
-                        if (!vacationMap[date]) vacationMap[date] = [];
+                        if (!vacationMap[date]) {
+                            vacationMap[date] = [];
+                        }
                         vacationMap[date].push({ employee: employeeName, status: "approved", department });
                     });
 
@@ -304,17 +383,31 @@ async function loadReservedVacations() {
                     listItem.textContent = `${employeeName} - ${range}`;
                     approvedList.appendChild(listItem);
 
-                    const option = document.createElement("option");
-                    option.value = `${employee}|${range}`;
-                    option.textContent = `${employeeName} - ${range}`;
-                    approvedDropdown.appendChild(option);
+                    // Store approved vacation data
+                    window.allApprovedVacations.push({
+                        employee: employeeName,
+                        range: range,
+                        startDate: startDate,
+                        endDate: endDate,
+                        department: department
+                    });
                 });
             }
         });
 
         updateCalendar(vacationMap);
 
-        console.log("Reserved and Approved Vacations loaded successfully.");
+      
+        
+        // Setup month selectors after data is loaded
+        setupMonthSelectors();
+        
+        // Apply month filtering after data is loaded
+        filterVacationsByMonth('reserved');
+        filterVacationsByMonth('approved');
+        
+        // Populate dropdowns with filtered data
+        populateDropdowns();
     } catch (error) {
         console.error("Error loading vacations:", error);
     }
@@ -322,110 +415,22 @@ async function loadReservedVacations() {
 
 // Update Calendar with Vacations (matching vacations folder logic)
 function updateCalendar(vacationMap) {
-    const dayCells = document.querySelectorAll(".day-cell");
-
-    dayCells.forEach(dayCell => {
-        const date = dayCell.dataset.date;
-        if (!date) return;
-
-        // Check if this date has vacation data
-        const hasVacationData = vacationMap[date];
-        const isRestrictedDate = window.restrictedDates && window.restrictedDates.includes(date);
-
-        if (!hasVacationData && !isRestrictedDate) return;
-
-        // Remove any existing corner elements
-        const existingCorners = dayCell.querySelectorAll(".corner-triangle");
-        existingCorners.forEach((corner) => corner.remove());
-
-        if (hasVacationData) {
-            // Create tooltip content
-            const tooltipContent = vacationMap[date]
-                .map(v => `${v.employee} (${v.status})`)
-                .join("\n");
-            dayCell.setAttribute("data-tooltip", tooltipContent);
-
-            // Handle vacation colors with corner triangles
-            const departmentStatuses = vacationMap[date].map(v => ({
-                department: v.department,
-                status: v.status
-            }));
-
-            // Apply the base color (first department)
-            const firstStatus = departmentStatuses[0];
-            dayCell.style.backgroundColor = departmentColors[firstStatus.department]?.[firstStatus.status] || "#CB04A5";
-
-            // Add corner triangles for additional departments
-            if (departmentStatuses.length > 1) {
-                if (departmentStatuses[1]) {
-                    const topLeftTriangle = document.createElement("div");
-                    topLeftTriangle.classList.add("corner-triangle");
-                    topLeftTriangle.style.backgroundColor = departmentColors[departmentStatuses[1].department]?.[departmentStatuses[1].status] || "#CB04A5";
-                    topLeftTriangle.style.clipPath = "polygon(0 0, 100% 0, 0 100%)"; // Top-left triangle
-                    topLeftTriangle.style.position = "absolute";
-                    topLeftTriangle.style.top = "0";
-                    topLeftTriangle.style.left = "0";
-                    topLeftTriangle.style.width = "50%";
-                    topLeftTriangle.style.height = "50%";
-                    dayCell.appendChild(topLeftTriangle);
-                }
-                if (departmentStatuses[2]) {
-                    const topRightTriangle = document.createElement("div");
-                    topRightTriangle.classList.add("corner-triangle");
-                    topRightTriangle.style.backgroundColor = departmentColors[departmentStatuses[2].department]?.[departmentStatuses[2].status] || "#CB04A5";
-                    topRightTriangle.style.clipPath = "polygon(100% 0, 100% 100%, 0 0)"; // Top-right triangle
-                    topRightTriangle.style.position = "absolute";
-                    topRightTriangle.style.top = "0";
-                    topRightTriangle.style.right = "0";
-                    topRightTriangle.style.width = "50%";
-                    topRightTriangle.style.height = "50%";
-                    dayCell.appendChild(topRightTriangle);
-                }
-            }
-
-            // If this is also a restricted date, add restricted color as a corner triangle
-            if (isRestrictedDate) {
-                const restrictedTriangle = document.createElement("div");
-                restrictedTriangle.classList.add("corner-triangle");
-                restrictedTriangle.style.backgroundColor = "#e69500"; // Restricted date color
-                restrictedTriangle.style.clipPath = "polygon(100% 0, 100% 100%, 0 100%)"; // Bottom-right triangle
-                restrictedTriangle.style.position = "absolute";
-                restrictedTriangle.style.bottom = "0";
-                restrictedTriangle.style.right = "0";
-                restrictedTriangle.style.width = "50%";
-                restrictedTriangle.style.height = "50%";
-                dayCell.appendChild(restrictedTriangle);
-            }
-        } else if (isRestrictedDate) {
-            // Only restricted date, no vacation - fill the whole cell
-            dayCell.style.backgroundColor = "#e69500";
-            dayCell.setAttribute("data-tooltip", "VACATION NOT ALLOWED");
-        }
-
-        // Red Dot Logic
-        const departmentCounts = { analytics: 0, technical: 0, vip: 0 };
-        vacationMap[date]?.forEach(({ department }) => {
-            departmentCounts[department] += 1;
+    // Convert vacationMap to the format expected by applyCellColoring
+    const approvedVacations = [];
+    
+    Object.entries(vacationMap).forEach(([date, vacations]) => {
+        vacations.forEach(vacation => {
+            approvedVacations.push({
+                employee: vacation.employee,
+                department: vacation.department,
+                dateRange: date, // Single date for admin side
+                status: vacation.status || 'reserved'
+            });
         });
-
-        const analyticsOrTechnical = departmentCounts.analytics + departmentCounts.technical;
-        const vip = departmentCounts.vip;
-
-        const redDotNeeded =
-            departmentCounts.analytics > 1 ||
-            departmentCounts.technical > 1 ||
-            vip > 1 ||
-            analyticsOrTechnical > 1;
-
-        let dotIndicator = dayCell.querySelector(".dot-indicator");
-        if (!dotIndicator) {
-            dotIndicator = document.createElement("div");
-            dotIndicator.classList.add("dot-indicator");
-            dayCell.appendChild(dotIndicator);
-        }
-
-        dotIndicator.style.display = redDotNeeded ? "block" : "none";
     });
+    
+    // Apply the improved cell coloring system
+    applyCellColoring(approvedVacations);
 }
 
 
@@ -433,7 +438,7 @@ function updateCalendar(vacationMap) {
 
 // Initialize App
 async function initialize() {
-    generateCalendar(currentYear); // Generate calendar
+            generateCalendar(window.currentYear); // Generate calendar
     await loadReservedVacations(); // Load vacations from Firebase
     populateEmployeeDropdown();
     setupYearSelector();
@@ -443,16 +448,14 @@ async function initialize() {
 
 // Setup Event Listeners
 function setupEventListeners() {
-    console.log("Setting up event listeners...");
+  
     
     // Check if buttons exist
     const deleteApprovedButton = document.getElementById("delete-approved-button");
     const forceReserveButton = document.getElementById("force-reserve-button");
     const deleteApprovedDropdown = document.getElementById("delete-approved-dropdown");
     
-    console.log("Delete Approved Button found:", !!deleteApprovedButton);
-    console.log("Force Reserve Button found:", !!forceReserveButton);
-    console.log("Delete Approved Dropdown found:", !!deleteApprovedDropdown);
+   
     // Add Vacation Button
     document.getElementById("add-vacation").addEventListener("click", async () => {
         const employeeValue = document.getElementById("employee-select").value;
@@ -477,7 +480,7 @@ function setupEventListeners() {
             const ref = database.ref(`vacations/${employee}`);
             const snapshot = await ref.get();
 
-            let vacationData = snapshot.val() || { dates: [], approved: [], department, status: "reserved", year: currentYear };
+            let vacationData = snapshot.val() || { dates: [], approved: [], department, status: "reserved", year: window.currentYear };
 
             // Ensure dates is an array
             if (!Array.isArray(vacationData.dates)) vacationData.dates = [];
@@ -486,7 +489,7 @@ function setupEventListeners() {
             vacationData.dates.push(dateRange);
             
             // Ensure year field is set
-            vacationData.year = currentYear;
+            vacationData.year = window.currentYear;
 
             await ref.set(vacationData);
 
@@ -520,7 +523,7 @@ function setupEventListeners() {
                 vacationData.approved.push(range);
                 
                 // Preserve year field
-                if (!vacationData.year) vacationData.year = currentYear;
+                if (!vacationData.year) vacationData.year = window.currentYear;
 
                 await ref.set(vacationData);
                 alert(`Vacation ${range} approved successfully!`);
@@ -572,16 +575,16 @@ function setupEventListeners() {
 
     // Delete Approved Vacation Button
     document.getElementById("delete-approved-button").addEventListener("click", async () => {
-        console.log("Delete Approved button clicked");
+       
         const selectedOption = document.getElementById("delete-approved-dropdown").value;
-        console.log("Selected option:", selectedOption);
+      
         if (!selectedOption) {
             alert("Please select an approved vacation to delete.");
             return;
         }
 
         const [employee, range] = selectedOption.split("|");
-        console.log("Employee:", employee, "Range:", range);
+      
 
         try {
             const ref = database.ref(`vacations/${employee}`);
@@ -589,9 +592,9 @@ function setupEventListeners() {
 
             if (snapshot.exists()) {
                 const vacationData = snapshot.val();
-                console.log("Current vacation data:", vacationData);
+           
                 vacationData.approved = vacationData.approved.filter(d => d !== range);
-                console.log("Updated vacation data:", vacationData);
+              
 
                 // Ensure both arrays exist before checking length
                 const datesLength = vacationData.dates ? vacationData.dates.length : 0;
@@ -610,16 +613,16 @@ function setupEventListeners() {
 
     // Force Reserve Button
     document.getElementById("force-reserve-button").addEventListener("click", async () => {
-        console.log("Force Reserve button clicked");
+       
         const selectedOption = document.getElementById("delete-approved-dropdown").value;
-        console.log("Selected option:", selectedOption);
+       
         if (!selectedOption) {
             alert("Please select an approved vacation to force reserve.");
             return;
         }
 
         const [employee, range] = selectedOption.split("|");
-        console.log("Employee:", employee, "Range:", range);
+       
 
         try {
             const ref = database.ref(`vacations/${employee}`);
@@ -627,12 +630,12 @@ function setupEventListeners() {
 
             if (snapshot.exists()) {
                 const vacationData = snapshot.val();
-                console.log("Current vacation data:", vacationData);
+                
                 // Move from approved to reserved
                 vacationData.approved = vacationData.approved.filter(d => d !== range);
                 if (!vacationData.dates) vacationData.dates = [];
                 vacationData.dates.push(range);
-                console.log("Updated vacation data:", vacationData);
+               
 
                 await ref.set(vacationData);
                 alert(`Vacation ${range} moved from approved to reserved successfully!`);
@@ -730,19 +733,503 @@ function setupYearSelector() {
             tab.classList.add('active');
             
             // Update current year
-            currentYear = parseInt(tab.dataset.year);
-            window.currentYear = currentYear; // Set global variable for highlighting functions
+            window.currentYear = parseInt(tab.dataset.year);
             
             // Clear selected dates
             selectedDates = [];
             
             // Regenerate calendar for new year
-            generateCalendar(currentYear);
+            generateCalendar(window.currentYear);
             
             // Reload vacations for new year
             await loadReservedVacations();
         });
     });
+}
+
+// Setup Month Selectors
+function setupMonthSelectors() {
+    const reservedMonthSelector = document.getElementById('reserved-month-selector');
+    const approvedMonthSelector = document.getElementById('approved-month-selector');
+    const approveMonthSelector = document.getElementById('approve-month-selector');
+    const deleteApprovedMonthSelector = document.getElementById('delete-approved-month-selector');
+
+    if (reservedMonthSelector) {
+        reservedMonthSelector.addEventListener('change', () => {
+            filterVacationsByMonth('reserved');
+            populateDropdowns(); // Update dropdowns when month changes
+        });
+    }
+    
+    if (approvedMonthSelector) {
+        approvedMonthSelector.addEventListener('change', () => {
+            filterVacationsByMonth('approved');
+            populateDropdowns(); // Update dropdowns when month changes
+        });
+    }
+    
+    if (approveMonthSelector) {
+        approveMonthSelector.addEventListener('change', () => {
+            populateDropdowns(); // Update dropdowns when month changes
+        });
+    }
+    
+    if (deleteApprovedMonthSelector) {
+        deleteApprovedMonthSelector.addEventListener('change', () => {
+            populateDropdowns(); // Update dropdowns when month changes
+        });
+    }
+}
+
+// Filter vacations by month
+function filterVacationsByMonth(type) {
+    const monthSelector = document.getElementById(`${type}-month-selector`);
+    const vacationList = document.getElementById(`${type}-vacations-list`);
+    
+    if (!monthSelector || !vacationList) return;
+    
+    const selectedMonth = parseInt(monthSelector.value);
+    const currentYear = window.currentYear || 2025;
+    
+    // Get all vacation items
+    const allItems = vacationList.querySelectorAll('li');
+    
+    // If "Show All" is selected (value 0), show all items
+    if (selectedMonth === 0) {
+        allItems.forEach(item => {
+            item.style.display = 'block';
+        });
+        return;
+    }
+    
+    allItems.forEach(item => {
+        const itemText = item.textContent;
+        
+        // Extract the date range from the item text (format: "Employee Name - YYYY-MM-DD to YYYY-MM-DD" or "Employee Name - YYYY-MM-DD")
+        const dateRangeMatch = itemText.match(/(\d{4}-\d{2}-\d{2})(?:\s+to\s+(\d{4}-\d{2}-\d{2}))?/);
+        
+        if (dateRangeMatch) {
+            const startDate = new Date(dateRangeMatch[1]);
+            const startMonth = startDate.getMonth() + 1; // getMonth() returns 0-11
+            const startYear = startDate.getFullYear();
+            
+            let shouldShow = false;
+            
+            if (dateRangeMatch[2]) {
+                // Date range - check if the selected month falls within the range
+                const endDate = new Date(dateRangeMatch[2]);
+                const endMonth = endDate.getMonth() + 1;
+                const endYear = endDate.getFullYear();
+                
+                // Check if the selected month/year falls within the range
+                if (startYear === currentYear && endYear === currentYear) {
+                    // Same year range
+                    if (selectedMonth >= startMonth && selectedMonth <= endMonth) {
+                        shouldShow = true;
+                    }
+                } else if (startYear === currentYear && endYear > currentYear) {
+                    // Range spans to next year
+                    if (selectedMonth >= startMonth) {
+                        shouldShow = true;
+                    }
+                } else if (startYear < currentYear && endYear === currentYear) {
+                    // Range spans from previous year
+                    if (selectedMonth <= endMonth) {
+                        shouldShow = true;
+                    }
+                }
+            } else {
+                // Single date - check if it matches the selected month and year
+                if (startMonth === selectedMonth && startYear === currentYear) {
+                    shouldShow = true;
+                }
+            }
+            
+            // Show/hide item based on the result
+            item.style.display = shouldShow ? 'block' : 'none';
+        } else {
+            // If no date pattern found, hide the item
+            item.style.display = 'none';
+        }
+    });
+}
+
+// Populate dropdowns based on month selection
+function populateDropdowns() {
+    const approveDropdown = document.getElementById("approve-dropdown");
+    const deleteApprovedDropdown = document.getElementById("delete-approved-dropdown");
+    
+    if (!approveDropdown || !deleteApprovedDropdown) return;
+    
+    // Clear existing options
+    approveDropdown.innerHTML = '<option value="" disabled selected>Select a Reserved Vacation</option>';
+    deleteApprovedDropdown.innerHTML = '<option value="" disabled selected>Select an Approved Vacation</option>';
+    
+    // Get selected months
+    const reservedMonth = parseInt(document.getElementById('reserved-month-selector')?.value || 0);
+    const approvedMonth = parseInt(document.getElementById('approved-month-selector')?.value || 0);
+    const approveMonth = parseInt(document.getElementById('approve-month-selector')?.value || 0);
+    const deleteApprovedMonth = parseInt(document.getElementById('delete-approved-month-selector')?.value || 0);
+    
+    // Populate approve dropdown (reserved vacations)
+    if (window.allReservedVacations) {
+        window.allReservedVacations.forEach(vacation => {
+            if (shouldShowVacation(vacation, approveMonth)) {
+                const option = document.createElement("option");
+                option.value = `${vacation.employee}|${vacation.range}`;
+                option.textContent = `${vacation.employee} - ${vacation.range}`;
+                approveDropdown.appendChild(option);
+            }
+        });
+    }
+    
+    // Populate delete approved dropdown (approved vacations)
+    if (window.allApprovedVacations) {
+        window.allApprovedVacations.forEach(vacation => {
+            if (shouldShowVacation(vacation, deleteApprovedMonth)) {
+                const option = document.createElement("option");
+                option.value = `${vacation.employee}|${vacation.range}`;
+                option.textContent = `${vacation.employee} - ${vacation.range}`;
+                deleteApprovedDropdown.appendChild(option);
+            }
+        });
+    }
+}
+
+// Helper function to check if vacation should be shown for selected month
+function shouldShowVacation(vacation, selectedMonth) {
+    if (selectedMonth === 0) return true; // Show All
+    
+    const startDate = new Date(vacation.startDate);
+    const endDate = new Date(vacation.endDate);
+    const startMonth = startDate.getMonth() + 1; // getMonth() returns 0-11
+    const endMonth = endDate.getMonth() + 1;
+    
+    // Check if the selected month falls within the vacation range
+    if (startMonth <= selectedMonth && selectedMonth <= endMonth) {
+        return true;
+    }
+    
+    return false;
+}
+
+// ============================================================================
+// IMPROVED CELL COLORING FUNCTIONS (copied from vacations folder)
+// ============================================================================
+
+// Cell Coloring Functions
+function applyCellColoring(approvedVacations) {
+    console.log('Applying cell coloring for vacations:', approvedVacations);
+    
+    // Clear all existing cell colors first
+    clearAllCellColors();
+    
+    // Create a map of dates to vacations
+    const dateVacationMap = {};
+    
+    approvedVacations.forEach(vacation => {
+        const dates = generateDateRange(vacation.dateRange);
+        
+        dates.forEach(date => {
+            if (!dateVacationMap[date]) {
+                dateVacationMap[date] = [];
+            }
+            dateVacationMap[date].push(vacation);
+        });
+    });
+    
+
+    
+    // Apply colors to calendar cells
+    const dayCells = document.querySelectorAll('.day-cell');
+    console.log('Found', dayCells.length, 'day cells');
+    
+    // Check what dates are available in the calendar
+    const availableDates = [];
+    dayCells.forEach(cell => {
+        const date = cell.dataset.date;
+        if (date) {
+            availableDates.push(date);
+        }
+    });
+    console.log('Available dates in calendar (first 10):', availableDates.slice(0, 10));
+    
+    // Check if our target dates exist in the calendar
+    const targetDates = Object.keys(dateVacationMap);
+    console.log('Looking for dates:', targetDates);
+    targetDates.forEach(targetDate => {
+        const found = availableDates.includes(targetDate);
+        console.log(`Date ${targetDate} found in calendar: ${found}`);
+    });
+    
+    dayCells.forEach(cell => {
+        const date = cell.dataset.date;
+        if (!date) return;
+        
+        const vacations = dateVacationMap[date];
+        if (vacations && vacations.length > 0) {
+            console.log(`Coloring cell for date ${date} with vacations:`, vacations);
+            colorCell(cell, vacations);
+            addTooltip(cell, vacations);
+        }
+    });
+}
+
+function clearAllCellColors() {
+    const dayCells = document.querySelectorAll('.day-cell');
+    dayCells.forEach(cell => {
+        // Clear background color
+        cell.style.backgroundColor = '';
+        // Clear tooltip
+        cell.removeAttribute('data-tooltip');
+        // Clear any corner triangles
+        const corners = cell.querySelectorAll('.corner-triangle');
+        corners.forEach(corner => corner.remove());
+        // Clear any cell coloring elements
+        const coloringElements = cell.querySelectorAll('.cell-coloring-element');
+        coloringElements.forEach(element => element.remove());
+        // Clear any dot indicators
+        const dotIndicators = cell.querySelectorAll('.dot-indicator');
+        dotIndicators.forEach(dot => dot.remove());
+        // Clear any date text elements (no longer used with CSS ::before approach)
+        const dateTexts = cell.querySelectorAll('.date-text');
+        dateTexts.forEach(text => text.remove());
+        // Reset text color but preserve date number visibility
+        cell.style.color = '';
+        
+        // Remove multiple-overlays class
+        cell.classList.remove('multiple-overlays');
+        
+        // Ensure date number is still visible after clearing colors
+        const dateNumber = cell.dataset.dateNumber || cell.textContent.trim();
+        if (dateNumber) {
+            cell.setAttribute('data-date-number', dateNumber);
+        }
+    });
+}
+
+function colorCell(cell, vacations) {
+    // Group vacations by department and status
+    const departmentGroups = {};
+    
+    vacations.forEach(vacation => {
+        let department = vacation.department;
+        // Keep original department names
+        
+        // Create a key that includes both department and status
+        const key = `${department}||${vacation.status || 'approved'}`;
+        
+        if (!departmentGroups[key]) {
+            departmentGroups[key] = [];
+        }
+        departmentGroups[key].push(vacation);
+    });
+    
+    const uniqueDepartments = Object.keys(departmentGroups);
+
+    
+    if (uniqueDepartments.length === 1) {
+        // Single department - full cell color
+        const department = uniqueDepartments[0];
+        const color = getDepartmentColor(department);
+        cell.style.backgroundColor = color;
+        
+        // Ensure date number is visible and on top
+        const existingText = cell.textContent;
+        if (existingText) {
+            cell.setAttribute('data-date-number', existingText);
+            cell.style.color = '#ffffff';
+        }
+        
+
+    } else if (uniqueDepartments.length === 2) {
+        // Two departments - diagonal split
+        cell.style.position = 'relative';
+        cell.style.background = 'none';
+        
+        // Get first two departments
+        const firstDept = uniqueDepartments[0];
+        const secondDept = uniqueDepartments[1];
+        
+        const color1 = getDepartmentColor(firstDept);
+        const color2 = getDepartmentColor(secondDept);
+        
+
+        
+        // Create diagonal split
+        const diagonalSplit = document.createElement('div');
+        diagonalSplit.className = 'cell-coloring-element';
+        diagonalSplit.style.cssText = `
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, ${color1} 0%, ${color1} 49.9%, ${color2} 50%, ${color2} 100%);
+            z-index: 1;
+            pointer-events: none;
+        `;
+        cell.appendChild(diagonalSplit);
+        
+        // Ensure date number is visible
+        const dateNumber = cell.textContent.trim();
+        if (dateNumber) {
+            cell.setAttribute('data-date-number', dateNumber);
+            cell.style.color = 'transparent'; // Hide original text
+            cell.classList.add('multiple-overlays'); // Add class for CSS targeting
+        }
+    } else if (uniqueDepartments.length >= 3) {
+        // Three or more departments - triangular split
+        cell.style.position = 'relative';
+        cell.style.background = 'none';
+        
+        // Get first three departments
+        const firstDept = uniqueDepartments[0];
+        const secondDept = uniqueDepartments[1];
+        const thirdDept = uniqueDepartments[2];
+        
+        const color1 = getDepartmentColor(firstDept);
+        const color2 = getDepartmentColor(secondDept);
+        const color3 = getDepartmentColor(thirdDept);
+        
+        
+        // Create triangular split using CSS clip-path
+        const triangularSplit = document.createElement('div');
+        triangularSplit.className = 'cell-coloring-element';
+        triangularSplit.style.cssText = `
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(45deg, ${color1} 0%, ${color1} 33%, transparent 33%),
+                linear-gradient(-45deg, ${color2} 0%, ${color2} 33%, transparent 33%),
+                ${color3};
+            z-index: 1;
+            pointer-events: none;
+        `;
+        cell.appendChild(triangularSplit);
+        
+        // Ensure date number is visible
+        const dateNumber = cell.textContent.trim();
+        if (dateNumber) {
+            cell.setAttribute('data-date-number', dateNumber);
+            cell.style.color = 'transparent'; // Hide original text
+            cell.classList.add('multiple-overlays'); // Add class for CSS targeting
+        }
+    }
+    
+    // Ensure date number is visible for all cases using CSS ::before pseudo-element
+    const existingText = cell.textContent.trim();
+    const dateNumber = cell.dataset.dateNumber || existingText;
+    
+    if (dateNumber && !cell.hasAttribute('data-date-number')) {
+        cell.setAttribute('data-date-number', dateNumber);
+    }
+    
+    // Always hide original text when using overlays to ensure ::before pseudo-element works
+    if (uniqueDepartments.length > 1) {
+        cell.style.color = 'transparent';
+    }
+    
+    // Ensure date number is always visible regardless of coloring
+    if (!cell.hasAttribute('data-date-number') && dateNumber) {
+        cell.setAttribute('data-date-number', dateNumber);
+    }
+    
+
+}
+
+
+
+function addTooltip(cell, vacations) {
+    // Create tooltip element
+    const tooltip = document.createElement('div');
+    tooltip.className = 'vacation-tooltip';
+    tooltip.style.cssText = `
+        position: fixed;
+        background-color: rgba(0, 0, 0, 0.9);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 5px;
+        font-size: 12px;
+        white-space: pre-line;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        z-index: 1000;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        max-width: 200px;
+    `;
+    
+    // Create tooltip content
+    const tooltipContent = vacations.map(vacation => {
+        const status = vacation.status === 'reserved' ? 'reserved' : 'approved';
+        return `${vacation.employee} (${vacation.department}) - ${status}`;
+    }).join('\n');
+    
+    tooltip.textContent = tooltipContent;
+    document.body.appendChild(tooltip);
+    
+    // Add hover events
+    cell.addEventListener('mouseenter', (e) => {
+        const rect = cell.getBoundingClientRect();
+        tooltip.style.left = rect.left + 'px';
+        tooltip.style.top = (rect.top - tooltip.offsetHeight - 5) + 'px';
+        tooltip.style.opacity = '1';
+    });
+    
+    cell.addEventListener('mouseleave', () => {
+        tooltip.style.opacity = '0';
+    });
+}
+
+function getDepartmentColor(departmentKey) {
+    // Parse the department and status from the key
+    const [department, status] = departmentKey.split('||');
+    
+    // Reserved colors (all departments)
+    if (status === 'reserved') {
+        return '#FF8C00'; // Orange for all reserved departments
+    }
+    
+    // Approved colors
+    const colors = {
+        'vip': 'rgb(50, 205, 50)', // Green for approved VIP
+        'analytics': 'rgb(102, 153, 204)', // Blue for approved Analytics
+        'technical': 'rgb(102, 153, 204)', // Blue for approved Technical
+        'kpi': '#6699CC', // Blue for approved KPI
+        'design': '#FF69B4', // Pink for approved Design
+        'other': '#FF69B4' // Pink for approved Other
+    };
+    
+    return colors[department] || '#FF8C00';
+}
+
+function generateDateRange(range) {
+    const dates = [];
+    
+    // Handle both single dates and date ranges
+    let start, end;
+    if (range.includes(" to ")) {
+        [start, end] = range.split(" to ");
+    } else {
+        // Single date - use the same date for start and end
+        start = range;
+        end = range;
+    }
+    
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    
+    const currentDate = new Date(startDate);
+    while (currentDate <= endDate) {
+        dates.push(currentDate.toISOString().split('T')[0]);
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+    
+    return dates;
 }
 
 initialize();
