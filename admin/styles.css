@@ -186,8 +186,16 @@ button.year-tab.active,
 
 /* Dark red background for restricted date cells */
 .day-cell.restricted-date {
-    background-color: #8B0000 !important; /* Dark red for restricted dates */
+    background-color: #8B0000 !important; /* Dark red for restricted dates - use !important to override vacation colors */
     color: white !important; /* White text for visibility */
+    position: relative;
+    z-index: 10; /* Higher z-index to ensure visibility */
+}
+
+/* Allow selection highlighting on restricted dates */
+.day-cell.restricted-date.selected {
+    background-color: rgba(255, 204, 0, 0.8) !important; /* Yellow with transparency over red */
+    color: #000000 !important; /* Black text for visibility on yellow */
 }
 
 .color-box.special-date {
@@ -420,6 +428,11 @@ button.year-tab.active,
 .day-cell .cell-coloring-element {
     border-radius: 4px;
     overflow: visible; /* Allow date numbers to be visible */
+}
+
+/* Ensure cell coloring elements don't override restricted dates */
+.day-cell.restricted-date .cell-coloring-element {
+    display: none !important; /* Hide vacation overlays on restricted dates */
 }
 
 /* General rule: Ensure date numbers are always visible on all cells with data-date-number */

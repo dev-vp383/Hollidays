@@ -243,9 +243,11 @@ function generateCalendar(year) {
                 if (selectedDates.includes(date)) {
                     selectedDates = selectedDates.filter(d => d !== date);
                     dayCell.style.backgroundColor = "";
+                    dayCell.classList.remove("selected");
                 } else {
                     selectedDates.push(date);
                     dayCell.style.backgroundColor = "rgba(255, 204, 0, 0.5)";
+                    dayCell.classList.add("selected");
                 }
         
             });
@@ -519,6 +521,11 @@ function setupEventListeners() {
 
             alert(`Vacation ${dateRange} added successfully!`);
             selectedDates = [];
+            // Clear selected class from all cells
+            document.querySelectorAll('.day-cell.selected').forEach(cell => {
+                cell.classList.remove('selected');
+                cell.style.backgroundColor = '';
+            });
             await loadReservedVacations(); // Refresh lists and calendar
         } catch (error) {
             console.error("Error adding vacation:", error);
@@ -723,7 +730,11 @@ function setupTooltips() {
     document.body.appendChild(tooltip);
 
     document.addEventListener("mouseover", (event) => {
-        if (event.target.classList.contains("day-cell") && event.target.hasAttribute("data-tooltip")) {
+        // Only show tooltip if it's not a vacation tooltip, not a restricted date, and has data-tooltip attribute
+        if (event.target.classList.contains("day-cell") && 
+            event.target.hasAttribute("data-tooltip") && 
+            !event.target.querySelector('.vacation-tooltip') &&
+            !event.target.classList.contains('restricted-date')) {
             const tooltipText = event.target.getAttribute("data-tooltip");
             tooltip.textContent = tooltipText;
 
@@ -805,6 +816,12 @@ function setupYearSelector() {
             
             // Clear selected dates
             selectedDates = [];
+            
+            // Clear selected class from all cells
+            document.querySelectorAll('.day-cell.selected').forEach(cell => {
+                cell.classList.remove('selected');
+                cell.style.backgroundColor = '';
+            });
             
             // Regenerate calendar for new year
             generateCalendar(window.currentYear);
@@ -1065,18 +1082,45 @@ function applyCellColoring(approvedVacations) {
         if (vacations && vacations.length > 0) {
             console.log(`Coloring cell for date ${date} with vacations:`, vacations);
             colorCell(cell, vacations);
-            addTooltip(cell, vacations);
+            // Skip tooltips for restricted dates - the red color already indicates they're not allowed
+            if (!cell.classList.contains('restricted-date')) {
+                addTooltip(cell, vacations);
+            }
         }
     });
+    
+    // Re-apply restricted date highlighting to ensure they remain visible
+    if (window.highlightVacationNotAllowed) {
+        window.highlightVacationNotAllowed();
+    }
 }
 
 function clearAllCellColors() {
     const dayCells = document.querySelectorAll('.day-cell');
     dayCells.forEach(cell => {
-        // Clear background color
-        cell.style.backgroundColor = '';
-        // Clear tooltip
-        cell.removeAttribute('data-tooltip');
+        // Only clear background color if it's not a restricted date
+        if (!cell.classList.contains('restricted-date')) {
+            cell.style.backgroundColor = '';
+        }
+        // Clear tooltip (but not for restricted dates since they don't have tooltips)
+        if (!cell.classList.contains('restricted-date')) {
+            cell.removeAttribute('data-tooltip');
+        }
+        
+        // Remove vacation tooltips and their event listeners
+        const vacationTooltips = document.querySelectorAll('.vacation-tooltip');
+        vacationTooltips.forEach(tooltip => tooltip.remove());
+        
+        // Remove event listeners from cells
+        if (cell._tooltipMouseEnter) {
+            cell.removeEventListener('mouseenter', cell._tooltipMouseEnter);
+            cell._tooltipMouseEnter = null;
+        }
+        if (cell._tooltipMouseLeave) {
+            cell.removeEventListener('mouseleave', cell._tooltipMouseLeave);
+            cell._tooltipMouseLeave = null;
+        }
+        
         // Clear any corner triangles
         const corners = cell.querySelectorAll('.corner-triangle');
         corners.forEach(corner => corner.remove());
@@ -1104,6 +1148,11 @@ function clearAllCellColors() {
 }
 
 function colorCell(cell, vacations) {
+    // Skip coloring if this is a restricted date - let the red background show
+    if (cell.classList.contains('restricted-date')) {
+        return;
+    }
+    
     // Group vacations by department and status
     const departmentGroups = {};
     
@@ -1239,6 +1288,12 @@ function colorCell(cell, vacations) {
 
 
 function addTooltip(cell, vacations) {
+    // Remove any existing tooltip for this cell
+    const existingTooltip = cell.querySelector('.vacation-tooltip');
+    if (existingTooltip) {
+        existingTooltip.remove();
+    }
+    
     // Create tooltip element
     const tooltip = document.createElement('div');
     tooltip.className = 'vacation-tooltip';
@@ -1259,7 +1314,7 @@ function addTooltip(cell, vacations) {
     `;
     
     // Create tooltip content
-    const tooltipContent = vacations.map(vacation => {
+    let tooltipContent = vacations.map(vacation => {
         const status = vacation.status === 'reserved' ? 'reserved' : 'approved';
         
         // Hide "(other)" department and department labels for same department
@@ -1269,20 +1324,33 @@ function addTooltip(cell, vacations) {
         return `${vacation.employee}${departmentLabel} - ${status}`;
     }).join('\n');
     
+    // If this is a restricted date, add the "VACATION NOT ALLOWED" message
+    if (cell.classList.contains('restricted-date')) {
+        tooltipContent = 'VACATION NOT ALLOWED\n' + tooltipContent;
+    }
+    
     tooltip.textContent = tooltipContent;
     document.body.appendChild(tooltip);
     
-    // Add hover events
-    cell.addEventListener('mouseenter', (e) => {
+    // Remove any existing event listeners to prevent duplicates
+    cell.removeEventListener('mouseenter', cell._tooltipMouseEnter);
+    cell.removeEventListener('mouseleave', cell._tooltipMouseLeave);
+    
+    // Create new event handlers
+    cell._tooltipMouseEnter = (e) => {
         const rect = cell.getBoundingClientRect();
         tooltip.style.left = rect.left + 'px';
         tooltip.style.top = (rect.top - tooltip.offsetHeight - 5) + 'px';
         tooltip.style.opacity = '1';
-    });
+    };
     
-    cell.addEventListener('mouseleave', () => {
+    cell._tooltipMouseLeave = () => {
         tooltip.style.opacity = '0';
-    });
+    };
+    
+    // Add hover events
+    cell.addEventListener('mouseenter', cell._tooltipMouseEnter);
+    cell.addEventListener('mouseleave', cell._tooltipMouseLeave);
 }
 
 function getDepartmentColor(departmentKey) {

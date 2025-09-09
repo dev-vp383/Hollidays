@@ -68,10 +68,12 @@ function generateCalendar(year) {
                 if (selectedDates && selectedDates.includes(date)) {
                     selectedDates = selectedDates.filter(d => d !== date);
                     dayCell.style.backgroundColor = "";
+                    dayCell.classList.remove("selected");
                 } else {
                     if (!selectedDates) selectedDates = [];
                     selectedDates.push(date);
                     dayCell.style.backgroundColor = "rgba(255, 204, 0, 0.5)";
+                    dayCell.classList.add("selected");
                 }
                 console.log("Selected Dates:", selectedDates);
             });

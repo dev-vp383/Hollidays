@@ -60,16 +60,8 @@ function highlightVacationNotAllowed() {
             // Add the restricted-date class for dark red background
             dayCell.classList.add("restricted-date");
             
-            // Add the tooltip
-            const existingTooltip = dayCell.getAttribute("data-tooltip") || "";
-            
-            // Only add "VACATION NOT ALLOWED" if it's not already there
-            if (!existingTooltip.includes("VACATION NOT ALLOWED")) {
-                const combinedTooltip = [existingTooltip, "VACATION NOT ALLOWED"]
-                    .filter(Boolean)
-                    .join("\n"); // Use \n for multi-line tooltips
-                dayCell.setAttribute("data-tooltip", combinedTooltip);
-            }
+            // Don't add tooltips for restricted dates - the red color already indicates they're not allowed
+            // This prevents duplicate "VACATION NOT ALLOWED" tooltips
             
             // Ensure date number is preserved for restricted dates
             const dateNumber = dayCell.dataset.dateNumber || dayCell.textContent.trim();
