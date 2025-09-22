@@ -198,6 +198,14 @@ button.year-tab.active,
     color: #000000 !important; /* Black text for visibility on yellow */
 }
 
+/* Ensure selection highlighting is always visible on regular cells */
+.day-cell.selected {
+    background-color: rgba(255, 204, 0, 0.5) !important; /* Yellow selection highlighting */
+    color: #000000 !important; /* Black text for visibility on yellow */
+    border: 3px solid #FFD700 !important; /* Add a bright gold border to make it very obvious */
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.8) !important; /* Add a glowing effect */
+}
+
 .color-box.special-date {
     background-color: #FFB3C0;
 }
@@ -545,7 +553,7 @@ button.year-tab.active,
 #delete-approved-dropdown {
     width: 100%;
     max-width: 300px;
-    padding: 8px;
+    padding: 10px;
     font-size: 1rem;
     background-color: #2c2c2c;
     border: 1px solid #444;
@@ -553,6 +561,7 @@ button.year-tab.active,
     color: #eaeaea;
     outline: none;
     margin-bottom: 15px;
+    box-shadow: none;
 }
 
 #employee-select:hover,
@@ -589,7 +598,7 @@ button:active {
 }
 
 #add-vacation {
-    margin-top: 20px;
+    margin-top: 0;
 }
 
 #approve-button {
@@ -824,6 +833,7 @@ h1, h2, h3 {
     margin-right: 5px;
 }
 
+#controls #employee-select,
 #controls select,
 #controls input[type="date"] {
     padding: 8px 12px;
@@ -842,7 +852,7 @@ h1, h2, h3 {
 }
 
 #controls button {
-    padding: 10px 20px;
+    padding: 8px 20px;
     background: #ff8c00;
     color: white;
     border: none;
@@ -850,6 +860,7 @@ h1, h2, h3 {
     cursor: pointer;
     font-weight: bold;
     transition: background 0.3s ease;
+    box-shadow: none;
 }
 
 #controls button:hover {
