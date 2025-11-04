@@ -114,7 +114,6 @@ const employees = {
         { name: "Jūlija B", value: "Jūlija_B|technical" },
         { name: "Anastasija V", value: "Anastasija_V|technical" },
         { name: "Daniels P", value: "Daniels_P|technical" },
-        {name: "Timurs C", value: "Timurs_C|technical" },
         { name: "Elīna T", value: "Elīna_T|technical" },
     ],
     KPI: [
@@ -144,12 +143,17 @@ const employees = {
         { name: "Aleksandrs T", value: "Aleksandrs_T|vip" },
         { name: "Vjaceslavs V", value: "Vjaceslavs_V|vip" },
         { name: "Jekaterina C", value: "Jekaterina_C|vip" },
+        { name: "Maksim R", value: "Maksim_R|vip" },
+        { name: "Shakhnozakhon N", value: "Shakhnozakhon_N|vip" },
         { name: "Andrejs K", value: "Andrejs_K|vip" },
         { name: "Kirills K", value: "Kirills_K|vip" },
         { name: "Sanita B", value: "Sanita_B|vip" },
         { name: "Vladislavs R", value: "Vladislavs_R|vip" },
         { name: "Aleksejs B", value: "Aleksejs_B|vip" },
-        { name: "Kezia R J", value: "Kezia_R_J|vip" }
+        { name: "Kezia R J", value: "Kezia_R_J|vip" },
+        { name: "Beate L S", value: "Beate_L_S|vip" },
+        { name: "Ruhong C", value: "Ruhong_C|vip" },
+        { name: "Davids B", value: "Davids_B|vip" },
     ],
     other: [
         { name: "Aliaksandryna I", value: "Aliaksandryna_I|other" },
@@ -158,7 +162,8 @@ const employees = {
     Design: [
         { name: "Romans S", value: "Romans_S|design" },
         { name: "Eduard E", value: "Eduard_E|design" },
-        { name: "Eduards P", value: "Eduards_P|design" },   
+        { name: "Eduards P", value: "Eduards_P|design" }  
+        
     ]
 };
 
