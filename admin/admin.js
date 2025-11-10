@@ -121,7 +121,6 @@ const employees = {
         { name: "Jelizaveta M", value: "Jelizaveta_M|analytics" }
     ],
     vip: [
-        { name: "Aleksandrs P", value: "Aleksandrs_P|vip" },
         { name: "Anastasija K", value: "Anastasija_K|vip" },
 		{ name: "Gatis J", value: "Gatis_J|vip" },
         { name: "Ivo J", value: "Ivo_J|vip" },
