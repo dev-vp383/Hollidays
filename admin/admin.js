@@ -156,7 +156,7 @@ const employees = {
         { name: "Davids B", value: "Davids_B|vip" },
 		{ name: "Diana N", value: "Diana_N|vip" },
 		{ name: "Bogdans G", value: "Bogdans_G|vip" },
-		{ name: "Jean_D_D", value: "Jean_D_D|vip" }
+		{ name: "Jean D D", value: "Jean_D_D|vip" }
     ],
     other: [
         { name: "Aliaksandryna I", value: "Aliaksandryna_I|other" },
