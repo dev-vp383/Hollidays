@@ -114,8 +114,8 @@ const employees = {
         { name: "Jūlija B", value: "Jūlija_B|technical" },
         { name: "Anastasija V", value: "Anastasija_V|technical" },
         { name: "Daniels P", value: "Daniels_P|technical" },
-        { name: "Elīna T", value: "Elīna_T|technical" }
-		{ name: "Veronika L", value: "Veronika_L|technical" }
+        { name: "Elīna T", value: "Elīna_T|technical" },
+		{ name: "Veronika L", value: "Veronika_L|technical" },
         { name: "Romans D", value: "Romans_D|technical" }
     ],
     KPI: [
