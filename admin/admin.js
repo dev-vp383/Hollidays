@@ -151,7 +151,6 @@ const employees = {
         { name: "Sanita B", value: "Sanita_B|vip" },
         { name: "Vladislavs R", value: "Vladislavs_R|vip" },
         { name: "Aleksejs B", value: "Aleksejs_B|vip" },
-        { name: "Kezia R J", value: "Kezia_R_J|vip" },
         { name: "Beate L S", value: "Beate_L_S|vip" },
         { name: "Ruhong C", value: "Ruhong_C|vip" },
 		{ name: "Diana N", value: "Diana_N|vip" },
