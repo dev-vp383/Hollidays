@@ -154,7 +154,9 @@ const employees = {
         { name: "Beate L S", value: "Beate_L_S|vip" },
         { name: "Ruhong C", value: "Ruhong_C|vip" },
 		{ name: "Diana N", value: "Diana_N|vip" },
-		{ name: "Jean D D", value: "Jean_D_D|vip" }
+		{ name: "Jean D D", value: "Jean_D_D|vip" },
+		{ name: "Vitalii S", value: "Vitalii_S|vip" },
+		{ name: "Dmitrijs Ž", value: "Dmitrijs_Ž|vip" }
     ],
     other: [
         { name: "Aliaksandryna I", value: "Aliaksandryna_I|other" },
@@ -164,8 +166,8 @@ const employees = {
         { name: "Romans S", value: "Romans_S|design" },
         { name: "Eduard E", value: "Eduard_E|design" },
         { name: "Eduards P", value: "Eduards_P|design" },
-		{ name: "Gustavs N", value: "Gustavs_N|design" }
-        
+		{ name: "Gustavs N", value: "Gustavs_N|design" },
+        { name: "Aliaksandr L", value: "Aliaksandr_L|design" }
     ]
 };
 
