@@ -1,5 +1,5 @@
 // Calendar Year
-let currentYear = 2025;
+let currentYear = 2026;
 
 // Generate Calendar Dynamically
 function generateCalendar(year) {

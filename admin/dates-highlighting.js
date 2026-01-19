@@ -34,9 +34,9 @@ if (typeof window.vacationNotAllowedRanges === "undefined") {
 
 
 function highlightVacationNotAllowed() {
-    // Get current year from calendar or default to 2025
-    const currentYear = window.currentYear || 2025;
-    const yearRanges = vacationNotAllowedRanges[currentYear] || vacationNotAllowedRanges[2025];
+    // Get current year from calendar or default to 2026
+    const currentYear = window.currentYear || 2026;
+    const yearRanges = vacationNotAllowedRanges[currentYear] || vacationNotAllowedRanges[2026];
     
     const restrictedDates = yearRanges.flatMap(range => {
         const dates = [];
@@ -123,9 +123,9 @@ function highlightLatvianHolidays() {
         return;
     }
 
-    // Get current year from calendar or default to 2025
-    const currentYear = window.currentYear || 2025;
-    const yearHolidays = latvianHolidayRanges[currentYear] || latvianHolidayRanges[2025];
+    // Get current year from calendar or default to 2026
+    const currentYear = window.currentYear || 2026;
+    const yearHolidays = latvianHolidayRanges[currentYear] || latvianHolidayRanges[2026];
     
     yearHolidays.forEach(({ date, description }) => {
         const dayCell = document.querySelector(`.day-cell[data-date="${date}"]`);
@@ -183,9 +183,9 @@ function highlightSpecialDates() {
         return;
     }
 
-    // Get current year from calendar or default to 2025
-    const currentYear = window.currentYear || 2025;
-    const yearSpecialDates = specialDateRanges[currentYear] || specialDateRanges[2025];
+    // Get current year from calendar or default to 2026
+    const currentYear = window.currentYear || 2026;
+    const yearSpecialDates = specialDateRanges[currentYear] || specialDateRanges[2026];
     
     yearSpecialDates.forEach(({ start, end, description }) => {
         const date = start; // For single day events, start and end are the same

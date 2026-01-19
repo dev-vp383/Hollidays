@@ -17,7 +17,7 @@ const database = firebase.database();
 let allApprovedVacations = [];
 
 // Initialize current year
-window.currentYear = 2025;
+window.currentYear = 2026;
 
 // Load approved vacations when page loads
 document.addEventListener("DOMContentLoaded", () => {
@@ -44,7 +44,7 @@ function loadApprovedVacations() {
             }
 
             const approvedVacations = [];
-            const currentYear = window.currentYear || 2025;
+            const currentYear = window.currentYear || 2026;
             console.log('Loading vacations for year:', currentYear);
             
             // Process all employees
@@ -126,7 +126,7 @@ function displayApprovedVacations(vacations) {
     const selectedMonth = parseInt(monthSelector.value);
     
     console.log(`Selected month: ${selectedMonth}`);
-    console.log(`Selected year: ${window.currentYear || 2025}`);
+    console.log(`Selected year: ${window.currentYear || 2026}`);
     
     // Filter vacations by selected month (only show vacations that actually have dates within the month)
     const filteredVacations = vacations.filter(vacation => {
@@ -143,7 +143,7 @@ function displayApprovedVacations(vacations) {
         const end = new Date(endDate);
         
         // Use the selected year from the year tabs
-        const selectedYear = window.currentYear || 2025;
+        const selectedYear = window.currentYear || 2026;
         const monthStart = new Date(selectedYear, selectedMonth - 1, 1); // Month start (0-indexed)
         const monthEnd = new Date(selectedYear, selectedMonth, 0); // Month end (0-indexed)
         

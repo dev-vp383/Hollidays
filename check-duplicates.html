@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Duplicate Vacations - 2026</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+        }
+        .section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .duplicate-item {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .error-item {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success-item {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .summary {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .count {
+            display: inline-block;
+            background: #007bff;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin: 0 5px;
+        }
+        .count.error {
+            background: #dc3545;
+        }
+        .count.warning {
+            background: #ffc107;
+            color: #333;
+        }
+    </style>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
+</head>
+<body>
+    <h1>🔍 Check Duplicate Vacations - 2026</h1>
+    
+    <div class="section">
+        <button id="checkButton" onclick="checkDuplicates()">Check for Duplicates</button>
+        <div id="loading" style="display: none; margin-top: 10px;">Loading data from Firebase...</div>
+    </div>
+
+    <div id="results" style="display: none;">
+        <div class="section">
+            <h2>Summary</h2>
+            <div id="summary"></div>
+        </div>
+
+        <div class="section">
+            <h2>Duplicate Entries Found</h2>
+            <div id="duplicates"></div>
+        </div>
+
+        <div class="section">
+            <h2>Overlapping Date Ranges</h2>
+            <div id="overlaps"></div>
+        </div>
+
+        <div class="section">
+            <h2>All 2026 Vacations (for reference)</h2>
+            <div id="allVacations"></div>
+        </div>
+    </div>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD0Biwjk-PfEGAsm_FUwavuo_6-FpfQw8I",
+            authDomain: "vacation-calendar-ad463.firebaseapp.com",
+            databaseURL: "https://vacation-calendar-ad463-default-rtdb.firebaseio.com",
+            projectId: "vacation-calendar-ad463",
+            storageBucket: "vacation-calendar-ad463.firebasestorage.app",
+            messagingSenderId: "318751055172",
+            appId: "1:318751055172:web:b511b2a74e7b804f56cb11"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Helper function to expand date range to individual dates
+        function expandDateRange(dateRange) {
+            const dates = [];
+            let start, end;
+            
+            if (dateRange.includes(" to ")) {
+                [start, end] = dateRange.split(" to ");
+            } else {
+                start = dateRange;
+                end = dateRange;
+            }
+            
+            const startDate = new Date(start);
+            const endDate = new Date(end);
+            const currentDate = new Date(startDate);
+            
+            while (currentDate <= endDate) {
+                dates.push(currentDate.toISOString().split('T')[0]);
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            
+            return dates;
+        }
+
+        // Check if two date ranges overlap
+        function dateRangesOverlap(range1, range2) {
+            const dates1 = expandDateRange(range1);
+            const dates2 = expandDateRange(range2);
+            
+            return dates1.some(date => dates2.includes(date));
+        }
+
+        // Check for duplicates
+        async function checkDuplicates() {
+            const button = document.getElementById('checkButton');
+            const loading = document.getElementById('loading');
+            const results = document.getElementById('results');
+            const duplicatesDiv = document.getElementById('duplicates');
+            const overlapsDiv = document.getElementById('overlaps');
+            const allVacationsDiv = document.getElementById('allVacations');
+            const summaryDiv = document.getElementById('summary');
+            
+            button.disabled = true;
+            loading.style.display = 'block';
+            duplicatesDiv.innerHTML = '';
+            overlapsDiv.innerHTML = '';
+            allVacationsDiv.innerHTML = '';
+            summaryDiv.innerHTML = '';
+            
+            try {
+                // Fetch all vacation data
+                const snapshot = await database.ref('vacations').once('value');
+                const data = snapshot.val() || {};
+                
+                const targetYear = 2026;
+                const duplicates = [];
+                const overlaps = [];
+                const allVacations = [];
+                
+                // Process each employee
+                Object.keys(data).forEach(employeeKey => {
+                    const employeeData = data[employeeKey];
+                    const employeeName = employeeKey.replace(/_/g, ' ');
+                    
+                    // Check reserved vacations (dates array)
+                    if (employeeData.dates && Array.isArray(employeeData.dates)) {
+                        const reserved2026 = employeeData.dates.filter(range => range.includes(`${targetYear}-`));
+                        
+                        // Check for exact duplicates in reserved
+                        const reservedCounts = {};
+                        reserved2026.forEach(range => {
+                            reservedCounts[range] = (reservedCounts[range] || 0) + 1;
+                        });
+                        
+                        Object.entries(reservedCounts).forEach(([range, count]) => {
+                            if (count > 1) {
+                                duplicates.push({
+                                    employee: employeeName,
+                                    type: 'reserved',
+                                    dateRange: range,
+                                    count: count
+                                });
+                            }
+                        });
+                        
+                        // Check for overlapping ranges in reserved
+                        for (let i = 0; i < reserved2026.length; i++) {
+                            for (let j = i + 1; j < reserved2026.length; j++) {
+                                if (dateRangesOverlap(reserved2026[i], reserved2026[j])) {
+                                    overlaps.push({
+                                        employee: employeeName,
+                                        type: 'reserved',
+                                        range1: reserved2026[i],
+                                        range2: reserved2026[j]
+                                    });
+                                }
+                            }
+                        }
+                        
+                        reserved2026.forEach(range => {
+                            allVacations.push({
+                                employee: employeeName,
+                                department: employeeData.department || 'unknown',
+                                dateRange: range,
+                                status: 'reserved'
+                            });
+                        });
+                    }
+                    
+                    // Check approved vacations
+                    if (employeeData.approved && Array.isArray(employeeData.approved)) {
+                        const approved2026 = employeeData.approved.filter(range => range.includes(`${targetYear}-`));
+                        
+                        // Check for exact duplicates in approved
+                        const approvedCounts = {};
+                        approved2026.forEach(range => {
+                            approvedCounts[range] = (approvedCounts[range] || 0) + 1;
+                        });
+                        
+                        Object.entries(approvedCounts).forEach(([range, count]) => {
+                            if (count > 1) {
+                                duplicates.push({
+                                    employee: employeeName,
+                                    type: 'approved',
+                                    dateRange: range,
+                                    count: count
+                                });
+                            }
+                        });
+                        
+                        // Check for overlapping ranges in approved
+                        for (let i = 0; i < approved2026.length; i++) {
+                            for (let j = i + 1; j < approved2026.length; j++) {
+                                if (dateRangesOverlap(approved2026[i], approved2026[j])) {
+                                    overlaps.push({
+                                        employee: employeeName,
+                                        type: 'approved',
+                                        range1: approved2026[i],
+                                        range2: approved2026[j]
+                                    });
+                                }
+                            }
+                        }
+                        
+                        approved2026.forEach(range => {
+                            allVacations.push({
+                                employee: employeeName,
+                                department: employeeData.department || 'unknown',
+                                dateRange: range,
+                                status: 'approved'
+                            });
+                        });
+                    }
+                    
+                    // Check if same date range exists in both reserved and approved
+                    if (employeeData.dates && employeeData.approved) {
+                        const reserved2026 = employeeData.dates.filter(range => range.includes(`${targetYear}-`));
+                        const approved2026 = employeeData.approved.filter(range => range.includes(`${targetYear}-`));
+                        
+                        reserved2026.forEach(reservedRange => {
+                            approved2026.forEach(approvedRange => {
+                                if (reservedRange === approvedRange || dateRangesOverlap(reservedRange, approvedRange)) {
+                                    duplicates.push({
+                                        employee: employeeName,
+                                        type: 'both',
+                                        dateRange: reservedRange,
+                                        count: 2,
+                                        note: 'Same range in both reserved and approved'
+                                    });
+                                }
+                            });
+                        });
+                    }
+                });
+                
+                // Display summary
+                const totalEmployees = Object.keys(data).length;
+                const totalVacations = allVacations.length;
+                const duplicateCount = duplicates.length;
+                const overlapCount = overlaps.length;
+                
+                summaryDiv.innerHTML = `
+                    <div class="summary">
+                        Total Employees: <span class="count">${totalEmployees}</span>
+                        Total 2026 Vacations: <span class="count">${totalVacations}</span>
+                        Exact Duplicates: <span class="count ${duplicateCount > 0 ? 'error' : ''}">${duplicateCount}</span>
+                        Overlapping Ranges: <span class="count ${overlapCount > 0 ? 'warning' : ''}">${overlapCount}</span>
+                    </div>
+                    ${duplicateCount === 0 && overlapCount === 0 ? 
+                        '<div class="success-item">✅ No duplicates or overlaps found!</div>' : 
+                        '<div class="error-item">⚠️ Issues found! See details below.</div>'
+                    }
+                `;
+                
+                // Display duplicates
+                if (duplicates.length > 0) {
+                    duplicates.forEach(dup => {
+                        const div = document.createElement('div');
+                        div.className = 'duplicate-item';
+                        div.innerHTML = `
+                            <strong>${dup.employee}</strong> (${dup.type})<br>
+                            Date Range: <code>${dup.dateRange}</code><br>
+                            Found ${dup.count} time(s)${dup.note ? '<br>' + dup.note : ''}
+                        `;
+                        duplicatesDiv.appendChild(div);
+                    });
+                } else {
+                    duplicatesDiv.innerHTML = '<div class="success-item">✅ No exact duplicates found!</div>';
+                }
+                
+                // Display overlaps
+                if (overlaps.length > 0) {
+                    overlaps.forEach(overlap => {
+                        const div = document.createElement('div');
+                        div.className = 'duplicate-item';
+                        div.innerHTML = `
+                            <strong>${overlap.employee}</strong> (${overlap.type})<br>
+                            Range 1: <code>${overlap.range1}</code><br>
+                            Range 2: <code>${overlap.range2}</code><br>
+                            <em>These ranges overlap</em>
+                        `;
+                        overlapsDiv.appendChild(div);
+                    });
+                } else {
+                    overlapsDiv.innerHTML = '<div class="success-item">✅ No overlapping ranges found!</div>';
+                }
+                
+                // Display all vacations
+                if (allVacations.length > 0) {
+                    allVacations.sort((a, b) => {
+                        const dateA = a.dateRange.includes(" to ") ? a.dateRange.split(' to ')[0] : a.dateRange;
+                        const dateB = b.dateRange.includes(" to ") ? b.dateRange.split(' to ')[0] : b.dateRange;
+                        return new Date(dateA) - new Date(dateB);
+                    });
+                    
+                    const pre = document.createElement('pre');
+                    pre.textContent = JSON.stringify(allVacations, null, 2);
+                    allVacationsDiv.appendChild(pre);
+                } else {
+                    allVacationsDiv.innerHTML = '<div class="success-item">No 2026 vacations found in database.</div>';
+                }
+                
+                results.style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error checking duplicates:', error);
+                duplicatesDiv.innerHTML = `<div class="error-item">Error: ${error.message}</div>`;
+                results.style.display = 'block';
+            } finally {
+                button.disabled = false;
+                loading.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
+

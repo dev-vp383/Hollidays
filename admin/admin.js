@@ -32,7 +32,7 @@ const departmentColors = {
 // Track Selected Dates
 let selectedDates = [];
 // Use window.currentYear to avoid conflicts with other files
-window.currentYear = window.currentYear || 2025;
+window.currentYear = window.currentYear || 2026;
 
 // Helper: Get Dates in a Range
 function getDatesInRange(startDate, endDate) {
@@ -858,7 +858,7 @@ function filterVacationsByMonth(type) {
     if (!monthSelector || !vacationList) return;
     
     const selectedMonth = parseInt(monthSelector.value);
-    const currentYear = window.currentYear || 2025;
+    const currentYear = window.currentYear || 2026;
     
     // Get all vacation items
     const allItems = vacationList.querySelectorAll('li');
