@@ -12,17 +12,13 @@
         <div id="calendar-section">
             <h1>Admin Dashboard</h1>
             
-            <!-- Year Selector Tabs -->
-            <div id="year-selector">
-                <button class="year-tab active" data-year="2026">2026</button>
-            </div>
-            
             <!-- Vacation Controls -->
             <div id="controls">
                 <label for="employee-select">Select Employee:</label>
                 <select id="employee-select"></select>
 
                 <button id="add-vacation">Add Vacation</button>
+                <button id="add-sick-leave" style="margin-left: 10px; background-color: #ff6b6b; color: white;">Sick Leave</button>
             </div>
 
             <!-- Calendar -->
@@ -140,6 +136,35 @@
             <div class="vacations-container">
                 <ul id="approved-vacations-list"></ul>
             </div>
+
+            <div class="approval-controls">
+                <h2>Sick Leave</h2>
+                <div class="month-selector-container">
+                    <label for="sick-leave-month-selector">Select Month:</label>
+                    <select id="sick-leave-month-selector">
+                        <option value="0">Show All</option>
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                </div>
+                <div class="vacations-container">
+                    <ul id="sick-leave-list"></ul>
+                </div>
+                <select id="delete-sick-leave-dropdown">
+                    <option value="" disabled selected>Select a Sick Leave Entry</option>
+                </select>
+                <button id="delete-sick-leave-button" style="margin-left: 10px; background-color: red; color: white;">Delete Sick Leave</button>
+            </div>
         </div>
     </div>
 
@@ -182,6 +207,12 @@
              const deleteApprovedSelector = document.getElementById('delete-approved-month-selector');
              if (deleteApprovedSelector) {
                  deleteApprovedSelector.value = currentMonth;
+             }
+             
+             // Set current month for sick leave month selector
+             const sickLeaveSelector = document.getElementById('sick-leave-month-selector');
+             if (sickLeaveSelector) {
+                 sickLeaveSelector.value = currentMonth;
              }
              
              // Initialize the admin app AFTER setting month selectors

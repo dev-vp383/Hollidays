@@ -25,7 +25,7 @@ window.database = database;
 // Department Colors (matching vacations folder)
 const departmentColors = {
     technical: { reserved: "#E49B0F", approved: "#6699CC" },
-    analytics: { reserved: "#E49B0F", approved: "#6699CC" },
+    kpi: { reserved: "#E49B0F", approved: "#6699CC" },
     vip: { reserved: "#E49B0F", approved: "#32CD32" }
 };
 
@@ -119,8 +119,8 @@ const employees = {
         { name: "Romans D", value: "Romans_D|technical" }
     ],
     KPI: [
-        { name: "Ruslans P", value: "Ruslans_P|analytics" },
-        { name: "Jelizaveta M", value: "Jelizaveta_M|analytics" }
+        { name: "Ruslans P", value: "Ruslans_P|kpi" },
+        { name: "Jelizaveta M", value: "Jelizaveta_M|kpi" }
     ],
     vip: [
         { name: "Anastasija K", value: "Anastasija_K|vip" },
@@ -311,6 +311,15 @@ async function loadReservedVacations() {
                 if (filteredInfo.approved.length > 0) hasRelevantData = true;
             }
             
+            // Filter sick leave array
+            if (info.sickLeave && Array.isArray(info.sickLeave)) {
+                filteredInfo.sickLeave = info.sickLeave.filter(dateRange => {
+                    const isRelevant = dateRange.startsWith(`${window.currentYear}-`);
+                    return isRelevant;
+                });
+                if (filteredInfo.sickLeave.length > 0) hasRelevantData = true;
+            }
+            
             // Only include employee if they have relevant data for the current year
             if (hasRelevantData) {
                 yearFilteredData[employee] = filteredInfo;
@@ -324,21 +333,33 @@ async function loadReservedVacations() {
         const approveDropdown = document.getElementById("approve-dropdown");
         const approvedList = document.getElementById("approved-vacations-list");
         const approvedDropdown = document.getElementById("delete-approved-dropdown");
+        const sickLeaveList = document.getElementById("sick-leave-list");
+        const deleteSickLeaveDropdown = document.getElementById("delete-sick-leave-dropdown");
 
         reservedList.innerHTML = "";
         approveDropdown.innerHTML = '<option value="" disabled selected>Select a Reserved Vacation</option>';
         approvedDropdown.innerHTML = '<option value="" disabled selected>Select an Approved Vacation</option>';
         approvedList.innerHTML = "";
+        if (sickLeaveList) sickLeaveList.innerHTML = "";
+        if (deleteSickLeaveDropdown) deleteSickLeaveDropdown.innerHTML = '<option value="" disabled selected>Select a Sick Leave Entry</option>';
 
         const vacationMap = {};
         
         // Store all vacation data for filtering dropdowns
         window.allReservedVacations = [];
         window.allApprovedVacations = [];
+        window.allSickLeave = [];
 
         Object.entries(yearFilteredData).forEach(([employee, info]) => {
             const employeeName = employee.split("_").join(" ");
-            const department = info.department || "other";
+            let department = info.department || "other";
+            // Normalize department name early (handle legacy "analytics" -> "kpi" and case variations)
+            if (department && typeof department === 'string') {
+                department = department.toLowerCase();
+                if (department === 'analytics') {
+                    department = 'kpi';
+                }
+            }
 
             if (info.dates) {
                 // Merge consecutive reserved ranges
@@ -412,6 +433,46 @@ async function loadReservedVacations() {
                     });
                 });
             }
+
+            // Handle sick leave
+            if (info.sickLeave && Array.isArray(info.sickLeave)) {
+                const mergedSickLeaveRanges = mergeConsecutiveRanges(info.sickLeave);
+                
+                mergedSickLeaveRanges.forEach(range => {
+                    let startDate, endDate;
+                    if (range.includes(" to ")) {
+                        [startDate, endDate] = range.split(" to ");
+                    } else {
+                        startDate = range;
+                        endDate = range;
+                    }
+                    
+                    const dates = getDatesInRange(startDate, endDate);
+                    dates.forEach(date => {
+                        if (!vacationMap[date]) {
+                            vacationMap[date] = [];
+                        }
+                        vacationMap[date].push({ employee: employeeName, status: "sickLeave", department, type: "SL" });
+                    });
+
+                    if (sickLeaveList) {
+                        const listItem = document.createElement("li");
+                        listItem.textContent = `${employeeName} - ${range} [SL]`;
+                        listItem.style.color = '#ff6b6b';
+                        sickLeaveList.appendChild(listItem);
+                    }
+
+                    // Store sick leave data
+                    window.allSickLeave.push({
+                        employee: employeeName,
+                        employeeKey: employee,
+                        range: range,
+                        startDate: startDate,
+                        endDate: endDate,
+                        department: department
+                    });
+                });
+            }
         });
 
         updateCalendar(vacationMap);
@@ -426,6 +487,7 @@ async function loadReservedVacations() {
         filterVacationsByMonth('approved');
         filterVacationsByMonth('approve');
         filterVacationsByMonth('delete-approved');
+        filterVacationsByMonth('sick-leave');
         
         // Populate dropdowns with filtered data
         populateDropdowns();
@@ -462,7 +524,7 @@ async function initialize() {
             generateCalendar(window.currentYear); // Generate calendar
     await loadReservedVacations(); // Load vacations from Firebase
     populateEmployeeDropdown();
-    setupYearSelector();
+    // Year selector removed - admin only sees 2026 by default
     setupTooltips(); // Setup tooltip functionality
     setupEventListeners(); // Setup all event listeners
 }
@@ -519,6 +581,57 @@ function setupEventListeners() {
         } catch (error) {
             console.error("Error adding vacation:", error);
             alert("Failed to add vacation.");
+        }
+    });
+
+    // Add Sick Leave Button
+    document.getElementById("add-sick-leave").addEventListener("click", async () => {
+        const employeeValue = document.getElementById("employee-select").value;
+
+        if (!employeeValue) {
+            alert("Please select an employee.");
+            return;
+        }
+
+        if (!selectedDates.length) {
+            alert("Please select at least one date.");
+            return;
+        }
+
+        const [employee, department] = employeeValue.split("|");
+        selectedDates.sort((a, b) => new Date(a) - new Date(b));
+        const startDate = selectedDates[0];
+        const endDate = selectedDates[selectedDates.length - 1];
+        const dateRange = startDate === endDate ? startDate : `${startDate} to ${endDate}`;
+
+        try {
+            const ref = window.database.ref(`vacations/${employee}`);
+            const snapshot = await ref.get();
+
+            let vacationData = snapshot.val() || { dates: [], approved: [], sickLeave: [], department, status: "reserved", year: window.currentYear };
+
+            // Ensure sickLeave is an array
+            if (!Array.isArray(vacationData.sickLeave)) vacationData.sickLeave = [];
+
+            // Add new sick leave date range
+            vacationData.sickLeave.push(dateRange);
+            
+            // Ensure year field is set
+            vacationData.year = window.currentYear;
+
+            await ref.set(vacationData);
+
+            alert(`Sick Leave ${dateRange} added successfully!`);
+            selectedDates = [];
+            // Clear selected class from all cells
+            document.querySelectorAll('.day-cell.selected').forEach(cell => {
+                cell.classList.remove('selected');
+                cell.style.backgroundColor = '';
+            });
+            await loadReservedVacations(); // Refresh lists and calendar
+        } catch (error) {
+            console.error("Error adding sick leave:", error);
+            alert("Failed to add sick leave.");
         }
     });
 
@@ -591,8 +704,9 @@ function setupEventListeners() {
                 // Ensure both arrays exist before checking length
                 const datesLength = vacationData.dates ? vacationData.dates.length : 0;
                 const approvedLength = vacationData.approved ? vacationData.approved.length : 0;
+                const sickLeaveLength = vacationData.sickLeave ? vacationData.sickLeave.length : 0;
 
-                if (datesLength === 0 && approvedLength === 0) await ref.remove();
+                if (datesLength === 0 && approvedLength === 0 && sickLeaveLength === 0) await ref.remove();
                 else await ref.set(vacationData);
 
                 alert(`Vacation ${range} deleted successfully!`);
@@ -630,8 +744,9 @@ function setupEventListeners() {
                 // Ensure both arrays exist before checking length
                 const datesLength = vacationData.dates ? vacationData.dates.length : 0;
                 const approvedLength = vacationData.approved ? vacationData.approved.length : 0;
+                const sickLeaveLength = vacationData.sickLeave ? vacationData.sickLeave.length : 0;
 
-                if (datesLength === 0 && approvedLength === 0) await ref.remove();
+                if (datesLength === 0 && approvedLength === 0 && sickLeaveLength === 0) await ref.remove();
                 else await ref.set(vacationData);
 
                 alert(`Approved vacation ${range} deleted successfully!`);
@@ -641,6 +756,46 @@ function setupEventListeners() {
             console.error("Error deleting approved vacation:", error);
         }
     });
+
+    // Delete Sick Leave Button
+    const deleteSickLeaveButton = document.getElementById("delete-sick-leave-button");
+    if (deleteSickLeaveButton) {
+        deleteSickLeaveButton.addEventListener("click", async () => {
+            const selectedOption = document.getElementById("delete-sick-leave-dropdown").value;
+            
+            if (!selectedOption) {
+                alert("Please select a sick leave entry to delete.");
+                return;
+            }
+
+            const [employee, range] = selectedOption.split("|");
+
+            try {
+                const ref = window.database.ref(`vacations/${employee}`);
+                const snapshot = await ref.get();
+
+                if (snapshot.exists()) {
+                    const vacationData = snapshot.val();
+                    if (!vacationData.sickLeave) vacationData.sickLeave = [];
+                    vacationData.sickLeave = vacationData.sickLeave.filter(d => d !== range);
+
+                    // Ensure both arrays exist before checking length
+                    const datesLength = vacationData.dates ? vacationData.dates.length : 0;
+                    const approvedLength = vacationData.approved ? vacationData.approved.length : 0;
+                    const sickLeaveLength = vacationData.sickLeave ? vacationData.sickLeave.length : 0;
+
+                    if (datesLength === 0 && approvedLength === 0 && sickLeaveLength === 0) await ref.remove();
+                    else await ref.set(vacationData);
+
+                    alert(`Sick leave ${range} deleted successfully!`);
+                    await loadReservedVacations();
+                }
+            } catch (error) {
+                console.error("Error deleting sick leave:", error);
+                alert("Failed to delete sick leave.");
+            }
+        });
+    }
 
     // Force Reserve Button
     document.getElementById("force-reserve-button").addEventListener("click", async () => {
@@ -757,48 +912,7 @@ function setupTooltips() {
 }
 
 // Setup Year Selector
-function setupYearSelector() {
-    const yearTabs = document.querySelectorAll('.year-tab');
-    
-    yearTabs.forEach(tab => {
-        tab.addEventListener('click', async () => {
-            // Remove active class from all tabs
-            yearTabs.forEach(t => t.classList.remove('active'));
-            
-            // Add active class to clicked tab
-            tab.classList.add('active');
-            
-            // Update current year
-            window.currentYear = parseInt(tab.dataset.year);
-            
-            // Clear selected dates
-            selectedDates = [];
-            
-            // Clear selected class from all cells
-            document.querySelectorAll('.day-cell.selected').forEach(cell => {
-                cell.classList.remove('selected');
-                cell.style.backgroundColor = '';
-            });
-            
-            // Regenerate calendar for new year
-            generateCalendar(window.currentYear);
-            
-            // Reload vacations for new year
-            await loadReservedVacations();
-            
-            // Reapply date highlighting after vacations are loaded
-            if (window.highlightVacationNotAllowed) {
-                window.highlightVacationNotAllowed();
-            }
-            if (window.highlightLatvianHolidays) {
-                window.highlightLatvianHolidays();
-            }
-            if (window.highlightSpecialDates) {
-                window.highlightSpecialDates();
-            }
-        });
-    });
-}
+// Year selector removed - admin only sees 2026 by default
 
 // Setup Month Selectors
 function setupMonthSelectors() {
@@ -834,6 +948,14 @@ function setupMonthSelectors() {
             populateDropdowns(); // Update dropdowns when month changes
         });
     }
+    
+    const sickLeaveMonthSelector = document.getElementById('sick-leave-month-selector');
+    if (sickLeaveMonthSelector) {
+        sickLeaveMonthSelector.addEventListener('change', () => {
+            filterVacationsByMonth('sick-leave');
+            populateDropdowns(); // Update dropdowns when month changes
+        });
+    }
 }
 
 // Filter vacations by month
@@ -853,6 +975,9 @@ function filterVacationsByMonth(type) {
     } else if (type === 'delete-approved') {
         monthSelector = document.getElementById('delete-approved-month-selector');
         vacationList = document.getElementById('approved-vacations-list'); // Use approved list for delete-approved section
+    } else if (type === 'sick-leave') {
+        monthSelector = document.getElementById('sick-leave-month-selector');
+        vacationList = document.getElementById('sick-leave-list');
     }
     
     if (!monthSelector || !vacationList) return;
@@ -874,7 +999,7 @@ function filterVacationsByMonth(type) {
     allItems.forEach(item => {
         const itemText = item.textContent;
         
-        // Extract the date range from the item text (format: "Employee Name - YYYY-MM-DD to YYYY-MM-DD" or "Employee Name - YYYY-MM-DD")
+        // Extract the date range from the item text (format: "Employee Name - YYYY-MM-DD to YYYY-MM-DD" or "Employee Name - YYYY-MM-DD" or with [SL] marker)
         const dateRangeMatch = itemText.match(/(\d{4}-\d{2}-\d{2})(?:\s+to\s+(\d{4}-\d{2}-\d{2}))?/);
         
         if (dateRangeMatch) {
@@ -927,18 +1052,21 @@ function filterVacationsByMonth(type) {
 function populateDropdowns() {
     const approveDropdown = document.getElementById("approve-dropdown");
     const deleteApprovedDropdown = document.getElementById("delete-approved-dropdown");
+    const deleteSickLeaveDropdown = document.getElementById("delete-sick-leave-dropdown");
     
     if (!approveDropdown || !deleteApprovedDropdown) return;
     
     // Clear existing options
     approveDropdown.innerHTML = '<option value="" disabled selected>Select a Reserved Vacation</option>';
     deleteApprovedDropdown.innerHTML = '<option value="" disabled selected>Select an Approved Vacation</option>';
+    if (deleteSickLeaveDropdown) deleteSickLeaveDropdown.innerHTML = '<option value="" disabled selected>Select a Sick Leave Entry</option>';
     
     // Get selected months
     const reservedMonth = parseInt(document.getElementById('reserved-month-selector')?.value || 0);
     const approvedMonth = parseInt(document.getElementById('approved-month-selector')?.value || 0);
     const approveMonth = parseInt(document.getElementById('approve-month-selector')?.value || 0);
     const deleteApprovedMonth = parseInt(document.getElementById('delete-approved-month-selector')?.value || 0);
+    const sickLeaveMonth = parseInt(document.getElementById('sick-leave-month-selector')?.value || 0);
     
     // Populate approve dropdown (reserved vacations)
     if (window.allReservedVacations) {
@@ -960,6 +1088,18 @@ function populateDropdowns() {
                 option.value = `${vacation.employee}|${vacation.range}`;
                 option.textContent = `${vacation.employee} - ${vacation.range}`;
                 deleteApprovedDropdown.appendChild(option);
+            }
+        });
+    }
+    
+    // Populate delete sick leave dropdown
+    if (deleteSickLeaveDropdown && window.allSickLeave) {
+        window.allSickLeave.forEach(sickLeave => {
+            if (shouldShowVacation(sickLeave, sickLeaveMonth)) {
+                const option = document.createElement("option");
+                option.value = `${sickLeave.employeeKey}|${sickLeave.range}`;
+                option.textContent = `${sickLeave.employee} - ${sickLeave.range}`;
+                deleteSickLeaveDropdown.appendChild(option);
             }
         });
     }
@@ -1103,10 +1243,27 @@ function colorCell(cell, vacations) {
     
     vacations.forEach(vacation => {
         let department = vacation.department;
-        // Keep original department names
+        // Normalize department name (handle legacy "analytics" -> "kpi" and case variations)
+        if (department && typeof department === 'string') {
+            department = department.toLowerCase();
+            if (department === 'analytics') {
+                department = 'kpi';
+            }
+        }
+        
+        // Preserve the original status - don't change it unless it's sick leave
+        let status = vacation.status;
+        if (!status) {
+            status = 'approved'; // Default to approved if no status
+        }
+        
+        // For sick leave, treat as 'approved' status so it uses department's approved color (blue for KPI/Technical)
+        if (vacation.type === 'SL' || vacation.status === 'sickLeave') {
+            status = 'approved'; // Use approved status so it gets the department's approved color
+        }
         
         // Create a key that includes both department and status
-        const key = `${department}||${vacation.status || 'approved'}`;
+        const key = `${department}||${status}`;
         
         if (!departmentGroups[key]) {
             departmentGroups[key] = [];
@@ -1119,8 +1276,8 @@ function colorCell(cell, vacations) {
     
     if (uniqueDepartments.length === 1) {
         // Single department - full cell color
-        const department = uniqueDepartments[0];
-        const color = getDepartmentColor(department);
+        const departmentKey = uniqueDepartments[0];
+        const color = getDepartmentColor(departmentKey);
         cell.style.backgroundColor = color;
         
         // Ensure date number is visible and on top
@@ -1249,7 +1406,6 @@ function addTooltip(cell, vacations) {
         padding: 8px 12px;
         border-radius: 5px;
         font-size: 12px;
-        white-space: pre-line;
         pointer-events: none;
         opacity: 0;
         transition: opacity 0.2s ease;
@@ -1258,23 +1414,39 @@ function addTooltip(cell, vacations) {
         max-width: 200px;
     `;
     
-    // Create tooltip content
+    // Create tooltip content with HTML for styling
     let tooltipContent = vacations.map(vacation => {
-        const status = vacation.status === 'reserved' ? 'reserved' : 'approved';
+        let status;
+        const isSickLeave = vacation.status === 'sickLeave' || vacation.type === 'SL';
+        
+        if (isSickLeave) {
+            status = 'SL';
+        } else if (vacation.status === 'reserved') {
+            status = 'reserved';
+        } else {
+            status = 'approved';
+        }
         
         // Hide "(other)" department and department labels for same department
         const department = vacation.department === 'other' ? '' : vacation.department;
         const departmentLabel = department ? ` (${department})` : '';
         
-        return `${vacation.employee}${departmentLabel} - ${status}`;
-    }).join('\n');
+        const lineText = `${vacation.employee}${departmentLabel} - ${status}`;
+        
+        // If it's sick leave, wrap in red span
+        if (isSickLeave) {
+            return `<span style="color: #ff6b6b;">${lineText}</span>`;
+        }
+        
+        return lineText;
+    }).join('<br>');
     
     // If this is a restricted date, add the "VACATION NOT ALLOWED" message
     if (cell.classList.contains('restricted-date')) {
-        tooltipContent = 'VACATION NOT ALLOWED\n' + tooltipContent;
+        tooltipContent = '<span style="color: #ff6b6b;">VACATION NOT ALLOWED</span><br>' + tooltipContent;
     }
     
-    tooltip.textContent = tooltipContent;
+    tooltip.innerHTML = tooltipContent;
     document.body.appendChild(tooltip);
     
     // Remove any existing event listeners to prevent duplicates
@@ -1302,22 +1474,36 @@ function getDepartmentColor(departmentKey) {
     // Parse the department and status from the key
     const [department, status] = departmentKey.split('||');
     
-    // Reserved colors (all departments)
+    // Reserved colors (all departments) - MUST check this first
     if (status === 'reserved') {
         return '#FF8C00'; // Orange for all reserved departments
     }
     
-    // Approved colors
+    // Normalize department name (handle legacy "analytics" -> "kpi" and case variations)
+    let normalizedDept = department;
+    if (department && typeof department === 'string') {
+        normalizedDept = department.toLowerCase();
+        if (normalizedDept === 'analytics') {
+            normalizedDept = 'kpi';
+        }
+    }
+    
+    // Approved colors (including sick leave - uses department color)
     const colors = {
         'vip': 'rgb(50, 205, 50)', // Green for approved VIP
-        'analytics': 'rgb(102, 153, 204)', // Blue for approved Analytics
-        'technical': 'rgb(102, 153, 204)', // Blue for approved Technical
         'kpi': '#6699CC', // Blue for approved KPI
+        'technical': '#6699CC', // Blue for approved Technical
         'design': '#FF69B4', // Pink for approved Design
         'other': '#FF69B4' // Pink for approved Other
     };
     
-    return colors[department] || '#FF8C00';
+    const color = colors[normalizedDept];
+    if (!color) {
+        console.warn(`getDepartmentColor: Unknown department "${normalizedDept}" (from "${department}"), status="${status}", falling back to orange`);
+        return '#FF8C00';
+    }
+    
+    return color;
 }
 
 function generateDateRange(range) {

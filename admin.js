@@ -26,7 +26,7 @@ window.database = database;
 // Department Colors (matching vacations folder)
 const departmentColors = {
     technical: { reserved: "#E49B0F", approved: "#6699CC" },
-    analytics: { reserved: "#E49B0F", approved: "#6699CC" },
+    kpi: { reserved: "#E49B0F", approved: "#6699CC" },
     vip: { reserved: "#E49B0F", approved: "#32CD32" }
 };
 
@@ -118,8 +118,8 @@ const employees = {
         { name: "Elīna T", value: "Elīna_T|technical" },
     ],
     KPI: [
-        { name: "Ruslans P", value: "Ruslans_P|analytics" },
-        { name: "Jelizaveta M", value: "Jelizaveta_M|analytics" }
+        { name: "Ruslans P", value: "Ruslans_P|kpi" },
+        { name: "Jelizaveta M", value: "Jelizaveta_M|kpi" }
     ],
     vip: [
         { name: "Aleksandrs P", value: "Aleksandrs_P|vip" },
@@ -1284,7 +1284,7 @@ function getDepartmentColor(departmentKey) {
     // Approved colors
     const colors = {
         'vip': 'rgb(50, 205, 50)', // Green for approved VIP
-        'analytics': 'rgb(102, 153, 204)', // Blue for approved Analytics
+        'kpi': 'rgb(102, 153, 204)', // Blue for approved KPI
         'technical': 'rgb(102, 153, 204)', // Blue for approved Technical
         'kpi': '#6699CC', // Blue for approved KPI
         'design': '#FF69B4', // Pink for approved Design

@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const departmentColors = {
         technical: { reserved: "#E49B0F", approved: "#6699CC" },
-        analytics: { reserved: "#E49B0F", approved: "#6699CC" },
+        kpi: { reserved: "#E49B0F", approved: "#6699CC" },
         vip: { reserved: "#E49B0F", approved: "#32CD32" }
     };
 
@@ -250,19 +250,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Red Dot Logic (unchanged)
-    const departmentCounts = { analytics: 0, technical: 0, vip: 0 };
+    const departmentCounts = { kpi: 0, technical: 0, vip: 0 };
     vacationMap[date]?.forEach(({ department }) => {
         departmentCounts[department] += 1;
     });
 
-    const analyticsOrTechnical = departmentCounts.analytics + departmentCounts.technical;
+    const kpiOrTechnical = departmentCounts.kpi + departmentCounts.technical;
     const vip = departmentCounts.vip;
 
     const redDotNeeded =
-        departmentCounts.analytics > 1 ||
+        departmentCounts.kpi > 1 ||
         departmentCounts.technical > 1 ||
         vip > 1 ||
-        analyticsOrTechnical > 1;
+        kpiOrTechnical > 1;
 
     let dotIndicator = dayCell.querySelector(".dot-indicator");
     if (!dotIndicator) {

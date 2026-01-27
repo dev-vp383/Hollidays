@@ -21,11 +21,8 @@ window.currentYear = 2026;
 
 // Load approved vacations when page loads
 document.addEventListener("DOMContentLoaded", () => {
-    // Check if there's an active year tab and set the current year accordingly
-    const activeYearTab = document.querySelector('.year-tab.active');
-    if (activeYearTab) {
-        window.currentYear = parseInt(activeYearTab.dataset.year);
-    }
+    // Year is fixed to 2026 for users - no year selector
+    window.currentYear = 2026;
     
     loadApprovedVacations(); // This will call setupMonthSelector after data is loaded
 });
@@ -53,6 +50,15 @@ function loadApprovedVacations() {
                 const employeeName = employeeKey.replace(/_/g, ' ');
                 console.log(`Processing employee: ${employeeKey} -> ${employeeName}`);
                 
+                // Normalize department name early (handle legacy "analytics" -> "kpi" and case variations)
+                let department = employeeData.department || 'unknown';
+                if (department && typeof department === 'string') {
+                    department = department.toLowerCase();
+                    if (department === 'analytics') {
+                        department = 'kpi';
+                    }
+                }
+                
                 // Get approved vacations - filter by year
                 if (employeeData.approved && Array.isArray(employeeData.approved)) {
                     employeeData.approved.forEach(range => {
@@ -60,7 +66,7 @@ function loadApprovedVacations() {
                         if (range.includes(`${currentYear}-`)) {
                             approvedVacations.push({
                                 employee: employeeName,
-                                department: employeeData.department || 'unknown',
+                                department: department,
                                 dateRange: range,
                                 status: 'approved'
                             });
@@ -77,7 +83,7 @@ function loadApprovedVacations() {
                         if (range.includes(`${currentYear}-`)) {
                             approvedVacations.push({
                                 employee: employeeName,
-                                department: employeeData.department || 'unknown',
+                                department: department,
                                 dateRange: range,
                                 status: 'reserved'
                             });
@@ -86,6 +92,8 @@ function loadApprovedVacations() {
                         }
                     });
                 }
+                
+                // Sick leave is NOT shown to users - only admin can see it
             });
 
             // Sort by date range
@@ -142,7 +150,7 @@ function displayApprovedVacations(vacations) {
         const start = new Date(startDate);
         const end = new Date(endDate);
         
-        // Use the selected year from the year tabs
+        // Use the current year (fixed to 2026 for users)
         const selectedYear = window.currentYear || 2026;
         const monthStart = new Date(selectedYear, selectedMonth - 1, 1); // Month start (0-indexed)
         const monthEnd = new Date(selectedYear, selectedMonth, 0); // Month end (0-indexed)
@@ -296,7 +304,6 @@ function loadRestrictedDates() {
 
 function setupMonthSelector() {
     const monthSelector = document.getElementById('month-selector');
-    const yearTabs = document.querySelectorAll('.year-tab');
     if (!monthSelector) return;
 
     // Set current month as default
@@ -311,41 +318,7 @@ function setupMonthSelector() {
         applyCellColoring(allApprovedVacations);
     });
 
-    // Add year selector functionality
-    yearTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            // Remove active class from all tabs
-            yearTabs.forEach(t => t.classList.remove('active'));
-            // Add active class to clicked tab
-            tab.classList.add('active');
-            
-            const selectedYear = parseInt(tab.dataset.year);
-            console.log('Year changed to:', selectedYear);
-            
-            // Update the current year for filtering
-            window.currentYear = selectedYear;
-            
-            // Clear existing data first
-            allApprovedVacations = [];
-            
-            // Regenerate calendar for the new year
-            generateCalendar(selectedYear);
-            
-            // Reload data from Firebase for the new year
-            loadApprovedVacations();
-            
-            // Reapply date highlighting after calendar is generated and data is loaded
-            if (window.highlightVacationNotAllowed) {
-                window.highlightVacationNotAllowed();
-            }
-            if (window.highlightLatvianHolidays) {
-                window.highlightLatvianHolidays();
-            }
-            if (window.highlightSpecialDates) {
-                window.highlightSpecialDates();
-            }
-        });
-    });
+    // Year selector removed - users only see 2026 by default
 }
 
 // Cell Coloring Functions
@@ -445,10 +418,19 @@ function colorCell(cell, vacations) {
     
     vacations.forEach(vacation => {
         let department = vacation.department;
-        // Keep original department names
+        // Normalize department name (handle legacy "analytics" -> "kpi" and case variations)
+        if (department && typeof department === 'string') {
+            department = department.toLowerCase();
+            if (department === 'analytics') {
+                department = 'kpi';
+            }
+        }
+        
+        // Status should be 'reserved' or 'approved' - sick leave is not shown to users
+        let status = vacation.status || 'approved';
         
         // Create a key that includes both department and status
-        const key = `${department}||${vacation.status || 'approved'}`;
+        const key = `${department}||${status}`;
         
         if (!departmentGroups[key]) {
             departmentGroups[key] = [];
@@ -593,8 +575,8 @@ function checkIfFullyBooked(vacations) {
     const departmentGroups = {};
     vacations.forEach(vacation => {
         let department = vacation.department;
-        if (department === 'technical' || department === 'analytics') {
-            department = 'tech_analytics';
+        if (department === 'technical' || department === 'kpi') {
+            department = 'tech_kpi';
         }
         
         if (!departmentGroups[department]) {
@@ -608,8 +590,8 @@ function checkIfFullyBooked(vacations) {
         return true;
     }
     
-    // Check rule 2: One Analytical and one Technical team member request the same week
-    if ((departmentGroups['analytics'] && departmentGroups['analytics'].length >= 1) && 
+    // Check rule 2: One KPI and one Technical team member request the same week
+    if ((departmentGroups['kpi'] && departmentGroups['kpi'].length >= 1) && 
         (departmentGroups['technical'] && departmentGroups['technical'].length >= 1)) {
         return true;
     }
@@ -644,7 +626,7 @@ function addTooltip(cell, vacations) {
         max-width: 200px;
     `;
     
-    // Create tooltip content
+    // Create tooltip content (sick leave is not shown to users)
     const tooltipContent = vacations.map(vacation => {
         const status = vacation.status === 'reserved' ? 'reserved' : 'approved';
         
@@ -681,23 +663,36 @@ function getDepartmentColor(departmentKey) {
     // Parse the department and status from the key
     const [department, status] = departmentKey.split('||');
     
-    // Reserved colors (all departments)
+    // Reserved colors (all departments) - MUST check this first
     if (status === 'reserved') {
         return '#FF8C00'; // Orange for all reserved departments
+    }
+    
+    // Normalize department name (handle legacy "analytics" -> "kpi" and case variations)
+    let normalizedDept = department;
+    if (department && typeof department === 'string') {
+        normalizedDept = department.toLowerCase();
+        if (normalizedDept === 'analytics') {
+            normalizedDept = 'kpi';
+        }
     }
     
     // Approved colors
     const colors = {
         'vip': 'rgb(50, 205, 50)', // Green for approved VIP
-        'analytics': 'rgb(102, 153, 204)', // Blue for approved Analytics
-        'technical': 'rgb(102, 153, 204)', // Blue for approved Technical
-
         'kpi': '#6699CC', // Blue for approved KPI
+        'technical': '#6699CC', // Blue for approved Technical
         'design': '#FF69B4', // Pink for approved Design
         'other': '#FF69B4' // Pink for approved Other
     };
     
-    return colors[department] || '#FF8C00';
+    const color = colors[normalizedDept];
+    if (!color) {
+        console.warn(`getDepartmentColor: Unknown department "${normalizedDept}" (from "${department}"), status="${status}", falling back to orange`);
+        return '#FF8C00';
+    }
+    
+    return color;
 }
 
 function generateDateRange(range) {
