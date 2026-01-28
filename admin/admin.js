@@ -1215,6 +1215,9 @@ function clearAllCellColors() {
         // Clear any dot indicators
         const dotIndicators = cell.querySelectorAll('.dot-indicator');
         dotIndicators.forEach(dot => dot.remove());
+        // Clear SL (sick leave) white dot indicator
+        const slDots = cell.querySelectorAll('.sl-dot-indicator');
+        slDots.forEach(dot => dot.remove());
         // Clear any date text elements (no longer used with CSS ::before approach)
         const dateTexts = cell.querySelectorAll('.date-text');
         dateTexts.forEach(text => text.remove());
@@ -1384,7 +1387,25 @@ function colorCell(cell, vacations) {
         cell.setAttribute('data-date-number', dateNumber);
     }
     
-
+    // Add white dot indicator when any vacation on this date is sick leave (SL)
+    const hasSickLeave = vacations.some(v => v.type === 'SL' || v.status === 'sickLeave');
+    if (hasSickLeave) {
+        const whiteDot = document.createElement('div');
+        whiteDot.className = 'sl-dot-indicator';
+        whiteDot.style.cssText = `
+            width: 8px;
+            height: 8px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            pointer-events: none;
+            z-index: 30;
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.3);
+        `;
+        cell.appendChild(whiteDot);
+    }
 }
 
 
