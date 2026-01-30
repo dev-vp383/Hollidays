@@ -142,7 +142,6 @@ const employees = {
         { name: "Dēvids B", value: "Dēvids_B|vip" },
         { name: "Laura S S", value: "Laura_S_S|vip" },
         { name: "Aleksandrs T", value: "Aleksandrs_T|vip" },
-        { name: "Vjaceslavs V", value: "Vjaceslavs_V|vip" },
         { name: "Jekaterina C", value: "Jekaterina_C|vip" },
         { name: "Maksim R", value: "Maksim_R|vip" },
         { name: "Shakhnozakhon N", value: "Shakhnozakhon_N|vip" },
